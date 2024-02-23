@@ -1,0 +1,21 @@
+@layer components {
+    .container {
+        @apply mx-auto w-[90%] max-w-[1850px];
+    }
+
+    .content {
+        @apply py-16 bg-surface-color min-h-[calc(100vh-130px)];
+    }
+
+    .text {
+        @apply font-display text-base text-text-dark-2 font-normal mb-2;
+    }
+
+    .link {
+        @apply text-accent-color;
+
+        &:hover {
+            @apply underline;
+        }
+    }
+}

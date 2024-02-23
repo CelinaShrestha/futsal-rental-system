@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "./index.scss";
+
+@import "../js/Layouts/styles.scss";
+@import "../js/Components/AuthHeading/styles.scss";
+@import "../js/Components/Button/styles.scss";
+@import "../js/Components/TextInput/styles.scss";
+

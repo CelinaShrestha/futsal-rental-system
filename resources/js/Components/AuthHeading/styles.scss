@@ -1,0 +1,7 @@
+.auth-heading {
+  @apply relative w-fit text-3xl text-primary-color font-heading;
+
+  // &::after {
+  //   @apply content-[""] h-1 absolute bottom-0 left-1/2 w-3/5 min-w-[140px] -translate-x-1/2 bg-gradient-to-r from-[#7c1d28_9.13%] to-[rgba(230,126,34,0.36)_100%];
+  // }
+}

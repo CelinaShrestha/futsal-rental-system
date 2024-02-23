@@ -1,0 +1,27 @@
+.auth-page {
+    @apply relative h-auto min-h-screen flex items-center justify-center;
+
+    .auth-page-content {
+        @apply container relative flex justify-center items-center h-auto min-h-screen pt-20;
+    }
+
+    .logo {
+        @apply absolute top-0 left-0 w-20 md:w-32;
+    }
+
+    .auth-form-section {
+        @apply w-full h-auto flex flex-col justify-center items-center;
+
+        .auth-body-sm {
+            @apply w-[90%] md:w-[450px];
+        }
+
+        .auth-body-lg {
+            @apply w-full max-w-[900px] grid;
+        }
+    }
+
+    .auth-form {
+        @apply w-full mb-8;
+    }
+}
