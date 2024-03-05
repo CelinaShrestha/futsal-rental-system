@@ -1,0 +1,12 @@
+.futsal-card {
+    @apply p-4 min-h-[250px] w-[800px] border rounded-md flex gap-5;
+
+    .img {
+        @apply w-[350px];
+
+        img {
+            @apply h-fit w-fit rounded-sm;
+        }
+    }
+    
+}

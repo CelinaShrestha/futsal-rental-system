@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useRef } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import Icon from "@/Components/Icon";
 
@@ -17,6 +17,13 @@ export default forwardRef(function TextInput(
 ) {
     const input = ref ? ref : useRef();
 
+    const [showPassword, setShowPassword] = useState(false);
+    const toggleIcon = showPassword ? "eye-slash" : "eye";
+
+    const togglePasswordVisiblity = () => {
+        setShowPassword((prev) => !prev);
+    };
+
     useEffect(() => {
         if (isFocused) {
             input.current.focus();
@@ -31,14 +38,31 @@ export default forwardRef(function TextInput(
     return (
         <div className="form-group">
             <label htmlFor={name}>{label}</label>
+
             <div className="form-control">
                 <input
                     {...props}
-                    type={type}
+                    type={
+                        type === "password"
+                            ? showPassword
+                                ? "text"
+                                : "password"
+                            : type
+                    }
                     className={inputFieldClasses}
                     ref={input}
                 />
-                {icon && (
+                {type === "password" && (
+                    <span
+                        className="icon-container"
+                        onClick={togglePasswordVisiblity}
+                    >
+                        <button className="icon-btn" type="button">
+                            <Icon icon={toggleIcon} size={20} />
+                        </button>
+                    </span>
+                )}
+                {icon && type !== "password" && (
                     <span className="icon-container" onClick={iconClickHandler}>
                         <button className="icon-btn" type="button">
                             <Icon icon={icon} size={20} />
