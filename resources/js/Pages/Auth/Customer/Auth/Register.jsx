@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import GuestLayout from "@/Layouts/GuestLayout";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
@@ -71,7 +71,6 @@ export default function CustomerRegister() {
                             onChange={(e) =>
                                 setData("middleName", e.target.value)
                             }
-                            required
                         />
 
                         <InputError
@@ -211,10 +210,7 @@ export default function CustomerRegister() {
                 </div>
 
                 <div className="flex flex-col-reverse md:flex-row items-center justify-end gap-4">
-                    <Link
-                        href={route("login")}
-                        className="link"
-                    >
+                    <Link href={route("login")} className="link">
                         Already registered?
                     </Link>
 

@@ -1,5 +1,6 @@
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import { Link } from "@inertiajs/react";
+import logo from "../../assets/logos/kick.png";
 import classNames from "classnames";
 import React from "react";
 import AuthHeading from "@/Components/AuthHeading";
@@ -24,6 +25,9 @@ export default function Guest({ pageTitle, children, size }) {
         // </div>
         <div className="auth-page">
             <div className="auth-page-content">
+                <Link href="/">
+                    <img className="logo" src={logo} alt="logo" />
+                </Link>
                 <div className="auth-form-section">
                     <AuthHeading title={pageTitle} />
                     <div className={authBodyClass}>{children}</div>

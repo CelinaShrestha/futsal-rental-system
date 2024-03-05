@@ -37,7 +37,7 @@ export default function CustomerLogin({ status, canResetPassword }) {
                 </div>
             )}
             <AuthDescription className="mb-8">
-                <p>Login In!</p>
+                <p>Welcome back ! Login to book your Futsal.</p>
             </AuthDescription>
             <form onSubmit={submit}>
                 <div>
@@ -53,7 +53,6 @@ export default function CustomerLogin({ status, canResetPassword }) {
 
                     <InputError message={errors.username} className="mt-2" />
 
-                    <InputError message={errors.username} className="mt-2" />
                 </div>
 
                 <div className="mt-4">

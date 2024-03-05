@@ -1,0 +1,11 @@
+.first-page {
+    @apply flex flex-col items-center justify-between px-5 lg:gap-16 md:flex-row text-primary-dark-1  my-20;
+
+    .img{
+        @apply max-w-[700px];
+
+        img{
+            @apply h-fit w-fit rounded-md;
+        }
+    }
+}
