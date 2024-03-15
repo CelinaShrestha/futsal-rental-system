@@ -1,0 +1,11 @@
+.FutsalDescription {
+    @apply flex flex-col justify-center;
+
+    .carousel-image {
+        @apply w-[1250px] h-[500px] self-center mt-8;
+
+        img {
+            @apply w-full h-full;
+        }
+    }
+}

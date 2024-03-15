@@ -18,4 +18,8 @@
             @apply underline;
         }
     }
+
+    .logo {
+        @apply w-8 md:w-14 h-14;
+    }
 }
