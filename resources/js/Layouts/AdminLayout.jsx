@@ -5,7 +5,7 @@ import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@inertiajs/react";
 
-export default function Authenticated({ user, header, children }) {
+export default function AdminLayout({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
@@ -23,19 +23,11 @@ export default function Authenticated({ user, header, children }) {
 
                         <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                             <NavLink
-                                href={route("dashboard")}
-                                active={route().current("dashboard")}
+                                href={route("admin.dashboard")}
+                                active={route().current("admin.dashboard")}
                             >
                                 Home
                             </NavLink>
-                            <NavLink
-                                href={route("futsal-listings.index")}
-                                active={route().current("futsal-listings.index")}
-                            >
-                                Futsals
-                            </NavLink>
-                            <NavLink href="#">Bookings</NavLink>
-                            <NavLink href="#">About</NavLink>
                         </div>
                         {/* </div> */}
 
@@ -49,7 +41,7 @@ export default function Authenticated({ user, header, children }) {
                                                 type="button"
                                                 className="inline-flex items-center px-3 py-2 border border-transparent text-base leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                                             >
-                                                {user.firstName}
+                                                {user.name}
 
                                                 <svg
                                                     className="ms-2 -me-0.5 h-4 w-4"
@@ -69,12 +61,12 @@ export default function Authenticated({ user, header, children }) {
 
                                     <Dropdown.Content>
                                         <Dropdown.Link
-                                            href={route("profile.edit")}
+                                            href={route("admin.profile.edit")}
                                         >
                                             Profile
                                         </Dropdown.Link>
                                         <Dropdown.Link
-                                            href={route("logout")}
+                                            href={route("admin.logout")}
                                             method="post"
                                             as="button"
                                         >
@@ -136,8 +128,8 @@ export default function Authenticated({ user, header, children }) {
                 >
                     <div className="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink
-                            href={route("dashboard")}
-                            active={route().current("dashboard")}
+                            href={route("admin.dashboard")}
+                            active={route().current("admin.dashboard")}
                         >
                             Dashboard
                         </ResponsiveNavLink>
@@ -154,12 +146,12 @@ export default function Authenticated({ user, header, children }) {
                         </div>
 
                         <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route("profile.edit")}>
+                            <ResponsiveNavLink href={route("admin.profile.edit")}>
                                 Profile
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 method="post"
-                                href={route("logout")}
+                                href={route("admin.logout")}
                                 as="button"
                             >
                                 Log Out
