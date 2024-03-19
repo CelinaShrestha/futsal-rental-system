@@ -26,6 +26,11 @@ class FutsalListingsController extends Controller
         ]);
     }
 
+    public function create()
+    {
+        return Inertia::render('Vendor/Court/AddCourt/index');
+    }
+
     public function store(FutsalListingsRequest $request)
     {
         try {
@@ -44,7 +49,7 @@ class FutsalListingsController extends Controller
             Storage::disk('public')->put($imageName, file_get_contents($request->image));
 
             // Redirect back to a specific page (e.g., futsal-listings.index)
-            return Redirect::route('futsal-listings.index')->with('success', 'Futsal listing created successfully.');
+            return Redirect::route('vendor.dashboard')->with('success', 'Futsal listing created successfully.');
         } catch (\Exception $e) {
             // Handle exceptions and redirect back with an error message
             return Redirect::back()
