@@ -7,7 +7,7 @@ import { Head, Link, useForm } from "@inertiajs/react";
 import AuthDescription from "@/Components/AuthDescription";
 import Button from "@/Components/Button";
 
-export default function CustomerRegister() {
+export default function VendorRegister() {
     const { data, setData, post, processing, errors, reset } = useForm({
         firstName: "",
         middleName: "",
@@ -30,7 +30,7 @@ export default function CustomerRegister() {
         console.log("submit");
         e.preventDefault();
 
-        post(route("register"));
+        post(route("vendor.register"));
     };
 
     return (
@@ -210,7 +210,7 @@ export default function CustomerRegister() {
                 </div>
 
                 <div className="flex flex-col-reverse md:flex-row items-center justify-end gap-4">
-                    <Link href={route("login")} className="link">
+                    <Link href={route("vendor.login")} className="link">
                         Already registered?
                     </Link>
 

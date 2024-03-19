@@ -8,9 +8,9 @@ import AuthDescription from "@/Components/AuthDescription";
 import Button from "@/Components/Button";
 import { Head, Link, useForm } from "@inertiajs/react";
 
-export default function AdminLogin({ status, canResetPassword }) {
+export default function VendorLogin({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        name: "",
+        username: "",
         password: "",
         remember: false,
     });
@@ -24,7 +24,7 @@ export default function AdminLogin({ status, canResetPassword }) {
     const submit = (e) => {
         e.preventDefault();
 
-        post(route("admin.login"));
+        post(route("vendor.login"));
     };
 
     return (
@@ -42,16 +42,16 @@ export default function AdminLogin({ status, canResetPassword }) {
             <form onSubmit={submit}>
                 <div>
                     <TextInput
-                        id="name"
-                        name="name"
-                        label="name"
-                        value={data.name}
-                        autoComplete="name"
-                        onChange={(e) => setData("name", e.target.value)}
+                        id="username"
+                        name="username"
+                        label="Username"
+                        value={data.username}
+                        autoComplete="username"
+                        onChange={(e) => setData("username", e.target.value)}
                         required
                     />
 
-                    <InputError message={errors.name} className="mt-2" />
+                    <InputError message={errors.username} className="mt-2" />
 
                 </div>
 
@@ -86,7 +86,7 @@ export default function AdminLogin({ status, canResetPassword }) {
                     </label>
                     {canResetPassword && (
                         <Link
-                            href={route("password.request")}
+                            href={route("vendor.password.request")}
                             className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
                             Forgot your password?
@@ -95,7 +95,7 @@ export default function AdminLogin({ status, canResetPassword }) {
                 </div>
 
                 <div className="flex flex-col-reverse items-center justify-end gap-4">
-                    <Link href={route("register")} className="link">
+                    <Link href={route("vendor.register")} className="link">
                         Don't have an account? Register
                     </Link>
 
