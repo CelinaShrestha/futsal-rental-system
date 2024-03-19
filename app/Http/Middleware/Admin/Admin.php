@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Middleware\Customer;
+namespace App\Http\Middleware\Admin;
 
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Auth;
 
-class Customer
+class Admin
 {
     /**
      * Handle an incoming request.
@@ -16,9 +16,9 @@ class Customer
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::guard('customer')->check()) {
-            return redirect()->route('customer.login')->with('error', 'You must be logged in to access this page.');
-            
+        if (!Auth::guard('admin')->check()) {
+            return redirect()->route('admin.login')->with('error', 'You must be logged in to access this page.');
+
         }
         return $next($request);
     }
