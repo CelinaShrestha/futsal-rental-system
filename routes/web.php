@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\FutsalListingsController;
 use App\Http\Controllers\AdminProfileController;
+use App\Http\Controllers\VendorProfileController;
 use Inertia\Inertia;
 
 /*
@@ -41,7 +42,6 @@ Route::get('/dashboard', function () {
 Route::get('/futsal-listings', [FutsalListingsController::class, 'index'])
     ->name('futsal-listings.index')
     ->middleware(['auth', 'verified']);
-Route::post('/futsal-listings', [FutsalListingsController::class, 'store'])->name('futsal-listings.store');
 Route::get('/futsal-listings/{id}', [FutsalListingsController::class, 'show'])
     ->name('futsal-listings.show')
     ->middleware(['auth', 'verified']);
@@ -66,6 +66,23 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/admin/profile', [AdminProfileController::class, 'edit'])->name('admin.profile.edit');
     Route::patch('/admin/profile', [AdminProfileController::class, 'update'])->name('admin.profile.update');
     Route::delete('/admin/profile', [AdminProfileController::class, 'destroy'])->name('admin.profile.destroy');
+    Route::get('admin/vendors', [VendorProfileController::class, 'show'])->name('vendors.show');
 });
 
 require __DIR__ . '/adminauth.php';
+
+Route::get('/vendor/dashboard', function () {
+    return Inertia::render('Vendor/Dashboard/index');
+})
+    ->middleware(['auth:vendor', 'verified'])
+    ->name('vendor.dashboard');
+
+Route::middleware('auth:vendor')->group(function () {
+    Route::get('/vendor/profile', [VendorProfileController::class, 'edit'])->name('vendor.profile.edit');
+    Route::patch('/vendor/profile', [VendorProfileController::class, 'update'])->name('vendor.profile.update');
+    Route::delete('/vendor/profile', [VendorProfileController::class, 'destroy'])->name('vendor.profile.destroy');
+    Route::get('/vendor/addCourt', [FutsalListingsController::class, 'create'])->name('futsal-listings.create');
+    Route::post('/vendor/addCourt', [FutsalListingsController::class, 'store'])->name('futsal-listings.store');
+});
+
+require __DIR__ . '/vendorauth.php';
