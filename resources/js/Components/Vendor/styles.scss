@@ -1,0 +1,18 @@
+.sidebar {
+    @apply h-screen absolute bg-primary-light-2 w-1/5;
+
+    a {
+        @apply hover:text-primary-color;
+    }
+
+    .ps-submenu-content {
+        @apply bg-primary-light-5;
+    }
+
+    .ps-menuitem-root {
+
+        .ps-active {
+            @apply text-accent-color;
+        }
+    }
+}
