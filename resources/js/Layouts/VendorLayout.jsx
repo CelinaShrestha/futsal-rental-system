@@ -5,9 +5,9 @@ import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@inertiajs/react";
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
-import Header from "@/Components/Admin/Header";
+import Header from "@/Components/Vendor/Header";
 
-export default function AdminLayout({ user, children }) {
+export default function VendorLayout({ user, children }) {
     return (
         <div className="flex">
             <div>
