@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Requests\VendorProfileUpdateRequest;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Vendor;
 use Illuminate\Http\RedirectResponse;
@@ -31,7 +31,7 @@ class VendorProfileController extends Controller
     /**
      * Update the vendor's profile information.
      */
-    public function update(AdminProfileUpdateRequest $request): RedirectResponse
+    public function update(VendorProfileUpdateRequest $request): RedirectResponse
     {
         $vendor = Auth::guard('vendor')->user();
         $vendor->fill($request->validated());
@@ -43,15 +43,6 @@ class VendorProfileController extends Controller
         $vendor->save();
 
         return Redirect::route('vendor.profile.edit'); // Ensure the route is defined for vendor
-    }
-
-    public function show()
-    {
-        $vendor = Vendor::all();
-
-        return Inertia::render('Admin/Vendor/ShowVendor/index', [
-            'vendor' => $vendor,
-        ]);
     }
 
     /**
