@@ -2,8 +2,16 @@ import React from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import Icon from "@/Components/Icon";
 import Button from "@/Components/Button";
+import { Inertia } from "@inertiajs/inertia";
+import ImageSlider from "@/Components/ImageSlider";
 
 export default function FutsalDescription({ futsal_listing, auth }) {
+
+    const onClickHandler = () => {
+        console.log("Book Now Clicked");
+        Inertia.visit(route("book"));
+    }
+
     return (
         <AuthenticatedLayout user={auth.user}>
             <div className="FutsalDescription container">
@@ -27,32 +35,37 @@ export default function FutsalDescription({ futsal_listing, auth }) {
                         <h2 className="font-semibold">
                             Rs {futsal_listing.price}/hr
                         </h2>
-                        <Button variant="secondary" size="sm">
+                        <Button variant="secondary" size="sm" onClick={onClickHandler}>
                             Book Now
                         </Button>
                     </div>
                 </div>
 
-                <div className="carousel-image">
-                    <img
-                        src={`http://127.0.0.1:8000/storage/${futsal_listing.image}`}
-                        alt=""
-                    />
+                <div className="image">
+                    {/* {futsal_listing.images.map((image, index) => (
+                        <div key={index} className="carousel-image">
+                            <img
+                                src={`http://127.0.0.1:8000/storage/${image}`}
+                                alt={`Image ${index + 1}`}
+                            />
+                        </div>
+                    ))} */}
+                    <ImageSlider images={futsal_listing.images} />
                 </div>
                 <div className="flex flex-col gap-5 mt-8">
                     <div>
                         <h2 className="font-semibold text-lg">Description</h2>
-                        <p>{futsal_listing.description}</p>
+                        <p>{futsal_listing.long_description}</p>
                         {/* Other details of the futsal listing */}
                     </div>
                     <div>
                         <h2 className="font-semibold text-lg">Facilities</h2>
-                        <p>*Facilities Listed*</p>
+                        <p>{futsal_listing.facilities}</p>
                         {/* Other details of the futsal listing */}
                     </div>
                     <div>
                         <h2 className="font-semibold text-lg">Contact Info</h2>
-                        <p>*Contact Info*</p>
+                        <p>{futsal_listing.contactNumber}</p>
                         {/* Other details of the futsal listing */}
                     </div>
                     <div>
