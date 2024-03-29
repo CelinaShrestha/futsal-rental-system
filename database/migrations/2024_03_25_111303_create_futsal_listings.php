@@ -14,10 +14,17 @@ return new class extends Migration
         Schema::create('futsal_listings', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('description');
-            $table->string('image');
+            $table->text('short_description');
+            $table->text('long_description');
+            $table->text('images')->nullable();
             $table->string('location');
             $table->integer('price');
+            $table->integer('capacity');
+            $table->text('facilities');
+            $table->string('contactNumber');
+            $table->string('altContactNumber')->nullable();
+            $table->boolean('is_verified')->default(false);
+            $table->boolean('is_available')->default(true);
             $table->timestamps();
         });
     }
