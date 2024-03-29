@@ -57,6 +57,6 @@ class RegisteredUserController extends Controller
 
         Auth::guard('vendor')->login($vendor);
 
-        return redirect(RouteServiceProvider::VENDOR_HOME);
+        return redirect(RouteServiceProvider::ADMIN_HOME);
     }
 }
