@@ -13,7 +13,7 @@ export default function FutsalCard({ listing }) {
         <div className="futsal-card">
             <div className="img self-center">
                 <img
-                    src={`http://127.0.0.1:8000/storage/${listing.image}`}
+                    src={`http://127.0.0.1:8000/storage/${listing.images[0]}`}
                     alt=""
                 />
             </div>
@@ -24,7 +24,7 @@ export default function FutsalCard({ listing }) {
                 </div>
                 <div>ratings</div>
                 <div>
-                    <p>{listing.description}</p>
+                    <p>{listing.short_description}</p>
                 </div>
                 <div className="flex flex-col gap-2 items-end justify-end pr-4">
                     <p className="text-secondary-color">

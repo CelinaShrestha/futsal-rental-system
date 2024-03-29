@@ -1,0 +1,29 @@
+@layer components {
+    .pill {
+        @apply w-fit min-w-[32px] text-xs px-2 py-1 text-center rounded-full border-[1px];
+
+        &-primary {
+            @apply bg-primary-light-5 text-primary-light-3 border-primary-light-3;
+        }
+
+        &-secondary {
+            @apply bg-secondary-light-5 text-secondary-light-3 border-secondary-light-3;
+        }
+
+        &-success {
+            @apply bg-success-light-5 text-success-color border-success-color;
+        }
+
+        &-error {
+            @apply bg-error-light-5 text-error-color border-error-color;
+        }
+
+        &-warning {
+            @apply bg-warning-light-5 text-warning-color border-warning-color;
+        }
+
+        &-accent {
+            @apply bg-accent-light-5 text-accent-color border-accent-color;
+        }
+    }
+}

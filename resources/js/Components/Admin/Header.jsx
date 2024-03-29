@@ -82,9 +82,16 @@ function Header() {
                             label={"Vendors"}
                             icon={<RiTeamLine />}
                         >
-                            <MenuItem icon={<RiUserFollowLine />}>
+                            <MenuItem
+                                icon={<RiUserFollowLine />}
+                                href={route("admin.vendor.register")}
+                                active={route().current(
+                                    "admin.vendor.register"
+                                )}
+                            >
                                 Add Vendor
                             </MenuItem>
+
                             <MenuItem
                                 icon={<RiListUnordered />}
                                 href={route("vendors.show")}
@@ -100,15 +107,21 @@ function Header() {
                         >
                             <MenuItem
                                 icon={<RiListUnordered />}
-                                // href={route("futsal-listings.show")}
-                                // active={route().current("futsal-listings.show")}
+                                href={route("admin.courts.show")}
+                                active={route().current("admin.courts.show")}
                             >
                                 Courts
                             </MenuItem>
                             <MenuItem icon={<RiListUnordered />}>
                                 Booked List
                             </MenuItem>
-                            <MenuItem icon={<GoUnverified />}>
+                            <MenuItem
+                                icon={<GoUnverified />}
+                                href={route("admin.courts.unverified")}
+                                active={route().current(
+                                    "admin.courts.unverified"
+                                )}
+                            >
                                 Unverified
                             </MenuItem>
                         </SubMenu>

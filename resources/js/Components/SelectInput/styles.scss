@@ -1,0 +1,13 @@
+.form-group {
+  .form-control {
+    .custom-select {
+      input {
+        @apply focus:outline-none focus:border-0 focus:ring-0;
+
+        &.invalid {
+          @apply focus:ring-0;
+        }
+      }
+    }
+  }
+}

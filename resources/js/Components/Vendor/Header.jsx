@@ -33,7 +33,7 @@ function Header() {
     };
 
     return (
-        <div>
+        <div className="height">
             <Sidebar
                 className={`app ${toggled ? "toggled" : ""} sidebar`}
                 collapsed={collapsed}
