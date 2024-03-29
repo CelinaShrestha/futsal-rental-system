@@ -37,14 +37,14 @@ export default function AdminLogin({ status, canResetPassword }) {
                 </div>
             )}
             <AuthDescription className="mb-8">
-                <p>Welcome back ! Login to book your Futsal.</p>
+                <p>Welcome back ! Login to access the Admin Portal.</p>
             </AuthDescription>
             <form onSubmit={submit}>
                 <div>
                     <TextInput
                         id="name"
                         name="name"
-                        label="name"
+                        label="Name"
                         value={data.name}
                         autoComplete="name"
                         onChange={(e) => setData("name", e.target.value)}
@@ -52,7 +52,6 @@ export default function AdminLogin({ status, canResetPassword }) {
                     />
 
                     <InputError message={errors.name} className="mt-2" />
-
                 </div>
 
                 <div className="mt-4">
@@ -95,9 +94,9 @@ export default function AdminLogin({ status, canResetPassword }) {
                 </div>
 
                 <div className="flex flex-col-reverse items-center justify-end gap-4">
-                    <Link href={route("register")} className="link">
+                    {/* <Link href={route("register")} className="link">
                         Don't have an account? Register
-                    </Link>
+                    </Link> */}
 
                     <Button size="lg" disabled={processing}>
                         Login

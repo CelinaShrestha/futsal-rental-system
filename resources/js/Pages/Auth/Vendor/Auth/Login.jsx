@@ -37,7 +37,7 @@ export default function VendorLogin({ status, canResetPassword }) {
                 </div>
             )}
             <AuthDescription className="mb-8">
-                <p>Welcome back ! Login to book your Futsal.</p>
+                <p>Welcome back ! Login to access the Vendor Portal.</p>
             </AuthDescription>
             <form onSubmit={submit}>
                 <div>
@@ -52,7 +52,6 @@ export default function VendorLogin({ status, canResetPassword }) {
                     />
 
                     <InputError message={errors.username} className="mt-2" />
-
                 </div>
 
                 <div className="mt-4">
@@ -95,9 +94,9 @@ export default function VendorLogin({ status, canResetPassword }) {
                 </div>
 
                 <div className="flex flex-col-reverse items-center justify-end gap-4">
-                    <Link href={route("vendor.register")} className="link">
+                    {/* <Link href={route("vendor.register")} className="link">
                         Don't have an account? Register
-                    </Link>
+                    </Link> */}
 
                     <Button size="lg" disabled={processing}>
                         Login
