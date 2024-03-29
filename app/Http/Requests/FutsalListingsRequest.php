@@ -19,46 +19,50 @@ class FutsalListingsRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
+
     public function rules(): array
     {
-        if (request()->isMethod('post')) {
-            return [
-                'title' => 'required|string|max:258',
-                'image' => 'required|image|mimes:jpg,jpeg,png,jpg,gif,svg|max:2048',
-                'description' => 'required|string',
-                'location' => 'required|string',
-                'price' => 'required|integer',
-            ];
-        } else {
-            return [
-                'title' => 'required|string|max:258',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                'description' => 'required|string',
-                'location' => 'required|string',
-                'price' => 'required|integer',
-            ];
-        }
+        $commonRules = [
+            'title' => 'required|string|max:255',
+            'short_description' => 'required|string',
+            'long_description' => 'required|string',
+            'location' => 'required|string',
+            'price' => 'required|integer',
+            'capacity' => 'required|integer|min:0|max:15',
+            'contactNumber' => 'required|string',
+            'altContactNumber' => 'nullable|string',
+            'facilities' => 'nullable|array',
+            'is_verified' => 'boolean',
+            'is_available' => 'boolean',
+        ];
+
+        $imageRules = [
+            'images' => 'nullable|array|max:5',
+            'images.*' => 'image|mimes:jpg,jpeg,png,gif,svg|max:2048',
+        ];
+
+        return $this->isMethod('post') ? array_merge($commonRules, $imageRules) : $commonRules;
     }
 
     public function messages()
     {
-        if (request()->isMethod('post')) {
-            return [
-                'title.required' => 'Name is required!',
-                'image.required' => 'Image is required!',
-                'image.mimes' => 'Image must be of type jpeg, png, jpg, gif, svg!',
-                'image.max' => 'Image must be less than 2048kb!',
-                'description.required' => 'Descritpion is required!',
-                'location.required' => 'Location is required!',
-                'price.required' => 'Price is required!',
-            ];
-        } else {
-            return [
-                'title.required' => 'Name is required!',
-                'description.required' => 'Descritpion is required!',
-                'location.required' => 'Location is required!',
-                'price.required' => 'Price is required!',
-            ];
-        }
+        return [
+            'title.required' => 'The title is required.',
+            'title.max' => 'The title must not exceed 255 characters.',
+            'short_description.required' => 'The short description is required.',
+            'long_description.required' => 'The long description is required.',
+            'location.required' => 'The location is required.',
+            'price.required' => 'The price is required.',
+            'price.integer' => 'The price must be an integer.',
+            'capacity.required' => 'The capacity is required.',
+            'capacity.integer' => 'The capacity must be an integer.',
+            'contactNumber.required' => 'The contact number is required.',
+            'images.required' => 'At least one image is required.',
+            'images.array' => 'The images field must be an array.',
+            'images.max' => 'Max 5 images allowed.',
+            'images.*.image' => 'Each image must be a valid image file.',
+            'images.*.mimes' => 'Each image must be of type jpeg, png, jpg, gif.',
+            'images.*.max' => 'Each image must not exceed 2048kb.',
+        ];
     }
 }
