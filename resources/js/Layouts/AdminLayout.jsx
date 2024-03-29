@@ -15,7 +15,7 @@ export default function AdminLayout({ user, children }) {
             </div>
 
             <main>
-                <div className="w-4/5 ml-9">{children}</div>
+                <div className="ml-9">{children}</div>
             </main>
         </div>
     );
