@@ -1,16 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import Icon from "@/Components/Icon";
 import Button from "@/Components/Button";
 import { Inertia } from "@inertiajs/inertia";
 import ImageSlider from "@/Components/ImageSlider";
+import Booking from "../Booking";
+import CourtDescription from "@/Components/CourtDescription";
+import RatingsList from "@/Components/RatingsList";
 
 export default function FutsalDescription({ futsal_listing, auth }) {
+    const [showOverview, setShowOverview] = useState(true);
+    const [showRatings, setShowRatings] = useState(false);
 
-    const onClickHandler = () => {
-        console.log("Book Now Clicked");
-        Inertia.visit(route("book"));
-    }
+    const handleOverviewClick = () => {
+        setShowOverview(true);
+        setShowRatings(false);
+    };
+
+    const handleRatingsClick = () => {
+        setShowOverview(false);
+        setShowRatings(true);
+    };
+    // const onClickHandler = () => {
+    //     console.log("Book Now Clicked");
+    //     Inertia.visit(route("book", { id: futsal_listing.id }));
+    // };
+    const [isOpen, setIsOpen] = useState(false);
+    const openModal = () => {
+        setIsOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsOpen(false);
+    };
 
     return (
         <AuthenticatedLayout user={auth.user}>
@@ -35,7 +57,11 @@ export default function FutsalDescription({ futsal_listing, auth }) {
                         <h2 className="font-semibold">
                             Rs {futsal_listing.price}/hr
                         </h2>
-                        <Button variant="secondary" size="sm" onClick={onClickHandler}>
+                        <Button
+                            variant="secondary"
+                            size="sm"
+                            onClick={openModal}
+                        >
                             Book Now
                         </Button>
                     </div>
@@ -52,29 +78,28 @@ export default function FutsalDescription({ futsal_listing, auth }) {
                     ))} */}
                     <ImageSlider images={futsal_listing.images} />
                 </div>
-                <div className="flex flex-col gap-5 mt-8">
-                    <div>
-                        <h2 className="font-semibold text-lg">Description</h2>
-                        <p>{futsal_listing.long_description}</p>
-                        {/* Other details of the futsal listing */}
-                    </div>
-                    <div>
-                        <h2 className="font-semibold text-lg">Facilities</h2>
-                        <p>{futsal_listing.facilities}</p>
-                        {/* Other details of the futsal listing */}
-                    </div>
-                    <div>
-                        <h2 className="font-semibold text-lg">Contact Info</h2>
-                        <p>{futsal_listing.contactNumber}</p>
-                        {/* Other details of the futsal listing */}
-                    </div>
-                    <div>
-                        <h2 className="font-semibold text-lg">Location</h2>
-                        <p>*Map Integration*</p>
-                        {/* Other details of the futsal listing */}
-                    </div>
+                <div className="flex my-4 max-w-sm ">
+                    <Button
+                        variant="link"
+                        size="sm"
+                        onClick={handleOverviewClick}
+                    >
+                        Overview
+                    </Button>
+                    <Button
+                        variant="link"
+                        size="sm"
+                        onClick={handleRatingsClick}
+                    >
+                        Ratings
+                    </Button>
                 </div>
+                {showOverview && (
+                    <CourtDescription futsal_listing={futsal_listing} />
+                )}
+                {showRatings && <RatingsList />}
             </div>
+            {isOpen && <Booking isOpen={isOpen} closeModal={closeModal} />}
         </AuthenticatedLayout>
     );
 }
