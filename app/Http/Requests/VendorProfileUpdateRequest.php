@@ -2,11 +2,12 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
+use App\Models\Vendor;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
-class ProfileUpdateRequest extends FormRequest
+class VendorProfileUpdateRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -16,7 +17,7 @@ class ProfileUpdateRequest extends FormRequest
     public function rules(): array
     {
         $id = $this->route('id'); // Retrieve the id from the route parameters
-        $user = User::find($id);
+        $vendor = Vendor::find($id);
         return [
             'firstName' => ['required', 'string', 'max:255'],
             'middleName' => ['nullable', 'string', 'max:255'], // Make it nullable if it's not required
@@ -27,7 +28,7 @@ class ProfileUpdateRequest extends FormRequest
                 'lowercase',
                 'email',
                 'max:255',
-                Rule::unique(User::class)->ignore($user), // Use the retrieved admin ID here
+                Rule::unique(Vendor::class)->ignore($vendor), // Use the retrieved admin ID here
             ],
             'contactNumber' => 'required|string|max:10|min:10',
             'address' => 'required|string|max:255',

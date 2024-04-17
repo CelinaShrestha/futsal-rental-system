@@ -36,4 +36,9 @@ class Vendor extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function futsalListings()
+    {
+        return $this->hasMany(FutsalListings::class)->where('is_verified', true);
+    }
 }
