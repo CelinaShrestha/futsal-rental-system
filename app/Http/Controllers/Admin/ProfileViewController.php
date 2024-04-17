@@ -9,12 +9,13 @@ use App\Models\FutsalListings;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Vendor;
+use App\Models\User;
 
 class ProfileViewController extends Controller
 {
     public function futsalshow()
     {
-        $futsal_listings = FutsalListings::all();
+        $futsal_listings = FutsalListings::with('vendor')->get();
 
         return Inertia::render('Admin/Court/ShowCourt/index', [
             'futsal_listings' => $futsal_listings,
@@ -41,10 +42,23 @@ class ProfileViewController extends Controller
 
     public function vendorshow()
     {
-        $vendor = Vendor::all();
+        $vendors = Vendor::withCount([
+            'futsalListings as listings_count' => function ($query) {
+                $query->where('is_verified', true); // Assuming there's an 'is_verified' column in the futsal_listings table
+            },
+        ])->get();
 
         return Inertia::render('Admin/Vendor/ShowVendor/index', [
-            'vendor' => $vendor,
+            'vendor' => $vendors,
+        ]);
+    }
+
+    public function customershow()
+    {
+        $user = User::all();
+
+        return Inertia::render('Admin/Customer/ShowCustomer/index', [
+            'user' => $user,
         ]);
     }
 }
