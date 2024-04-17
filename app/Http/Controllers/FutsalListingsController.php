@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use App\Models\Vendor;
+use Illuminate\Support\Facades\Auth;
 
 class FutsalListingsController extends Controller
 {
@@ -29,48 +30,54 @@ class FutsalListingsController extends Controller
 
     public function create()
     {
-        return Inertia::render('Vendor/Court/AddCourt/index');
-    }
-
-  public function store(FutsalListingsRequest $request)
-{
-    try {
-
-        // Create an array to store image file names
-        $imageNames = [];
-
-        // Upload and store each image
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $imageName = Str::random(32) . '.' . $image->getClientOriginalExtension();
-                $imageNames[] = $imageName;
-                Storage::disk('public')->put($imageName, file_get_contents($image));
-            }
-        }
-
-        // Create FutsalListing
-        $futsalListing = FutsalListings::create([
-            'title' => $request->title,
-            'short_description' => $request->short_description,
-            'long_description' => $request->long_description,
-            'images' => $imageNames,
-            'location' => $request->location,
-            'price' => $request->price,
-            'capacity' => $request->capacity,
-            'facilities' => $request->facilities,
-            'contactNumber' => $request->contactNumber,
-            'altContactNumber' => $request->altContactNumber,
-            'is_verified' => $request->is_verified ?? false,
-            'is_available' => $request->is_available ?? true,
+        $vendor_id = Auth::id();
+        return Inertia::render('Vendor/Court/AddCourt/index', [
+            'vendor_id' => $vendor_id,
         ]);
-
-        // Redirect back to a specific page with success message
-        return redirect()->route('vendor.dashboard')->with('success', 'Futsal listing created successfully.');
-    } catch (\Exception $e) {
-        // Handle exceptions and redirect back with an error message
-        return back()->withInput()->withErrors(['error' => 'Something went wrong. Please try again.']);
     }
-}
+
+    public function store(FutsalListingsRequest $request)
+    {
+        try {
+            $user_id = Auth::id();
+            // Create an array to store image file names
+            $imageNames = [];
+
+            // Upload and store each image
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $imageName = Str::random(32) . '.' . $image->getClientOriginalExtension();
+                    $imageNames[] = $imageName;
+                    Storage::disk('public')->put($imageName, file_get_contents($image));
+                }
+            }
+
+            // Create FutsalListing
+            $futsalListing = FutsalListings::create([
+                'title' => $request->title,
+                'short_description' => $request->short_description,
+                'long_description' => $request->long_description,
+                'images' => $imageNames,
+                'location' => $request->location,
+                'price' => $request->price,
+                'capacity' => $request->capacity,
+                'facilities' => $request->facilities,
+                'contactNumber' => $request->contactNumber,
+                'altContactNumber' => $request->altContactNumber,
+                'is_verified' => $request->is_verified ?? false,
+                'is_available' => $request->is_available ?? true,
+                'vendor_id' => $user_id,
+            ]);
+
+            // Redirect back to a specific page with success message
+            return redirect()->route('vendor.dashboard')->with('success', 'Futsal listing created successfully.');
+        } catch (\Exception $e) {
+            // Handle exceptions and redirect back with an error message
+            return back()
+                ->withInput()
+                ->withErrors(['error' => 'Something went wrong. Please try again.']);
+        }
+    }
     // public function store(FutsalListingsRequest $request)
     // {
     //     $vendor = $this->vendor();
@@ -221,7 +228,6 @@ class FutsalListingsController extends Controller
             $futsal_listings->altContactNumber = $request->altContactNumber;
             $futsal_listings->is_verified = $request->is_verified ?? false;
             $futsal_listings->is_available = $request->is_available ?? true;
-            $futsal_listings->vendor_id = $request->vendor_id;
 
             // Handle image upload for each image in the request
             if ($request->hasFile('images')) {
