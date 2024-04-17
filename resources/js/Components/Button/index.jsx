@@ -19,6 +19,7 @@ const Button = ({
       "btn-primary": variant === "primary",
       "btn-secondary": variant === "secondary",
       "btn-danger": variant === "danger",
+      "btn-link": variant === "link",
       "btn-sm": size === "sm",
       "btn-md": size === "md",
       "btn-lg": size === "lg",

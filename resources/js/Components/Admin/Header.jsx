@@ -20,7 +20,8 @@ import { FiChevronsLeft, FiChevronsRight } from "react-icons/fi/";
 import { GoUnverified } from "react-icons/go";
 import { Sidebar, SubMenu, Menu, MenuItem } from "react-pro-sidebar";
 
-function Header() {
+function Header({user}) {
+    console.log("user:", user.user.name);
     const [collapsed, setCollapsed] = useState(false);
     const [toggled, setToggled] = useState(false);
 
@@ -33,13 +34,18 @@ function Header() {
     };
 
     return (
-        <div>
+        <div >
             <Sidebar
                 className={`app ${toggled ? "toggled" : ""} sidebar`}
                 collapsed={collapsed}
                 toggled={toggled}
                 handleToggleSidebar={handleToggleSidebar}
                 handleCollapsedChange={handleCollapsedChange}
+                rootStyles={{
+                    position: "fixed",
+                    height: "100vh",
+                    width: "300px",
+                }}
             >
                 <main>
                     <Menu>
@@ -62,7 +68,7 @@ function Header() {
                                         letterSpacing: "1px",
                                     }}
                                 >
-                                    YOUR LOGO!..
+                                    Welcome Back! {user.user.name}
                                 </div>
                             </MenuItem>
                         )}
@@ -130,7 +136,11 @@ function Header() {
                             label={"Customers"}
                             icon={<RiAccountCircleLine />}
                         >
-                            <MenuItem icon={<RiListUnordered />}>
+                            <MenuItem
+                                icon={<RiListUnordered />}
+                                href={route("customers.show")}
+                                active={route().current("customers.show")}
+                            >
                                 Customer List
                             </MenuItem>
                         </SubMenu>
@@ -139,7 +149,11 @@ function Header() {
                             label={"Settings"}
                             icon={<RiSettings3Line />}
                         >
-                            <MenuItem icon={<RiProfileLine />}>
+                            <MenuItem
+                                icon={<RiProfileLine />}
+                                href={route("vendor.profile.edit")}
+                                active={route().current("vendor.profile.edit")}
+                            >
                                 Profile
                             </MenuItem>
                             <MenuItem icon={<RiLogoutBoxLine />}>

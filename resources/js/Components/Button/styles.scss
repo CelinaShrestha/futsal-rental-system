@@ -1,25 +1,33 @@
 @layer components {
-  .btn {
-    @apply flex justify-center items-center gap-2 font-display px-8 h-12 w-full transition rounded-md;
+    .btn {
+        @apply flex justify-center items-center gap-2 font-display px-8 h-12 w-full transition rounded-md;
 
-    &-primary {
-      @apply bg-primary-color text-white hover:bg-primary-dark-3;
-    }
+        &-primary {
+            @apply bg-primary-color text-white hover:bg-white hover:border-primary-color hover:border hover:text-primary-color;
+        }
 
-    &-secondary {
-      @apply bg-secondary-color text-white hover:bg-secondary-dark-3;
-    }
+        &-secondary {
+            @apply bg-secondary-color text-white  hover:bg-white hover:border-secondary-color hover:border hover:text-secondary-color;
+        }
 
-    &-danger {
-      @apply bg-accent-color text-white hover:bg-accent-dark-1;
-    }
+        &-danger {
+            @apply bg-accent-color text-white hover:bg-white hover:border-accent-color hover:border hover:text-accent-color;
+        }
 
-    &-sm {
-      @apply h-10;
-    }
+        &-sm {
+            @apply h-10;
+        }
 
-    &-lg {
-      @apply h-14;
+        &-lg {
+            @apply h-14;
+        }
+
+        &-link {
+            @apply bg-transparent  hover:text-accent-color shadow-lg border border-gray-700 rounded-none;
+        }
+
+        &:disabled {
+            @apply bg-gray-300 text-gray-500 cursor-not-allowed;
+        }
     }
-  }
 }

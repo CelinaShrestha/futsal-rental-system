@@ -1,0 +1,18 @@
+.slick-slider{
+    @apply relative;
+}
+//     .slick-arrow {
+//         @apply bg-white hover:bg-gray-200 text-gray-900;
+//     }
+//     .slick-track {
+//         @apply flex w-full mx-0 gap-5;
+//     }
+//     .slick-slide .slick-active {
+//         @apply w-64;
+//     }
+// }
+.slick-slide {
+    display: inline-block; /* or inline-flex */
+    width: auto; /* Ensure each slide occupies its content width */
+}
+

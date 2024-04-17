@@ -1,0 +1,28 @@
+.custom-datepicker {
+    @apply border border-gray-300 rounded-md shadow-sm;
+}
+
+// Custom styles for the date picker input
+.custom-datepicker input {
+    @apply block w-full pl-3 pr-10 py-2 border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-blue-500;
+}
+
+// Custom styles for the date picker calendar
+.custom-datepicker .react-datepicker__calendar {
+    @apply border border-gray-300 rounded-md;
+}
+
+// Custom styles for the date picker day
+.custom-datepicker .react-datepicker__day {
+    @apply text-gray-700;
+}
+
+// Custom styles for the date picker selected day
+.custom-datepicker .react-datepicker__day--selected {
+    @apply bg-blue-500 text-white;
+}
+
+// Custom styles for the date picker today
+.custom-datepicker .react-datepicker__day--today {
+    @apply font-semibold;
+}
