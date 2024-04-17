@@ -4,15 +4,16 @@ import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@inertiajs/react";
+import Footer from "@/Components/Footer";
 
-export default function Authenticated({ user, header, children }) {
+export default function AuthenticatedLayout({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
     return (
         <div className="min-h-screen ">
-            <nav className="mb-4 mt-2">
-                <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-14">
+            <nav className="mb-4 mt-2 max-w-[90%] mx-auto">
+                <div className="max-w-8xl mx-auto ">
                     <div className="flex justify-between h-16">
                         {/* <div className="flex"> */}
                         <div className="flex items-center logo">
@@ -30,7 +31,9 @@ export default function Authenticated({ user, header, children }) {
                             </NavLink>
                             <NavLink
                                 href={route("futsal-listings.index")}
-                                active={route().current("futsal-listings.index")}
+                                active={route().current(
+                                    "futsal-listings.index"
+                                )}
                             >
                                 Futsals
                             </NavLink>
@@ -178,6 +181,7 @@ export default function Authenticated({ user, header, children }) {
             )} */}
 
             <main>{children}</main>
+            <Footer />
         </div>
     );
 }

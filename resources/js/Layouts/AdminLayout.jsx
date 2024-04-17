@@ -9,13 +9,13 @@ import Header from "@/Components/Admin/Header";
 
 export default function AdminLayout({ user, children }) {
     return (
-        <div className="flex">
-            <div>
-                <Header />
+        <div className="grid grid-cols-[20%_80%]">
+            <div className="z-10">
+                <Header user={user} />
             </div>
 
             <main>
-                <div className="ml-9">{children}</div>
+                <div className="ml-4 ">{children}</div>
             </main>
         </div>
     );

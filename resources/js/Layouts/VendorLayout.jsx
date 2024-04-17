@@ -9,13 +9,12 @@ import Header from "@/Components/Vendor/Header";
 
 export default function VendorLayout({ user, children }) {
     return (
-        <div className="flex">
-            <div>
-                <Header />
+        <div className="grid grid-cols-[20%_80%]">
+            <div className="z-10">
+                <Header user={user} />
             </div>
-
             <main>
-                <div className="ml-9">{children}</div>
+                <div className="">{children}</div>
             </main>
         </div>
     );
