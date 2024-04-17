@@ -1,6 +1,6 @@
 import Select from "react-select";
 
-const SelectInput = ({ label, options, value, onChange, isSearchable }) => {
+const SelectInput = ({ label, options, value, onChange, isSearchable,required }) => {
     return (
         <div className="form-group">
             <label>{label}</label>
@@ -10,7 +10,8 @@ const SelectInput = ({ label, options, value, onChange, isSearchable }) => {
                     value={value}
                     onChange={onChange}
                     placeholder={`Select ${label}`}
-                    isSearchable={isSearchable} // Set the isSearchable prop
+                    isSearchable={isSearchable}
+                    required={required}
                 />
             </div>
         </div>

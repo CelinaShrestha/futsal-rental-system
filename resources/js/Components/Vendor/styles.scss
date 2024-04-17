@@ -1,19 +1,25 @@
 .sidebar {
+    @apply h-full absolute bg-surface-color w-[350px];
 
-    @apply h-100vh absolute bg-primary-light-2 w-1/5;
 
-    a {
-        @apply hover:text-primary-color;
-    }
 
-    .ps-submenu-content {
-        @apply bg-primary-light-5;
-    }
+    // a {
+    //     @apply hover:text-primary-color;
+    // }
+
+    // .ps-submenu-content {
+    //     @apply bg-primary-light-5;
+    // }
 
     .ps-menuitem-root {
 
         .ps-active {
-            @apply text-accent-color;
+            @apply text-primary-color;
         }
     }
+
+    .ps-submenu-content{
+        @apply bg-surface-color;
+    }
 }
+

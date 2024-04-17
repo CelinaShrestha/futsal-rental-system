@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Children, useState } from "react";
 import { Link } from "@inertiajs/react";
 import {
     RiHome4Line,
@@ -20,7 +20,7 @@ import { FiChevronsLeft, FiChevronsRight } from "react-icons/fi/";
 import { GoUnverified } from "react-icons/go";
 import { Sidebar, SubMenu, Menu, MenuItem } from "react-pro-sidebar";
 
-function Header() {
+function Header({ user }) {
     const [collapsed, setCollapsed] = useState(false);
     const [toggled, setToggled] = useState(false);
 
@@ -33,77 +33,85 @@ function Header() {
     };
 
     return (
-        <div className="height">
-            <Sidebar
-                className={`app ${toggled ? "toggled" : ""} sidebar`}
-                collapsed={collapsed}
-                toggled={toggled}
-                handleToggleSidebar={handleToggleSidebar}
-                handleCollapsedChange={handleCollapsedChange}
-            >
-                <main>
-                    <Menu>
-                        {collapsed ? (
-                            <MenuItem
-                                icon={<FiChevronsRight />}
-                                onClick={handleCollapsedChange}
-                            ></MenuItem>
-                        ) : (
-                            <MenuItem
-                                suffix={<FiChevronsLeft />}
-                                onClick={handleCollapsedChange}
-                            >
-                                <div
-                                    style={{
-                                        padding: "9px",
-                                        // textTransform: "uppercase",
-                                        fontWeight: "bold",
-                                        fontSize: 14,
-                                        letterSpacing: "1px",
-                                    }}
+        <div>
+            <div className="height ">
+                <Sidebar
+                    className={`app ${toggled ? "toggled" : ""} sidebar`}
+                    collapsed={collapsed}
+                    toggled={toggled}
+                    handleToggleSidebar={handleToggleSidebar}
+                    handleCollapsedChange={handleCollapsedChange}
+                    rootStyles={{
+                        position: "fixed",
+                        height: "100vh",
+                        width: "300px",
+                    }}
+                >
+                    <main>
+                        <Menu>
+                            {collapsed ? (
+                                <MenuItem
+                                    icon={<FiChevronsRight />}
+                                    onClick={handleCollapsedChange}
+                                ></MenuItem>
+                            ) : (
+                                <MenuItem
+                                    suffix={<FiChevronsLeft />}
+                                    onClick={handleCollapsedChange}
                                 >
-                                    YOUR LOGO!..
-                                </div>
-                            </MenuItem>
-                        )}
-                        <hr />
-                    </Menu>
+                                    <div
+                                        style={{
+                                            padding: "9px",
+                                            // textTransform: "uppercase",
+                                            fontWeight: "bold",
+                                            fontSize: 14,
+                                            letterSpacing: "1px",
+                                        }}
+                                    >
+                                        Welcome Back! {user.user.firstName}
+                                    </div>
+                                </MenuItem>
+                            )}
+                            <hr />
+                        </Menu>
 
-                    <Menu>
-                        <MenuItem
-                            icon={<RiHome4Line />}
-                            href={route("vendor.dashboard")}
-                            active={route().current("vendor.dashboard")}
-                        >
-                            Dashboard
-                        </MenuItem>
+                        <Menu>
+                            <MenuItem
+                                icon={<RiHome4Line />}
+                                href={route("vendor.dashboard")}
+                                active={route().current("vendor.dashboard")}
+                            >
+                                Dashboard
+                            </MenuItem>
 
-                        <SubMenu
-                            defaultOpen
-                            label={"Courts"}
-                            icon={<RiFootballLine />}
-                        >
-                            <MenuItem
-                                icon={<RiListUnordered />}
-                                // href={route("futsal-listings.show")}
-                                // active={route().current("futsal-listings.show")}
+                            <SubMenu
+                                defaultOpen
+                                label={"Courts"}
+                                icon={<RiFootballLine />}
                             >
-                                Courts
-                            </MenuItem>
-                            <MenuItem icon={<RiListUnordered />}>
-                                Booked List
-                            </MenuItem>
-                            <MenuItem
-                                icon={<GoUnverified />}
-                                href={route("futsal-listings.create")}
-                                active={route().current(
-                                    "futsal-listings.create"
-                                )}
-                            >
-                                Add Court
-                            </MenuItem>
-                        </SubMenu>
-                        {/* <SubMenu
+                                <MenuItem
+                                    icon={<RiListUnordered />}
+                                    href={route("vendor.futsal-listings")}
+                                    active={route().current(
+                                        "vendor.futsal-listings"
+                                    )}
+                                >
+                                    Courts
+                                </MenuItem>
+                                <MenuItem icon={<RiListUnordered />}>
+                                    Booked List
+                                </MenuItem>
+                                <MenuItem
+                                    icon={<GoUnverified />}
+                                    href={route("futsal-listings.create")}
+                                    active={route().current(
+                                        "futsal-listings.create"
+                                    )}
+                                >
+                                    Add Court
+                                </MenuItem>
+                            </SubMenu>
+                            {/* <SubMenu
                             defaultOpen
                             label={"Vendors"}
                             icon={<RiTeamLine />}
@@ -119,39 +127,40 @@ function Header() {
                                 Vendor List
                             </MenuItem>
                         </SubMenu> */}
-                        <SubMenu
-                            defaultOpen
-                            label={"Customers"}
-                            icon={<RiAccountCircleLine />}
-                        >
-                            <MenuItem icon={<RiListUnordered />}>
-                                Customer List
-                            </MenuItem>
-                            <MenuItem icon={<RiListUnordered />}>
-                                Refund Request
-                            </MenuItem>
-                        </SubMenu>
-                        <SubMenu
-                            defaultOpen
-                            label={"Settings"}
-                            icon={<RiSettings3Line />}
-                        >
-                            <MenuItem icon={<RiProfileLine />}>
-                                Profile
-                            </MenuItem>
-                            <MenuItem icon={<RiLogoutBoxLine />}>
-                                <Link
-                                    href={route("vendor.logout")}
-                                    method="post"
-                                    as="button"
-                                >
-                                    Log Out
-                                </Link>
-                            </MenuItem>
-                        </SubMenu>
-                    </Menu>
-                </main>
-            </Sidebar>
+                            <SubMenu
+                                defaultOpen
+                                label={"Customers"}
+                                icon={<RiAccountCircleLine />}
+                            >
+                                <MenuItem icon={<RiListUnordered />}>
+                                    Customer List
+                                </MenuItem>
+                                <MenuItem icon={<RiListUnordered />}>
+                                    Refund Request
+                                </MenuItem>
+                            </SubMenu>
+                            <SubMenu
+                                defaultOpen
+                                label={"Settings"}
+                                icon={<RiSettings3Line />}
+                            >
+                                <MenuItem icon={<RiProfileLine />}>
+                                    Profile
+                                </MenuItem>
+                                <MenuItem icon={<RiLogoutBoxLine />}>
+                                    <Link
+                                        href={route("vendor.logout")}
+                                        method="post"
+                                        as="button"
+                                    >
+                                        Log Out
+                                    </Link>
+                                </MenuItem>
+                            </SubMenu>
+                        </Menu>
+                    </main>
+                </Sidebar>
+            </div>
         </div>
     );
 }

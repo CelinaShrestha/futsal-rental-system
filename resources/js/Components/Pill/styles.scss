@@ -3,11 +3,11 @@
         @apply w-fit min-w-[32px] text-xs px-2 py-1 text-center rounded-full border-[1px];
 
         &-primary {
-            @apply bg-primary-light-5 text-primary-light-3 border-primary-light-3;
+            @apply bg-primary-light-5 text-primary-color border-primary-light-3;
         }
 
         &-secondary {
-            @apply bg-secondary-light-5 text-secondary-light-3 border-secondary-light-3;
+            @apply bg-secondary-light-5 text-secondary-color border-secondary-light-3;
         }
 
         &-success {
