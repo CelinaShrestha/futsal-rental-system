@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React,{useState} from "react";
 import Button from "@/Components/Button";
 import { RiEdit2Line, RiDeleteBin6Line } from "react-icons/ri";
 import { Inertia } from "@inertiajs/inertia";
 import Modal from "@/Components/Modal";
 import { useForm } from "@inertiajs/react";
 
-function VendorTable({ vendor }) {
+function UserTable({ user }) {
     const onClickEdit = (listingId) => {
         // console.log(listing.id);
-        Inertia.visit(route("admin.vendor.profile.edit", { id: listingId }));
+        Inertia.visit(route("admin.customer.profile.edit", { id: listingId }));
     };
+
     const {
         data,
         setData,
@@ -31,16 +32,15 @@ function VendorTable({ vendor }) {
     const handleDeleteConfirm = (listingId) => {
         // Perform delete operation here
         console.log("Item deleted");
-        destroy(route("admin.vendor.profile.destroy", { id: listingId }), {
+        destroy(route("admin.customer.profile.destroy", { id: listingId }), {
             preserveScroll: true,
             onSuccess: () => closeModal(),
             onFinish: () => reset(),
         });
     };
-
     return (
         <>
-            {vendor.map((listing) => (
+            {user.map((listing) => (
                 <tr key={listing.id}>
                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                         <div className="flex items-center">
@@ -53,7 +53,7 @@ function VendorTable({ vendor }) {
                             </div>
                             <div className="ml-3">
                                 <p className="text-gray-900 whitespace-no-wrap">
-                                    {listing.firstName} {listing.lastName}
+                                    {listing.firstName}
                                 </p>
                             </div>
                         </div>
@@ -70,9 +70,7 @@ function VendorTable({ vendor }) {
                     </td>
                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                         <p className="text-gray-900 whitespace-no-wrap">
-                            {listing.listings_count !== null
-                                ? listing.listings_count
-                                : 0}
+                            *Listngs no*
                         </p>
                     </td>
                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -104,12 +102,12 @@ function VendorTable({ vendor }) {
                         <Modal
                             isOpen={isOpen}
                             closeModal={closeModal}
-                            modalTitle="Delete Vendor?"
+                            modalTitle="Delete Customer?"
                         >
                             <form className="p-6">
                                 <p>
-                                    Are you sure you want to delete the vendor's
-                                    profile?
+                                    Are you sure you want to delete the
+                                    customer's profile?
                                 </p>
                                 <div className="flex justify-end mt-4">
                                     <Button
@@ -137,4 +135,4 @@ function VendorTable({ vendor }) {
     );
 }
 
-export default VendorTable;
+export default UserTable;

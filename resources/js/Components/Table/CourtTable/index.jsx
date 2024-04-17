@@ -2,8 +2,14 @@ import React from "react";
 import Button from "@/Components/Button";
 import { RiEdit2Line, RiDeleteBin6Line } from "react-icons/ri";
 import Pill from "@/Components/Pill";
+import { Inertia } from "@inertiajs/inertia";
+
 
 function CourtTable({ futsal_listings }) {
+    const onClickEdit = (listingId) => {
+        // console.log(listing.id);
+        Inertia.visit(route("admin.court.profile.edit", { id: listingId }));
+    };
     return (
         <>
             {futsal_listings.map((listing) => (
@@ -36,7 +42,7 @@ function CourtTable({ futsal_listings }) {
                     </td>
                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                         <p className="text-gray-900 whitespace-no-wrap">
-                            *Listngs Owner*
+                            {listing.vendor.firstName}
                         </p>
                     </td>
                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -56,6 +62,7 @@ function CourtTable({ futsal_listings }) {
                             size="sm"
                             variant="secondary"
                             className="w-[25px]"
+                            onClick={() => onClickEdit(listing.id)}
                         >
                             <span>
                                 <RiEdit2Line />

@@ -1,11 +1,11 @@
 .futsal-card {
-    @apply p-4 h-[250px] w-[700px] border rounded-md grid grid-cols-[auto_auto] justify-items-stretch;
+    @apply h-[250px] w-[800px] border rounded-md grid grid-cols-[auto_auto] justify-items-stretch;
 
     .img {
-        @apply w-[250px] h-[200px];
+        @apply w-[400px] h-[250px];
 
         img {
-            @apply h-full w-full rounded-sm;
+            @apply h-full w-full rounded-l-sm;
         }
     }
 
