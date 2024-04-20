@@ -1,6 +1,6 @@
 .sidebar {
 
-    @apply h-100vh absolute bg-primary-light-2 w-1/5;
+    @apply h-screen absolute bg-primary-light-2 w-1/5;
 
     a {
         @apply hover:text-primary-color;
