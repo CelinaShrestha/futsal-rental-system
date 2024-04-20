@@ -70,12 +70,15 @@ class FutsalListingsController extends Controller
             ]);
 
             // Redirect back to a specific page with success message
-            return redirect()->route('vendor.dashboard')->with('success', 'Futsal listing created successfully.');
+            return redirect()
+                ->route('time-slots.index', ['id' => $futsalListing->id])
+                ->with('success', 'Futsal listing created successfully.');
         } catch (\Exception $e) {
-            // Handle exceptions and redirect back with an error message
-            return back()
-                ->withInput()
-                ->withErrors(['error' => 'Something went wrong. Please try again.']);
+            // Log the exception for debugging purposes
+            Log::error('Futsal listing creation failed: ' . $e->getMessage());
+
+            // Redirect back with an error message
+            return back()->withErrors(['error' => 'Something went wrong. Please try again.']);
         }
     }
     // public function store(FutsalListingsRequest $request)

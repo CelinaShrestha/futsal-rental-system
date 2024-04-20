@@ -19,25 +19,26 @@ class TimeSlotRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
+
     public function rules(): array
     {
         return [
-            'day' => 'required|string',
-            'start_time' => 'required|time_format:H:i',
-            'end_time' => 'required|time_format:H:i',
-            'is_booked' => 'boolean',
-            'is_available' => 'boolean',
-            'vendor_id' => 'required|integer|exists:vendors,id',
-            'futsal_listings_id' => 'required|integer|exists:futsal_listings,id',
+            'timeSlots' => 'required|array',
+            'timeSlots.*.day' => 'required|string',
+            'timeSlots.*.start_time' => 'required|date_format:H:i',
+            'timeSlots.*.end_time' => 'required|date_format:H:i',
+            'futsal_listings_id' => 'required|integer|exists:futsal_listings,id', // Moved outside of timeSlots array
         ];
     }
 
     public function messages()
     {
         return [
-            'day.required' => 'The day is required.',
-            'start_time.required' => 'The start time is required.',
-            'end_time.required' => 'The end time is required.',
+            'timeSlots.*.day.required' => 'The day is required.',
+            'timeSlots.*.start_time.required' => 'The start time is required.',
+            'timeSlots.*.end_time.required' => 'The end time is required.',
+            'futsal_listings_id.required' => 'The futsal listing ID is required.',
+            'futsal_listings_id.exists' => 'The provided futsal listing ID does not exist.',
         ];
     }
 }

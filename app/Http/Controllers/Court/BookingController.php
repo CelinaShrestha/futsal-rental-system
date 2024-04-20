@@ -7,20 +7,26 @@ use Illuminate\Http\Request;
 use App\Models\FutsalListings;
 use Inertia\Inertia;
 use Label84\HoursHelper\Facades\HoursHelper;
+use App\Models\TimeSlot;
+
 
 class BookingController extends Controller
 {
     public function show($id)
     {
         $futsal_listing = FutsalListings::findOrFail($id);
-        $hours = HoursHelper::create('08:00', '11:00', 60, 'H:i', [
-            ['09:00', '09:59'],
-            // more..
-        ]);
+        $timeSlot = TimeSlot::where('day', 'Thursday')->where('futsal_listings_id', $id)->first();
+
+        $hours = [];
+        if ($timeSlot && $timeSlot->start_time && $timeSlot->end_time) {
+            $hours = HoursHelper::create($timeSlot->start_time, $timeSlot->end_time, 30);
+        }
 
         return Inertia::render('Customer/Booking/index', [
             'futsal_listing' => $futsal_listing,
             'hours' => $hours,
+            'start_time' => $timeSlot->start_time ?? null,
+            'end_time' => $timeSlot->end_time ?? null,
         ]);
     }
 }
