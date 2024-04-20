@@ -21,17 +21,9 @@ export default function FutsalDescription({ futsal_listing, auth }) {
         setShowOverview(false);
         setShowRatings(true);
     };
-    // const onClickHandler = () => {
-    //     console.log("Book Now Clicked");
-    //     Inertia.visit(route("book", { id: futsal_listing.id }));
-    // };
-    const [isOpen, setIsOpen] = useState(false);
-    const openModal = () => {
-        setIsOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsOpen(false);
+    const onClickHandler = () => {
+        console.log("Book Now Clicked");
+        Inertia.visit(route("book", { id: futsal_listing.id }));
     };
 
     return (
@@ -60,7 +52,7 @@ export default function FutsalDescription({ futsal_listing, auth }) {
                         <Button
                             variant="secondary"
                             size="sm"
-                            onClick={openModal}
+                            onClick={onClickHandler}
                         >
                             Book Now
                         </Button>
@@ -99,7 +91,6 @@ export default function FutsalDescription({ futsal_listing, auth }) {
                 )}
                 {showRatings && <RatingsList />}
             </div>
-            {isOpen && <Booking isOpen={isOpen} closeModal={closeModal} />}
         </AuthenticatedLayout>
     );
 }

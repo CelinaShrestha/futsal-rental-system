@@ -1,115 +1,114 @@
 import React, { useState } from "react";
-import Modal from "@/Components/Modal";
-import Button from "@/Components/Button";
+import { Head, Link, useForm } from "@inertiajs/react";
+import InputError from "@/Components/InputError";
 import TextInput from "@/Components/TextInput";
+import Button from "@/Components/Button";
+import VendorLayout from "@/Layouts/VendorLayout";
 
-function TimeSlot({ isOpen, closeModal }) {
-    const [timeSlots, setTimeSlots] = useState({
-        Monday: { opening: "", closing: "" },
-        Tuesday: { opening: "", closing: "" },
-        Wednesday: { opening: "", closing: "" },
-        Thursday: { opening: "", closing: "" },
-        Friday: { opening: "", closing: "" },
-        Saturday: { opening: "", closing: "" },
-        Sunday: { opening: "", closing: "" },
+export default function TimeSlot({ auth, futsal_listings_id, vendor_id }) {
+    const [daysOfWeek, setDaysOfWeek] = useState([
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+    ]);
+
+    const { data, setData, post, processing, errors, reset } = useForm({
+        timeSlots: daysOfWeek.map((day) => ({
+            day,
+            start_time: "",
+            end_time: "",
+        })),
+        successMessage: null, // State to hold the success message
     });
-    const [isFormValid, setIsFormValid] = useState(false);
 
-    const handleInputChange = (day, field, value) => {
-        setTimeSlots((prevTimeSlots) => ({
-            ...prevTimeSlots,
-            [day]: {
-                ...prevTimeSlots[day],
-                [field]: value,
-            },
-        }));
-
-        // Check if all time slots are filled
-        const allFilled = Object.values(timeSlots).every(
-            (slot) => slot.opening && slot.closing
-        );
-        setIsFormValid(allFilled);
+    const handleChange = (index, field, value) => {
+        const updatedTimeSlots = [...data.timeSlots];
+        updatedTimeSlots[index][field] = value;
+        setData("timeSlots", updatedTimeSlots);
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        console.log(timeSlots);
-
-        // Here you can handle form submission, e.g., send time slots to backend
+    const submit = async (e) => {
+        e.preventDefault(); // Prevent default form submission behavior
+        try {
+            const response = await post(
+                route("time-slots.store", { id: futsal_listings_id }),
+                {
+                    timeSlots: data.timeSlots,
+                }
+            );
+            reset();
+            if (response && response.status === 201) {
+                console.log("Time slots created successfully");
+                setData("successMessage", "Time slots created successfully"); // Set success message
+                reset(); // Reset the form after successful submission
+            }
+        } catch (error) {
+            console.error("Form submission error:", error);
+        }
     };
 
     return (
-        <Modal
-            isOpen={isOpen}
-            closeModal={closeModal}
-            modalTitle="Add Time Slots"
-            maxWidth="7xl"
-        >
-            <form onSubmit={handleSubmit} className="flex flex-col">
-                <div className="container my-8 overflow-x-auto">
-                    <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
-                        <table className="min-w-full leading-normal">
-                            <thead>
-                                <tr>
-                                    <th className="table-heading">Day</th>
-                                    <th className="table-heading">
-                                        Opening Time
-                                    </th>
-                                    <th className="table-heading">
-                                        Closing Time
-                                    </th>
-                                </tr>
-                            </thead>
+        <>
+            <VendorLayout user={auth}>
+                {daysOfWeek.map((day, index) => (
+                    <form key={index} className="flex flex-col">
+                        {/* Day of the week */}
+                        <h2 className="text-xl font-bold mb-2">{day}</h2>
 
-                            <tbody className="text-center">
-                                {Object.entries(timeSlots).map(
-                                    ([day, slot]) => (
-                                        <tr key={day}>
-                                            <td>{day}</td>
-                                            <td className="table-description">
-                                                <TextInput
-                                                    type="time"
-                                                    value={slot.opening}
-                                                    onChange={(e) =>
-                                                        handleInputChange(
-                                                            day,
-                                                            "opening",
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                />
-                                            </td>
-                                            <td className="table-description">
-                                                <TextInput
-                                                    type="time"
-                                                    value={slot.closing}
-                                                    onChange={(e) =>
-                                                        handleInputChange(
-                                                            day,
-                                                            "closing",
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                    min={slot.opening}
-                                                />
-                                            </td>
-                                        </tr>
-                                    )
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                        {/* Form Content */}
+                        <TextInput
+                            label="Start Time"
+                            type="time"
+                            value={data.timeSlots[index].start_time}
+                            onChange={(e) =>
+                                handleChange(
+                                    index,
+                                    "start_time",
+                                    e.target.value
+                                )
+                            }
+                            required
+                        />
+                        <TextInput
+                            label="End Time"
+                            type="time"
+                            value={data.timeSlots[index].end_time}
+                            onChange={(e) =>
+                                handleChange(index, "end_time", e.target.value)
+                            }
+                            required
+                        />
+                    </form>
+                ))}
+
+                {/* Submit Button */}
                 <Button
-                    className="w-[150px] place-self-center"
+                    className="w-[150px] place-self-center mt-4"
                     type="submit"
-                    disabled={!isFormValid}
+                    disabled={processing}
+                    onClick={submit}
                 >
-                    Add Court
+                    {processing ? "Adding Court..." : "Add Court"}
                 </Button>
-            </form>
-        </Modal>
+
+                {/* Success Message */}
+                {data.successMessage && (
+                    <div
+                        className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mt-4"
+                        role="alert"
+                    >
+                        <strong className="font-bold">Success!</strong>
+                        <span className="block sm:inline">
+                            {" "}
+                            {data.successMessage}
+                        </span>
+                    </div>
+                )}
+            </VendorLayout>
+        </>
     );
 }
-
-export default TimeSlot;
