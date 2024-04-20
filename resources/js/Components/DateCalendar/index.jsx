@@ -14,14 +14,16 @@ export default function CustomCalendar() {
     };
 
     return (
-        <div>
+        <div className="flex flex-col gap-4 text-center">
             <Calendar
                 onChange={handleDateChange}
                 value={startDate}
                 minDate={today} // Set minDate to today's date
                 maxDate={twoWeeksLater} // Set maxDate to two weeks later
             />
-            <p>Selected Date: {startDate.toDateString()}</p>
+            <p className="font-semibold text-accent-color">
+                {startDate.toDateString()}
+            </p>
         </div>
     );
 }
