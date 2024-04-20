@@ -19,6 +19,7 @@ use App\Http\Controllers\Vendor\CourtViewController;
 
 use App\Http\Controllers\Court\BookingController;
 use App\Http\Controllers\Court\FilterController;
+use App\Http\Controllers\Court\TimeSlotController;
 
 use Inertia\Inertia;
 
@@ -115,7 +116,10 @@ Route::middleware('auth:vendor')->group(function () {
     Route::delete('/vendor/profile', [VendorProfileController::class, 'destroy'])->name('vendor.profile.destroy');
     Route::get('/vendor/addCourt', [FutsalListingsController::class, 'create'])->name('futsal-listings.create');
     Route::post('/vendor/addCourt', [FutsalListingsController::class, 'store'])->name('futsal-listings.store');
-    // Route::post('/vendor/addTimeSlots', [FutsalListingsController::class, 'storeTimeSlots'])->name('time-slots.store');
+
+    Route::get('/vendor/addTimeSlots/{id}', [TimeSlotController::class, 'index'])->name('time-slots.index');
+    Route::post('/vendor/addTimeSlots/{id}', [TimeSlotController::class, 'storeTimeSlots'])->name('time-slots.store');
+
     Route::get('/vendor/courts', [CourtViewController::class, 'index'])->name('vendor.futsal-listings');
 });
 
