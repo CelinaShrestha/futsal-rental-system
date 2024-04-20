@@ -20,7 +20,7 @@ import { FiChevronsLeft, FiChevronsRight } from "react-icons/fi/";
 import { GoUnverified } from "react-icons/go";
 import { Sidebar, SubMenu, Menu, MenuItem } from "react-pro-sidebar";
 
-function Header({user}) {
+function Header({ user }) {
     console.log("user:", user.user.name);
     const [collapsed, setCollapsed] = useState(false);
     const [toggled, setToggled] = useState(false);
@@ -34,7 +34,7 @@ function Header({user}) {
     };
 
     return (
-        <div >
+        <div>
             <Sidebar
                 className={`app ${toggled ? "toggled" : ""} sidebar`}
                 collapsed={collapsed}
