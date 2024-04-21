@@ -15,8 +15,10 @@ class CourtViewController extends Controller
         // Retrieve the authenticated user (Vendor instance)
         $vendor = Auth::guard('vendor')->user();
 
-        // Retrieve futsal listings for the vendor
-        $futsal_listings = FutsalListings::where('vendor_id', $vendor->id)->get();
+        // Retrieve futsal listings for the vendor with bookings count
+        $futsal_listings = FutsalListings::where('vendor_id', $vendor->id)
+            ->withCount('bookings')
+            ->get();
 
         return Inertia::render('Vendor/Court/ViewCourt/index', [
             'futsal_listings' => $futsal_listings,
