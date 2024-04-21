@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 
-export default function CustomCalendar() {
+export default function CustomCalendar({ onDateChange }) {
     const today = new Date();
     const twoWeeksLater = new Date();
     twoWeeksLater.setDate(today.getDate() + 14); // Set date to two weeks ahead
@@ -11,6 +11,10 @@ export default function CustomCalendar() {
 
     const handleDateChange = (date) => {
         setStartDate(date);
+        // Call the onDateChange callback with the selected date
+        if (typeof onDateChange === "function") {
+            onDateChange(date);
+        }
     };
 
     return (

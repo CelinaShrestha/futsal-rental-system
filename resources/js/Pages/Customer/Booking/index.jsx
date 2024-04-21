@@ -4,6 +4,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import CustomCalendar from "../../../Components/DateCalendar";
 import Button from "@/Components/Button";
 import { Inertia } from "@inertiajs/inertia";
+import { useForm } from "@inertiajs/inertia-react";
 
 function Booking({ auth, futsal_listing, timeSlot }) {
     const [selectedDuration, setSelectedDuration] = useState(null);
@@ -11,6 +12,19 @@ function Booking({ auth, futsal_listing, timeSlot }) {
     const [intervalOptions, setIntervalOptions] = useState([]);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [showFullDescription, setShowFullDescription] = useState(false);
+
+    console.log("Futsal Listing:", futsal_listing.id);
+    console.log(auth.user);
+
+    // Calculate total price based on the selected duration
+    const calculatePrice = () => {
+        if (selectedDuration) {
+            const durationInMinutes = parseInt(selectedDuration.value);
+            const durationInHours = durationInMinutes / 60;
+            return durationInHours * futsal_listing.price;
+        }
+        return 0;
+    };
 
     // Update interval options when timeSlot or selectedDate changes
     useEffect(() => {
@@ -26,18 +40,39 @@ function Booking({ auth, futsal_listing, timeSlot }) {
         { value: "120", label: "120 minutes" },
     ];
 
+    const { data, setData, post, processing, errors } = useForm({
+        booking_date: selectedDate,
+        interval: selectedInterval ? selectedInterval.value : null,
+        time_slot: selectedInterval ? selectedInterval.label : null,
+        total_price: calculatePrice(),
+        day: selectedDate.toLocaleDateString("en-US", { weekday: "long" }),
+    });
+
+    useEffect(() => {
+        const updateData = async () => {
+            await setData({
+                ...data,
+                booking_date: selectedDate.toISOString().split("T")[0],
+                total_price: calculatePrice(),
+                day: selectedDate.toLocaleDateString("en-US", {
+                    weekday: "long",
+                }),
+            });
+        };
+
+        updateData();
+    }, [selectedDate, selectedDuration]);
+
     const handleDurationChange = (option) => {
         setSelectedDuration(option);
         setSelectedInterval(null); // Reset selected interval
 
-        // Filter time slots for the selected day
         const selectedDaySlot = timeSlot.find(
             (slot) =>
                 slot.day ===
                 selectedDate.toLocaleDateString("en-US", { weekday: "long" })
         );
 
-        // Calculate time intervals based on duration
         const intervals = [];
         if (selectedDaySlot) {
             const startTime = new Date(
@@ -60,16 +95,26 @@ function Booking({ auth, futsal_listing, timeSlot }) {
                 intervals.push({
                     value: `${startTimeFormatted}-${endTimeFormatted}`,
                     label: `${startTimeFormatted}-${endTimeFormatted}`,
+                    duration: option.value, // Store duration here
                 });
             }
         }
 
-        // Update interval options
         setIntervalOptions(intervals);
+        setData({
+            ...data,
+            interval: null, // Reset interval when duration changes
+            time_slot: null, // Reset time slot when duration changes
+        });
     };
 
     const handleIntervalChange = (option) => {
         setSelectedInterval(option);
+        setData({
+            ...data,
+            interval: option ? option.duration : null, // Store duration here
+            time_slot: option ? option.label : null,
+        });
     };
 
     const handleDateChange = (date) => {
@@ -87,16 +132,29 @@ function Booking({ auth, futsal_listing, timeSlot }) {
         return text.substr(0, maxLength) + " ... ";
     };
 
-    const calculatePrice = () => {
-        if (selectedDuration) {
-            const durationInMinutes = parseInt(selectedDuration.value);
-            const durationInHours = durationInMinutes / 60;
-            return durationInHours * futsal_listing.price;
-        }
-        return 0;
-    };
-
     const totalPrice = calculatePrice();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault(); // Prevent default form submission behavior
+        console.log("Form submitted"); // Add a log statement to check if the function is called
+        console.log("Data:", data); // Log the form data object
+        try {
+            const response = post(
+                route("book.create", { id: futsal_listing.id })
+            ); // Submit form data asynchronously
+            console.log("Response:", response); // Log the response object
+            if (response && response.status === 200) {
+                console.log("Form submitted successfully");
+            } else {
+                console.log(
+                    "Form submission failed:",
+                    response ? response.data.message : "Unknown error"
+                );
+            }
+        } catch (error) {
+            console.error("Form submission error:", error);
+        }
+    };
 
     return (
         <AuthenticatedLayout user={auth.user}>
@@ -156,61 +214,66 @@ function Booking({ auth, futsal_listing, timeSlot }) {
                         </div>
                     </div>
                     <div className="booking-form lg:min-w-[500px] pl-6">
-                        <div className="mt-6">
-                            <p className=" text-lg font-semibold text-text">
-                                Select a date
-                            </p>
-                            <div className="mt-4 flex flex-col items-center">
-                                <CustomCalendar
-                                    value={selectedDate}
-                                    onChange={handleDateChange}
-                                />
+                        <form onSubmit={handleSubmit}>
+                            <div className="mt-6">
+                                <p className=" text-lg font-semibold text-text">
+                                    Select a date
+                                </p>
+                                <div className="mt-4 flex flex-col items-center">
+                                    <CustomCalendar
+                                        onDateChange={handleDateChange}
+                                    />
+                                </div>
                             </div>
-                        </div>
 
-                        <div className="mt-6">
-                            <p className="text-lg font-semibold text-text">
-                                Duration
-                            </p>
-                            <div className="mt-4">
-                                <SelectInput
-                                    options={durationOptions}
-                                    value={selectedDuration}
-                                    onChange={handleDurationChange}
-                                    isSearchable={false}
-                                    required
-                                />
+                            <div className="mt-6">
+                                <p className="text-lg font-semibold text-text">
+                                    Duration
+                                </p>
+                                <div className="mt-4">
+                                    <SelectInput
+                                        options={durationOptions}
+                                        value={selectedDuration}
+                                        onChange={handleDurationChange}
+                                        isSearchable={false}
+                                        required
+                                    />
+                                </div>
                             </div>
-                        </div>
 
-                        <div className="mt-6">
-                            <p className=" text-lg font-semibold text-text">
-                                Time Interval
-                            </p>
-                            <div className="mt-4">
-                                <SelectInput
-                                    options={intervalOptions}
-                                    value={selectedInterval}
-                                    isSearchable={false}
-                                    onChange={handleIntervalChange}
-                                    required
-                                />
+                            <div className="mt-6">
+                                <p className=" text-lg font-semibold text-text">
+                                    Time Interval
+                                </p>
+                                <div className="mt-4">
+                                    <SelectInput
+                                        options={intervalOptions}
+                                        value={selectedInterval}
+                                        isSearchable={false}
+                                        onChange={handleIntervalChange}
+                                        required
+                                    />
+                                </div>
                             </div>
-                        </div>
 
-                        <hr className="mt-6" />
-                        <div className="mt-6 flex items-center justify-between">
-                            <p className=" text-md font-semibold text-text">
-                                Total Price
-                            </p>
-                            <p className="mt-2 text-md text-text">
-                                Rs. {totalPrice.toFixed(2)}{" "}
-                                {/* Display total price */}
-                            </p>
-                        </div>
-                        <Button variant="primary" size="lg" className="mt-6">
-                            Book Now
-                        </Button>
+                            <hr className="mt-6" />
+                            <div className="mt-6 flex items-center justify-between">
+                                <p className=" text-md font-semibold text-text">
+                                    Total Price
+                                </p>
+                                <p className="mt-2 text-md text-text">
+                                    Rs. {totalPrice.toFixed(2)}{" "}
+                                    {/* Display total price */}
+                                </p>
+                            </div>
+                            <Button
+                                variant="primary"
+                                size="lg"
+                                className="mt-6"
+                            >
+                                Book Now
+                            </Button>
+                        </form>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,13 @@
+.view-bookings {
+    .heading-image {
+        @apply bg-cover h-[600px];
+
+        img {
+            @apply h-full w-full object-cover;
+        }
+
+        .text{
+            @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-2xl text-surface-color font-bold font-heading text-center lg:text-nowrap;
+        }
+    }
+}

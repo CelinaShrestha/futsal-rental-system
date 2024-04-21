@@ -37,7 +37,12 @@ export default function AuthenticatedLayout({ user, header, children }) {
                             >
                                 Futsals
                             </NavLink>
-                            <NavLink href="#">Bookings</NavLink>
+                            <NavLink
+                                href={route("my-bookings.index")}
+                                active={route().current("my-bookings.index")}
+                            >
+                                Bookings
+                            </NavLink>
                             <NavLink href="#">About</NavLink>
                         </div>
                         {/* </div> */}
