@@ -21,6 +21,8 @@ use App\Http\Controllers\Court\BookingController;
 use App\Http\Controllers\Court\FilterController;
 use App\Http\Controllers\Court\TimeSlotController;
 
+use App\Http\Controllers\Customer\ViewBookingsController;
+
 use Inertia\Inertia;
 
 /*
@@ -59,10 +61,16 @@ Route::get('/', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [CustomerProfileController::class, 'index'])->name('dashboard');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
     Route::get('/booking/{id}', [BookingController::class, 'show'])->name('book');
+    Route::post('/booking/{id}', [BookingController::class, 'create'])->name('book.create');
+
+    Route::get('/my-bookings', [ViewBookingsController::class, 'index'])->name('my-bookings.index');
+
     Route::get('/futsal-listings', [FutsalListingsController::class, 'index'])->name('futsal-listings.index');
     Route::post('/futsal-listings', [FilterController::class, 'filter'])->name('futsal-listings.filter');
     Route::get('/futsal-listings/{id}', [FutsalListingsController::class, 'show'])->name('futsal-listings.show');
@@ -80,9 +88,9 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/admin/profile', [AdminProfileController::class, 'edit'])->name('admin.profile.edit');
     Route::patch('/admin/profile', [AdminProfileController::class, 'update'])->name('admin.profile.update');
     Route::delete('/admin/profile', [AdminProfileController::class, 'destroy'])->name('admin.profile.destroy');
+
     Route::get('admin/vendors', [ProfileViewController::class, 'vendorshow'])->name('vendors.show');
     Route::get('admin/vendor/register', [RegisteredUserController::class, 'create'])->name('admin.vendor.register');
-
     Route::post('admin/vendor/register', [RegisteredUserController::class, 'store']);
 
     Route::get('admin/courts', [ProfileViewController::class, 'futsalshow'])->name('admin.courts.show');
