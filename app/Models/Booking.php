@@ -11,11 +11,10 @@ class Booking extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $fillable = ['booking_date', 'time_slot', 'interval', 'total_price', 'is_confirmed', 'is_cancelled', 'is_paid', 'futsal_listings_id', 'user_id'];
+    protected $fillable = ['booking_date', 'start_time', 'end_time', 'duration', 'day', 'total_price', 'is_confirmed', 'is_cancelled', 'is_paid', 'futsal_listings_id', 'user_id', 'time_slot_id'];
 
     protected $casts = [
         'booking_date' => 'date',
-        'time_slot' => 'time:H:i',
         'is_confirmed' => 'boolean',
         'is_cancelled' => 'boolean',
         'is_paid' => 'boolean',
