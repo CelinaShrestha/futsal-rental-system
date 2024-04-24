@@ -57,7 +57,7 @@ export default function AddCourt({ auth }) {
     return (
         <>
             <VendorLayout user={auth}>
-                <div className="mt-8 lg:ml-44">
+                <div className="mt-8 container">
                     <AuthDescription className="container">
                         <p className="text-primary-color font-bold font-heading text-2xl">
                             Add Court

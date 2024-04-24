@@ -3,7 +3,6 @@ import VendorLayout from "@/Layouts/VendorLayout";
 import Table from "@/Components/Table";
 import VendorCourtTable from "@/Components/Table/VendorCourtTable";
 
-
 function ViewCourt({ auth, futsal_listings }) {
     console.log(futsal_listings);
     const headings = [

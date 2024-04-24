@@ -5,23 +5,10 @@ import TextInput from "@/Components/TextInput";
 import Button from "@/Components/Button";
 import VendorLayout from "@/Layouts/VendorLayout";
 
-export default function TimeSlot({ auth, futsal_listings_id, vendor_id }) {
-    const [daysOfWeek, setDaysOfWeek] = useState([
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday",
-    ]);
-
-    const { data, setData, post, processing, errors, reset } = useForm({
-        timeSlots: daysOfWeek.map((day) => ({
-            day,
-            start_time: "",
-            end_time: "",
-        })),
+export default function EditTimeSlot({ auth, timeSlots , futsal_listing_id }) {
+    console.log(futsal_listing_id);
+    const { data, setData, patch, processing, errors, reset } = useForm({
+        timeSlots: timeSlots, // Initialize form data with existing time slots
         successMessage: null, // State to hold the success message
     });
 
@@ -34,16 +21,16 @@ export default function TimeSlot({ auth, futsal_listings_id, vendor_id }) {
     const submit = async (e) => {
         e.preventDefault(); // Prevent default form submission behavior
         try {
-            const response = await post(
-                route("time-slots.store", { id: futsal_listings_id }),
+            const response = await patch(
+                route("time-slots.update", { id: futsal_listing_id }), // Adjust the route to match the update route
                 {
                     timeSlots: data.timeSlots,
                 }
             );
             reset();
-            if (response && response.status === 201) {
-                console.log("Time slots created successfully");
-                setData("successMessage", "Time slots created successfully"); // Set success message
+            if (response && response.status === 200) {
+                console.log("Time slots updated successfully");
+                setData("successMessage", "Time slots updated successfully"); // Set success message
                 reset(); // Reset the form after successful submission
             }
         } catch (error) {
@@ -51,11 +38,19 @@ export default function TimeSlot({ auth, futsal_listings_id, vendor_id }) {
         }
     };
 
+    const cancel = (e) => {
+        e.preventDefault();
+        history.back();
+    };
+
     return (
         <>
             <VendorLayout user={auth}>
-                <form onSubmit={submit} className="container ">
-                    <table className="w-full my-12">
+                <form
+                    onSubmit={submit}
+                    className="container my-12 flex flex-col items-end"
+                >
+                    <table className="w-full">
                         <thead>
                             <tr>
                                 <th>Day</th>
@@ -64,15 +59,13 @@ export default function TimeSlot({ auth, futsal_listings_id, vendor_id }) {
                             </tr>
                         </thead>
                         <tbody>
-                            {daysOfWeek.map((day, index) => (
+                            {data.timeSlots.map((timeSlot, index) => (
                                 <tr key={index}>
-                                    <td>{day}</td>
+                                    <td>{timeSlot.day}</td>
                                     <td>
                                         <TextInput
                                             type="time"
-                                            value={
-                                                data.timeSlots[index].start_time
-                                            }
+                                            value={timeSlot.start_time}
                                             onChange={(e) =>
                                                 handleChange(
                                                     index,
@@ -86,9 +79,7 @@ export default function TimeSlot({ auth, futsal_listings_id, vendor_id }) {
                                     <td>
                                         <TextInput
                                             type="time"
-                                            value={
-                                                data.timeSlots[index].end_time
-                                            }
+                                            value={timeSlot.end_time}
                                             onChange={(e) =>
                                                 handleChange(
                                                     index,
@@ -103,9 +94,27 @@ export default function TimeSlot({ auth, futsal_listings_id, vendor_id }) {
                             ))}
                         </tbody>
                     </table>
-                    <Button type="submit" disabled={processing} width="w-[170px]">
-                        {processing ? "Adding Court..." : "Add Court"}
-                    </Button>
+                    <div className="flex gap-4 mt-4">
+                        <Button
+                            type="submit"
+                            disabled={processing}
+                            width="w-[170px]"
+                            className={"text-nowrap"}
+                        >
+                            {processing
+                                ? "Updating Time Slots..."
+                                : "Update Time Slots"}
+                        </Button>
+
+                        <Button
+                            width="w-[170px]"
+                            className="text-nowrap"
+                            onClick={cancel}
+                            variant="danger"
+                        >
+                            Cancel
+                        </Button>
+                    </div>
                 </form>
 
                 {/* Success Message */}
