@@ -13,6 +13,11 @@
 // }
 .slick-slide {
     display: inline-block; /* or inline-flex */
-    width: auto; /* Ensure each slide occupies its content width */
+    width: 400px; /* Ensure each slide occupies its content width */
+}
+
+.slick-track {
+    display: flex;
+    gap: 12px; /* Ensure the track is a flex container */
 }
 

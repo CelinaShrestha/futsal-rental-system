@@ -15,9 +15,9 @@ function VendorCourtTable({ futsal_listings }) {
                 <tr key={listing.id}>
                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                         <div className="flex items-center">
-                            <div className="flex-shrink-0 w-10 h-10">
+                            <div className="flex-shrink-0 w-[100px] h-[100px]">
                                 <img
-                                    className="w-full h-full rounded-full"
+                                    className="w-full h-full rounded-md"
                                     src={`http://127.0.0.1:8000/storage/${listing.images[0]}`}
                                     alt=""
                                 />
@@ -56,17 +56,12 @@ function VendorCourtTable({ futsal_listings }) {
                             <Pill variant="accent">Not Verified</Pill>
                         )}
                     </td>
-                    <td className="flex gap-2 px-5 py-5 border-b border-gray-200 bg-white text-sm items-center justify-center">
-                        <Button
-                            size="sm"
-                            variant="secondary"
-                            className="w-[25px]"
-                            // onClick={() => onClickEdit(listing.id)}
-                        >
-                            <span>
-                                <RiEdit2Line />
+                    <td className=" gap-2 px-5 py-5 border-b border-gray-200 bg-white text-sm items-center justify-center">
+                       <a href={route('vendor.futsal-listings.show',{id:listing.id})}>
+                            <span className="underline text-secondary-color">
+                               View Details
                             </span>
-                        </Button>
+                       </a>
                     </td>
                 </tr>
             ))}

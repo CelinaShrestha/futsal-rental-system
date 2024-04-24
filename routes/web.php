@@ -20,6 +20,7 @@ use App\Http\Controllers\Vendor\CourtViewController;
 use App\Http\Controllers\Court\BookingController;
 use App\Http\Controllers\Court\FilterController;
 use App\Http\Controllers\Court\TimeSlotController;
+use App\Http\Controllers\Court\DisabledDateTimeController;
 
 use App\Http\Controllers\Customer\ViewBookingsController;
 
@@ -72,6 +73,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/my-bookings', [ViewBookingsController::class, 'index'])->name('my-bookings.index');
 
     Route::get('/futsal-listings', [FutsalListingsController::class, 'index'])->name('futsal-listings.index');
+    Route::get('/futsal-listings/search', [FutsalListingsController::class, 'search'])->name('search');
     Route::post('/futsal-listings', [FilterController::class, 'filter'])->name('futsal-listings.filter');
     Route::get('/futsal-listings/{id}', [FutsalListingsController::class, 'show'])->name('futsal-listings.show');
 });
@@ -127,8 +129,14 @@ Route::middleware('auth:vendor')->group(function () {
 
     Route::get('/vendor/addTimeSlots/{id}', [TimeSlotController::class, 'index'])->name('time-slots.index');
     Route::post('/vendor/addTimeSlots/{id}', [TimeSlotController::class, 'storeTimeSlots'])->name('time-slots.store');
+    Route::get('/vendor/editTimeSlots/{id}', [TimeSlotController::class, 'edit'])->name('time-slots.edit');
+    Route::patch('/vendor/editTimeSlots/{id}', [TimeSlotController::class, 'update'])->name('time-slots.update');
+
+    Route::get('/vendor/disabledDateTime/{id}', [DisabledDateTimeController::class, 'index'])->name('vendor.disable.index');
+    Route::post('/vendor/disabledDateTime/{id}', [DisabledDateTimeController::class, 'create'])->name('vendor.disable.create');
 
     Route::get('/vendor/courts', [CourtViewController::class, 'index'])->name('vendor.futsal-listings');
+    Route::get('/vendor/courts/{id}', [CourtViewController::class, 'show'])->name('vendor.futsal-listings.show');
 });
 
 require __DIR__ . '/vendorauth.php';
