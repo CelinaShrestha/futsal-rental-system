@@ -12,12 +12,13 @@ use App\Models\TimeSlot;
 use App\Models\Booking;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class BookingController extends Controller
 {
     public function show($id)
     {
-        $futsal_listing = FutsalListings::findOrFail($id);
+        $futsal_listing = FutsalListings::with('bookings')->findOrFail($id);
 
         $timeSlot = TimeSlot::where('futsal_listings_id', $id)->get();
 
@@ -82,7 +83,7 @@ class BookingController extends Controller
                 'is_paid' => false,
             ]);
 
-            return response()->json(['message' => 'Booking created successfully'], 201);
+            return Redirect::route('my-bookings.index')->with('success', 'Booking added successfully!');
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to create booking', 'error' => $e->getMessage()], 500);
         }

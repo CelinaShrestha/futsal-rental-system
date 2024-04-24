@@ -16,9 +16,24 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use App\Models\Vendor;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class FutsalListingsController extends Controller
 {
+    public function search(Request $request)
+{
+    $query = $request->input('q');
+    Log::info('Query: ' . $query);
+    $futsal_listings = FutsalListings::where('is_verified', true)
+        ->where('title', 'like', '%'.$query.'%')
+        ->orWhere('location', 'like', '%'.$query.'%')
+        ->get();
+
+    return Inertia::render('Customer/FutsalListings/index', [
+        'futsal_listings' => $futsal_listings,
+    ]);
+}
+
     public function index()
     {
         $futsal_listings = FutsalListings::where('is_verified', true)->get();

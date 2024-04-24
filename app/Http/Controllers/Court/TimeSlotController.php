@@ -9,7 +9,6 @@ use App\Models\TimeSlot;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Log;
 
-
 class TimeSlotController extends Controller
 {
     public function index($id)
@@ -111,6 +110,47 @@ class TimeSlotController extends Controller
         } catch (\Exception $e) {
             // If an error occurs during creation, return an error response
             return response()->json(['message' => 'Failed to create time slots', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function edit($id)
+    {
+        $vendor_id = Auth::id();
+        $timeSlots = TimeSlot::where('futsal_listings_id', $id)->where('vendor_id', $vendor_id)->get();
+        return Inertia::render('Vendor/Court/EditTimeSlot/index', [
+            'timeSlots' => $timeSlots,
+            'futsal_listing_id' => $id,
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'timeSlots' => 'required|array', // Ensure 'timeSlots' is an array
+            'timeSlots.*.id' => 'required|integer', // Ensure each time slot has an 'id' value
+            'timeSlots.*.day' => 'required|string', // Ensure each time slot has a 'day' value
+            'timeSlots.*.start_time' => 'required|string', // Ensure each time slot has a 'start_time' value
+            'timeSlots.*.end_time' => 'required|string', // Ensure each time slot has an 'end_time' value
+        ]);
+
+        try {
+            // Iterate over the time slots and update records in the database
+            foreach ($validatedData['timeSlots'] as $timeSlotData) {
+                TimeSlot::where('id', $timeSlotData['id'])->update([
+                    'day' => $timeSlotData['day'],
+                    'start_time' => $timeSlotData['start_time'],
+                    'end_time' => $timeSlotData['end_time'],
+                ]);
+            }
+
+            // Return a success response
+            return response()
+                ->json(['message' => 'Time slots updated successfully'], 200)
+                ->redirect(route('vendor.futsal-listings'));
+        } catch (\Exception $e) {
+            // If an error occurs during update, return an error response
+            return response()->json(['message' => 'Failed to update time slots', 'error' => $e->getMessage()], 500);
         }
     }
 }
