@@ -26,4 +26,14 @@ class TimeSlot extends Model
     {
         return $this->belongsTo(FutsalListings::class);
     }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    public function disabledDateTimes()
+    {
+        return $this->hasMany(DisabledDateTime::class);
+    }
 }

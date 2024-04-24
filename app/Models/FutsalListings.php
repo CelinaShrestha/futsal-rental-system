@@ -28,5 +28,13 @@ class FutsalListings extends Model
         return $this->hasMany(Booking::class);
     }
 
+    public function timeSlots()
+    {
+        return $this->hasMany(TimeSlot::class);
+    }
 
+    public function disabledDateTimes()
+    {
+        return $this->hasMany(DisabledDateTime::class);
+    }
 }
