@@ -40,7 +40,7 @@ export default {
             },
             colors: {
                 secondary: {
-                    color: "#3059bd",
+                    color: "#043565",
                     light: {
                         1: "#426bcf",
                         2: "#5f82d7",
