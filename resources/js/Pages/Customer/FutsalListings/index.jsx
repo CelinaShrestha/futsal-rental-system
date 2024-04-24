@@ -16,6 +16,9 @@ import {
     Squares2X2Icon,
     AdjustmentsHorizontalIcon,
 } from "@heroicons/react/20/solid";
+import classNames from "classnames";
+import SearchComponent from "@/Components/SearchComponent";
+import { Inertia } from "@inertiajs/inertia";
 
 const sortOptions = [
     { name: "Most Popular", href: "#", current: true },
@@ -65,17 +68,25 @@ const filters = [
 
 export default function ViewFutsal({ auth, futsal_listings }) {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-    // const { data, setData, post, processing, errors, reset } = useForm({
-    //     title: "",
-    //     image: null,
-    //     location: "",
-    //     price: "",
-    //     description: "",
-    // });
+    const [inputValue, setInputValue] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
 
-    // const submit = (e) => {
-    //     post(route("futsal-listings.store"));
-    // };
+    const handleSearch = async () => {
+        try {
+            const response = Inertia.visit(route("search", { q: inputValue }));
+            if (response.ok) {
+                const data = await response.json();
+                setSearchResults(data.futsal_listings);
+            } else {
+                console.error("Failed to fetch search results");
+            }
+        } catch (error) {
+            console.error(
+                "Error occurred while fetching search results:",
+                error
+            );
+        }
+    };
     return (
         <>
             <AuthenticatedLayout user={auth.user}>
@@ -233,10 +244,14 @@ export default function ViewFutsal({ auth, futsal_listings }) {
                         </Transition.Root>
 
                         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                            <div className="flex items-baseline justify-between border-b border-gray-200 pb-6">
-                                <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-                                    {/* Courts */}
-                                </h1>
+                            <div className="flex items-baseline border-b border-gray-200 pb-6 justify-between">
+                                <SearchComponent
+                                    inputValue={inputValue}
+                                    setInputValue={(e) =>
+                                        setInputValue(e.target.value)
+                                    }
+                                    handleSearch={handleSearch}
+                                />
 
                                 <div className="flex items-center">
                                     <Menu

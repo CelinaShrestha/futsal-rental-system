@@ -1,11 +1,14 @@
 .first-page {
-    @apply flex flex-col items-center justify-between px-5 lg:gap-16 md:flex-row text-primary-dark-1  my-20;
+    @apply flex flex-col items-center justify-between px-5 lg:gap-16 md:flex-row;
+}
+.dashboard-img {
+    @apply min-w-[650px] h-[450px];
 
-    .img{
-        @apply max-w-[700px];
-
-        img{
-            @apply h-fit w-fit rounded-md;
-        }
+    img {
+        @apply h-full w-full object-cover;
     }
+}
+
+.about-us-content {
+    @apply flex flex-col  justify-between gap-5;
 }

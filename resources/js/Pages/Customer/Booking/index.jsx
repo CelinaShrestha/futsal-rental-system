@@ -12,9 +12,7 @@ function Booking({ auth, futsal_listing, timeSlot }) {
     const [intervalOptions, setIntervalOptions] = useState([]);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [showFullDescription, setShowFullDescription] = useState(false);
-
-    console.log("Futsal Listing:", futsal_listing.id);
-    console.log(auth.user);
+    const [disabledDates, setDisabledDates] = useState([]);
 
     // Calculate total price based on the selected duration
     const calculatePrice = () => {
@@ -33,14 +31,7 @@ function Booking({ auth, futsal_listing, timeSlot }) {
         }
     }, [timeSlot, selectedDate]);
 
-    const durationOptions = [
-        { value: "30", label: "30 minutes" },
-        { value: "60", label: "60 minutes" },
-        { value: "90", label: "90 minutes" },
-        { value: "120", label: "120 minutes" },
-    ];
-
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, post } = useForm({
         booking_date: selectedDate,
         interval: selectedInterval ? selectedInterval.value : null,
         time_slot: selectedInterval ? selectedInterval.label : null,
@@ -50,9 +41,16 @@ function Booking({ auth, futsal_listing, timeSlot }) {
 
     useEffect(() => {
         const updateData = async () => {
+            // Get the local time zone offset in minutes
+            const offset = selectedDate.getTimezoneOffset();
+            // Add the offset to the selectedDate to get the local date
+            const localDate = new Date(
+                selectedDate.getTime() - offset * 60 * 1000
+            );
+
             await setData({
                 ...data,
-                booking_date: selectedDate.toISOString().split("T")[0],
+                booking_date: localDate.toISOString().split("T")[0], // Format date as YYYY-MM-DD
                 total_price: calculatePrice(),
                 day: selectedDate.toLocaleDateString("en-US", {
                     weekday: "long",
@@ -82,30 +80,82 @@ function Booking({ auth, futsal_listing, timeSlot }) {
             const duration = parseInt(option.value);
 
             let currentTime = startTime;
+            let allSlotsBooked = true; // Flag to check if all slots are booked
+
             while (currentTime < endTime) {
                 const startTimeFormatted = currentTime.toLocaleTimeString([], {
                     hour: "2-digit",
                     minute: "2-digit",
                 });
-                currentTime.setMinutes(currentTime.getMinutes() + duration);
-                const endTimeFormatted = currentTime.toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                });
-                intervals.push({
-                    value: `${startTimeFormatted}-${endTimeFormatted}`,
-                    label: `${startTimeFormatted}-${endTimeFormatted}`,
-                    duration: option.value, // Store duration here
-                });
-            }
-        }
+                const endTimeFormatted = new Date(
+                    currentTime.getTime() + duration * 60000
+                ); // Calculate end time based on duration
+                const endTimeFormattedString =
+                    endTimeFormatted.toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                    });
 
-        setIntervalOptions(intervals);
-        setData({
-            ...data,
-            interval: null, // Reset interval when duration changes
-            time_slot: null, // Reset time slot when duration changes
-        });
+                const isDisabled = futsal_listing.bookings.some((booking) => {
+                    // Parse booking date and time
+                    const bookingDate = new Date(booking.booking_date);
+                    const bookingStartTime = new Date(
+                        `01/01/2000 ${booking.start_time}`
+                    );
+                    const bookingEndTime = new Date(
+                        `01/01/2000 ${booking.end_time}`
+                    );
+
+                    // Check if the booking date matches the selected date
+                    const isSameDate =
+                        bookingDate.getDate() === selectedDate.getDate() &&
+                        bookingDate.getMonth() === selectedDate.getMonth() &&
+                        bookingDate.getFullYear() ===
+                            selectedDate.getFullYear();
+
+                    // Check if the current interval overlaps with the booking time slot
+                    const doesOverlap =
+                        isSameDate &&
+                        ((currentTime >= bookingStartTime &&
+                            currentTime < bookingEndTime) ||
+                            (endTimeFormatted > bookingStartTime &&
+                                endTimeFormatted <= bookingEndTime) ||
+                            (currentTime <= bookingStartTime &&
+                                endTimeFormatted >= bookingEndTime));
+
+                    return doesOverlap;
+                });
+
+                console.log("Is Disabled:", isDisabled); // Debug logging
+
+                // Push the interval with disabled property to the intervals array
+                intervals.push({
+                    value: `${startTimeFormatted}-${endTimeFormattedString}`,
+                    label: `${startTimeFormatted}-${endTimeFormattedString}`,
+                    duration: option.value, // Store duration here
+                    disabled: isDisabled, // Set the disabled property based on the isDisabled flag
+                });
+
+                if (!isDisabled) {
+                    allSlotsBooked = false;
+                }
+
+                currentTime = endTimeFormatted;
+            }
+
+            setIntervalOptions(intervals);
+            setData({
+                ...data,
+                interval: null, // Reset interval when duration changes
+                time_slot: null, // Reset time slot when duration changes
+            });
+
+            // Disable the date in the calendar if all slots are booked
+            const datesToDisable = allSlotsBooked
+                ? [selectedDate] // Disable selected date if all slots are booked
+                : [];
+            setDisabledDates(datesToDisable);
+        }
     };
 
     const handleIntervalChange = (option) => {
@@ -136,20 +186,17 @@ function Booking({ auth, futsal_listing, timeSlot }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault(); // Prevent default form submission behavior
-        console.log("Form submitted"); // Add a log statement to check if the function is called
-        console.log("Data:", data); // Log the form data object
         try {
-            const response = post(
+            const response = await post(
                 route("book.create", { id: futsal_listing.id })
             ); // Submit form data asynchronously
-            console.log("Response:", response); // Log the response object
-            if (response && response.status === 200) {
-                console.log("Form submitted successfully");
+
+            if (response.ok) {
+                // Handle success
+                Inertia.visit(response.location);
             } else {
-                console.log(
-                    "Form submission failed:",
-                    response ? response.data.message : "Unknown error"
-                );
+                // Handle error
+                console.error("Form submission failed:", response);
             }
         } catch (error) {
             console.error("Form submission error:", error);
@@ -221,7 +268,9 @@ function Booking({ auth, futsal_listing, timeSlot }) {
                                 </p>
                                 <div className="mt-4 flex flex-col items-center">
                                     <CustomCalendar
+                                        selectedDate={selectedDate}
                                         onDateChange={handleDateChange}
+                                        disabledDates={disabledDates}
                                     />
                                 </div>
                             </div>
@@ -232,7 +281,20 @@ function Booking({ auth, futsal_listing, timeSlot }) {
                                 </p>
                                 <div className="mt-4">
                                     <SelectInput
-                                        options={durationOptions}
+                                        options={[
+                                            {
+                                                value: "60",
+                                                label: "60 minutes",
+                                            },
+                                            {
+                                                value: "120",
+                                                label: "120 minutes",
+                                            },
+                                            {
+                                                value: "180",
+                                                label: "180 minutes",
+                                            },
+                                        ]}
                                         value={selectedDuration}
                                         onChange={handleDurationChange}
                                         isSearchable={false}
@@ -247,10 +309,32 @@ function Booking({ auth, futsal_listing, timeSlot }) {
                                 </p>
                                 <div className="mt-4">
                                     <SelectInput
-                                        options={intervalOptions}
+                                        options={intervalOptions.map(
+                                            (option) => ({
+                                                ...option,
+                                                isDisabled: option.disabled,
+                                            })
+                                        )}
                                         value={selectedInterval}
                                         isSearchable={false}
                                         onChange={handleIntervalChange}
+                                        getOptionLabel={(option) =>
+                                            option.label
+                                        }
+                                        getOptionValue={(option) =>
+                                            option.value
+                                        }
+                                        formatOptionLabel={(option) => (
+                                            <span
+                                                className={
+                                                    option.isDisabled
+                                                        ? "disabled-option"
+                                                        : ""
+                                                }
+                                            >
+                                                {option.label}
+                                            </span>
+                                        )}
                                         required
                                     />
                                 </div>

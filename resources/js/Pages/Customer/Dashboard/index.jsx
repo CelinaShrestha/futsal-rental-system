@@ -34,9 +34,9 @@ export default function Dashboard({ auth, futsal_listings }) {
     ];
     return (
         <AuthenticatedLayout user={auth.user}>
-            <div className="container">
+            <div className="">
                 <div className="first-page">
-                    <div className="flex flex-col gap-10">
+                    {/* <div className="flex flex-col gap-10">
                         <div className="flex flex-col gap-5">
                             <h1 className="text-2xl text-accent-color font-bold font-heading">
                                 Book your game today!
@@ -47,20 +47,137 @@ export default function Dashboard({ auth, futsal_listings }) {
                                 booking experience.
                             </h2>
                         </div>
-                        <Button size="md" width="w-[170px]">
-                            Explore More
-                        </Button>
+
                     </div>
 
                     <div className="img">
                         <img src={home} alt="home" />
+                    </div> */}
+
+                    <div class="w-screen">
+                        <div class="relative mx-auto flex items-center justify-center px-4 sm:max-w-xl md:max-w-screen-xl md:flex-row">
+                            <div class="my-auto mx-auto mt-10 w-full max-w-xl   lg:max-w-screen-xl">
+                                <div class="mb-16 lg:mb-0 lg:max-w-lg">
+                                    <div class="mb-6 max-w-xl">
+                                        <div>
+                                            <p class="bg-teal-accent-400 mb-2 inline-block rounded-full px-3 py-px text-xs font-semibold uppercase tracking-wider text-indigo-900">
+                                                KickIt Futsal Booking
+                                            </p>
+                                        </div>
+                                        <h2 class="mb-6 max-w-lg text-3xl font-bold tracking-tight text-slate-700 sm:text-5xl sm:leading-snug">
+                                            Book your <br />
+                                            <span class="inline-block font-bold text-accent-color">
+                                                game today!
+                                            </span>
+                                        </h2>
+                                        <p class="text-base text-gray-700 md:text-lg">
+                                            Sprinkle your week with some futsal
+                                            and make it more fun . Explore more
+                                            for seamless court booking
+                                            experience.
+                                        </p>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <Button
+                                            size="md"
+                                            width="w-[170px]"
+                                            variant="danger"
+                                            className="mr-6 inline-flex"
+                                        >
+                                            Explore More
+                                        </Button>
+                                        <a
+                                            href="/"
+                                            aria-label=""
+                                            class="inline-flex items-center font-semibold text-accent-color transition-colors duration-200 hover:text-orange-400"
+                                        >
+                                            Learn more
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex h-full w-full space-x-3 overflow-hidden md:justify-end lg:px-2">
+                                <div class="my-auto mb-20 hidden w-56 flex-col space-y-3 md:mt-36 lg:flex">
+                                    <div class="rounded-xl bg-yellow-400 pt-10">
+                                        <img
+                                            class="h-full w-full object-contain"
+                                            src="/images/yg7jHmFeLOLmlxPWz8D4C.png"
+                                            alt=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="my-auto flex space-x-3 rounded-xl md:mt-12 md:w-60 md:flex-col md:space-y-3 md:space-x-0 md:px-4">
+                                    <div class="h-40 overflow-hidden rounded-xl bg-green-600/60">
+                                        <img
+                                            class="mx-auto h-full w-full object-contain object-bottom"
+                                            src="/images/5L6JMrng-34iG1LN5yh7Q.png"
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div class="h-40 overflow-hidden rounded-xl bg-pink-600/60">
+                                        <img
+                                            class="mx-auto h-full w-full object-contain object-bottom"
+                                            src="/images/AjCb3ZW2H6zNzumU0E3B2.png"
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div class="h-40 overflow-hidden rounded-xl bg-blue-600/60">
+                                        <img
+                                            class="mx-auto h-full w-full object-contain object-bottom"
+                                            src="/images/LOsO0RwPYEzhVfeDuJG3M.png"
+                                            alt=""
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            {/* <div className="second flex flex-col gap-5 my-20 py-10 bg-surface-color">
-                <h1 className="text-center font-heading text-[40px] text-accent-color font-semibold">
-                    Why Book with Us?
-                </h1>
+            <div className="mt-20 bg-gradient-to-r from-gray-50 to-gray-100 ">
+                <div className="container flex flex-col items-center  px-5 lg:gap-16 lg:flex-row py-24">
+                    <div className="dashboard-img">
+                        <img src={home} alt="home" />
+                    </div>
+                    <div className="about-us-content max-w-[500px]">
+                        <div className="flex flex-col">
+                            <h2 className="text-primary-color text-md font-semibold">
+                                About Us
+                            </h2>
+                            <h1 className="text-2xl text-accent-color font-bold ">
+                                Get to Know Us
+                            </h1>
+                        </div>
+
+                        <p className="text-justify leading-7">
+                            At KickIT, we're passionate about futsal and
+                            committed to providing the best experience for
+                            players of all levels. With our diverse range of
+                            futsal facilities available for rent at affordable
+                            prices, we make it easy for everyone to enjoy the
+                            game they love.
+                        </p>
+                        <Button width="w-[150px] text-nowrap rounded-none">
+                            Learn More
+                        </Button>
+                    </div>
+                </div>
+            </div>
+            <div className="second flex flex-col gap-5 mt-20 py-10">
+                <div>
+                    {" "}
+                    <h2 className="text-secondary-color text-md font-semibold text-center">
+                        Our Services
+                    </h2>
+                    <h1 className="text-2xl text-accent-color font-bold text-center">
+                        Unlock Your Futsal Experience
+                    </h1>
+                    {/* <p className="text-center mb-4">
+                        Discover Our Range of High-Quality Venues at Affordable
+                        Prices
+                    </p> */}
+                </div>
 
                 <div className=" flex justify-center gap-12">
                     {cards.map((card, index) => (
@@ -73,18 +190,59 @@ export default function Dashboard({ auth, futsal_listings }) {
                         </Card>
                     ))}
                 </div>
-            </div> */}
-            <div className="second flex flex-col gap-5 my-20 py-10 bg-surface-color">
-                <div className="container overflow-hidden">
-                    <h1 className=" font-heading text-xl text-accent-color font-bold">
-                        Available Courts
-                    </h1>
+            </div>
+            <div className="second flex flex-col gap-5 my-20 bg-gray-50 ">
+                <div className="container overflow-hidden text-center py-20">
+                    <div className="pb-4">
+                        <h2 className="text-indigo-900 text-md font-semibold text-center">
+                            Collection
+                        </h2>
+                        <h1 className="text-2xl text-accent-color font-bold text-center">
+                            Available Courts
+                        </h1>
+                    </div>
                     <SwipeToSlide data={futsal_listings} />
                 </div>
             </div>
 
             <div>
-                <Blog />
+                <div class="flex container px-12">
+                    <div class="border-white/20 relative mx-auto my-5 w-full bg-gradient-to-r from-surface-color to-secondary-color shadow-lg">
+                        <div class="p-8 md:p-12 lg:px-16">
+                            <div class="">
+                                <h2 class="text-2xl font-bold text-white md:text-3xl">
+                                    Subscribe to stay ahead
+                                </h2>
+
+                                <p class="hidden text-white sm:mt-4 sm:block">
+                                    Lorem ipsum dolor sit amet consectetur
+                                    adipisicing elit. Facere temporibus dicta
+                                    mollitia!
+                                </p>
+                            </div>
+
+                            <div class="mt-8 max-w-xl">
+                                <form action="#" class="sm:flex sm:gap-4">
+                                    <div class="sm:flex-1">
+                                        <label for="email" class="sr-only">
+                                            Email
+                                        </label>
+
+                                        <input
+                                            type="email"
+                                            placeholder="Email address"
+                                            class="w-full rounded-md border-indigo-200 bg-white p-3 text-text shadow-sm transition focus:border-white focus:outline-none focus:ring focus:ring-accent-light-5"
+                                        />
+                                    </div>
+
+                                    <Button width="w-[150px] " variant="danger" className="text-nowrap">
+                                        Sign Up
+                                    </Button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             {/*
