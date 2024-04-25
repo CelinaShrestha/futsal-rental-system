@@ -17,26 +17,36 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Vendor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class FutsalListingsController extends Controller
 {
     public function search(Request $request)
-{
-    $query = $request->input('q');
-    Log::info('Query: ' . $query);
-    $futsal_listings = FutsalListings::where('is_verified', true)
-        ->where('title', 'like', '%'.$query.'%')
-        ->orWhere('location', 'like', '%'.$query.'%')
-        ->get();
+    {
+        $query = $request->input('q');
+        Log::info('Query: ' . $query);
+        $futsal_listings = FutsalListings::where('is_verified', true)
+            ->where('title', 'like', '%' . $query . '%')
+            ->orWhere('location', 'like', '%' . $query . '%')
+            ->get();
 
-    return Inertia::render('Customer/FutsalListings/index', [
-        'futsal_listings' => $futsal_listings,
-    ]);
-}
+        return Inertia::render('Customer/FutsalListings/index', [
+            'futsal_listings' => $futsal_listings,
+        ]);
+    }
 
     public function index()
     {
         $futsal_listings = FutsalListings::where('is_verified', true)->get();
+
+        // Iterate over each futsal listing
+        foreach ($futsal_listings as $futsal_listing) {
+            // Calculate the average rating
+            $average_rating = $futsal_listing->ratings->avg('rating');
+
+            // Add the average rating to the futsal listing object
+            $futsal_listing->average_rating = $average_rating;
+        }
 
         return Inertia::render('Customer/FutsalListings/index', [
             'futsal_listings' => $futsal_listings,
@@ -141,7 +151,7 @@ class FutsalListingsController extends Controller
 
     public function show($id)
     {
-        $futsal_listing = FutsalListings::findOrFail($id);
+        $futsal_listing = FutsalListings::with('ratings.user')->findOrFail($id);
 
         return Inertia::render('Customer/FutsalDescription/index', [
             'futsal_listing' => $futsal_listing,
