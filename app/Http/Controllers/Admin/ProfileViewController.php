@@ -55,7 +55,7 @@ class ProfileViewController extends Controller
 
     public function customershow()
     {
-        $user = User::all();
+        $user = User::withCount('bookings')->get();
 
         return Inertia::render('Admin/Customer/ShowCustomer/index', [
             'user' => $user,
