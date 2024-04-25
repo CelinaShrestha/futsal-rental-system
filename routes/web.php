@@ -16,11 +16,14 @@ use App\Http\Controllers\Admin\CourtEditController;
 
 use App\Http\Controllers\VendorAuth\RegisteredUserController;
 use App\Http\Controllers\Vendor\CourtViewController;
+use App\Http\Controllers\Vendor\CustomerViewController;
+use App\Http\Controllers\Vendor\DashboardViewController;
 
 use App\Http\Controllers\Court\BookingController;
 use App\Http\Controllers\Court\FilterController;
 use App\Http\Controllers\Court\TimeSlotController;
 use App\Http\Controllers\Court\DisabledDateTimeController;
+use App\Http\Controllers\Court\RatingController;
 
 use App\Http\Controllers\Customer\ViewBookingsController;
 
@@ -72,8 +75,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/my-bookings', [ViewBookingsController::class, 'index'])->name('my-bookings.index');
 
+    Route::post('/rating/{id}', [RatingController::class, 'store'])->name('rating.store');
+
     Route::get('/futsal-listings', [FutsalListingsController::class, 'index'])->name('futsal-listings.index');
     Route::get('/futsal-listings/search', [FutsalListingsController::class, 'search'])->name('search');
+    Route::get('/futsal-listings/filter', [FilterController::class, 'filter'])->name('futsal-listings.filter');
     Route::post('/futsal-listings', [FilterController::class, 'filter'])->name('futsal-listings.filter');
     Route::get('/futsal-listings/{id}', [FutsalListingsController::class, 'show'])->name('futsal-listings.show');
 });
@@ -114,18 +120,21 @@ Route::middleware('auth:admin')->group(function () {
 
 require __DIR__ . '/adminauth.php';
 
-Route::get('/vendor/dashboard', function () {
-    return Inertia::render('Vendor/Dashboard/index');
-})
-    ->middleware(['auth:vendor', 'verified'])
-    ->name('vendor.dashboard');
+// Route::get('/vendor/dashboard', function () {
+//     return Inertia::render('Vendor/Dashboard/index');
+// })
+//     ->middleware(['auth:vendor', 'verified'])
+//     ->name('vendor.dashboard');
 
 Route::middleware('auth:vendor')->group(function () {
+    Route::get('/vendor/dashboard', [DashboardViewController::class, 'index'])->name('vendor.dashboard');
     Route::get('/vendor/profile', [VendorProfileController::class, 'edit'])->name('vendor.profile.edit');
     Route::patch('/vendor/profile', [VendorProfileController::class, 'update'])->name('vendor.profile.update');
     Route::delete('/vendor/profile', [VendorProfileController::class, 'destroy'])->name('vendor.profile.destroy');
     Route::get('/vendor/addCourt', [FutsalListingsController::class, 'create'])->name('futsal-listings.create');
     Route::post('/vendor/addCourt', [FutsalListingsController::class, 'store'])->name('futsal-listings.store');
+
+    Route::get('/vendor/CustomerBookings', [CustomerViewController::class, 'index'])->name('vendor.customer-bookings');
 
     Route::get('/vendor/addTimeSlots/{id}', [TimeSlotController::class, 'index'])->name('time-slots.index');
     Route::post('/vendor/addTimeSlots/{id}', [TimeSlotController::class, 'storeTimeSlots'])->name('time-slots.store');
