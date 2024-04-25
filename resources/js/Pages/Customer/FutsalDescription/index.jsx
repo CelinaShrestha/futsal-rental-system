@@ -9,6 +9,7 @@ import CourtDescription from "@/Components/CourtDescription";
 import RatingsList from "@/Components/RatingsList";
 
 export default function FutsalDescription({ futsal_listing, auth }) {
+    console.log(futsal_listing);
     const [showOverview, setShowOverview] = useState(true);
     const [showRatings, setShowRatings] = useState(false);
 
@@ -28,7 +29,7 @@ export default function FutsalDescription({ futsal_listing, auth }) {
 
     return (
         <AuthenticatedLayout user={auth.user}>
-            <div className="FutsalDescription container">
+            <div className="FutsalDescription container w-[80%]">
                 <div className="flex justify-between">
                     <div className="flex flex-col gap-2">
                         <h1 className="text-xl font-bold">
@@ -89,7 +90,7 @@ export default function FutsalDescription({ futsal_listing, auth }) {
                 {showOverview && (
                     <CourtDescription futsal_listing={futsal_listing} />
                 )}
-                {showRatings && <RatingsList />}
+                {showRatings && <RatingsList ratings={futsal_listing.ratings}  />}
             </div>
         </AuthenticatedLayout>
     );

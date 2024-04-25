@@ -10,6 +10,11 @@ import ReactCardSlider from "react-card-slider-component";
 import { Switch } from "@headlessui/react";
 import SwipeToSlide from "@/Components/CardSlider";
 import Blog from "@/Components/Blogs";
+import img1 from "../../../../assets/images/img1.jpg";
+import img2 from "../../../../assets/images/img2.jpg";
+import img3 from "../../../../assets/images/img3.jpg";
+import img4 from "../../../../assets/images/img4.jpg";
+import img5 from "../../../../assets/images/img5.jpg";
 
 export default function Dashboard({ auth, futsal_listings }) {
     const cards = [
@@ -54,8 +59,8 @@ export default function Dashboard({ auth, futsal_listings }) {
                         <img src={home} alt="home" />
                     </div> */}
 
-                    <div class="w-screen">
-                        <div class="relative mx-auto flex items-center justify-center px-4 sm:max-w-xl md:max-w-screen-xl md:flex-row">
+                    <div class="container">
+                        <div class="relative mx-auto flex items-center justify-center px-4  md:flex-row">
                             <div class="my-auto mx-auto mt-10 w-full max-w-xl   lg:max-w-screen-xl">
                                 <div class="mb-16 lg:mb-0 lg:max-w-lg">
                                     <div class="mb-6 max-w-xl">
@@ -97,35 +102,35 @@ export default function Dashboard({ auth, futsal_listings }) {
                                 </div>
                             </div>
 
-                            <div class="flex h-full w-full space-x-3 overflow-hidden md:justify-end lg:px-2">
-                                <div class="my-auto mb-20 hidden w-56 flex-col space-y-3 md:mt-36 lg:flex">
-                                    <div class="rounded-xl bg-yellow-400 pt-10">
+                            <div class="flex h-full w-full space-x-3 overflow-hidden md:justify-end">
+                                <div class=" hidden mb-12 w-[350px] flex-col space-y-3 md:mt-32 lg:flex items-center justify-center">
+                                    <div class="rounded-xl bg-yellow-400 p-2 ">
                                         <img
-                                            class="h-full w-full object-contain"
-                                            src="/images/yg7jHmFeLOLmlxPWz8D4C.png"
+                                            class="h-full w-full object-cover rounded-xl"
+                                            src={img1}
                                             alt=""
                                         />
                                     </div>
                                 </div>
-                                <div class="my-auto flex space-x-3 rounded-xl md:mt-12 md:w-60 md:flex-col md:space-y-3 md:space-x-0 md:px-4">
-                                    <div class="h-40 overflow-hidden rounded-xl bg-green-600/60">
+                                <div class="my-auto flex space-x-3 rounded-xl md:mt-12 md:w-72 md:flex-col md:space-y-3 md:space-x-0 md:px-4">
+                                    <div class="h-40 overflow-hidden rounded-xl bg-green-600/60 p-2">
                                         <img
-                                            class="mx-auto h-full w-full object-contain object-bottom"
-                                            src="/images/5L6JMrng-34iG1LN5yh7Q.png"
+                                            class="mx-auto h-full w-full rounded-xl object-cover "
+                                            src={img2}
                                             alt=""
                                         />
                                     </div>
-                                    <div class="h-40 overflow-hidden rounded-xl bg-pink-600/60">
+                                    <div class="h-44 overflow-hidden rounded-xl bg-pink-600/60 p-2">
                                         <img
-                                            class="mx-auto h-full w-full object-contain object-bottom"
-                                            src="/images/AjCb3ZW2H6zNzumU0E3B2.png"
+                                            class="mx-auto h-full w-full  rounded-xl object-cover"
+                                            src={img3}
                                             alt=""
                                         />
                                     </div>
-                                    <div class="h-40 overflow-hidden rounded-xl bg-blue-600/60">
+                                    <div class="h-40 overflow-hidden rounded-xl bg-blue-600/60 p-2">
                                         <img
-                                            class="mx-auto h-full w-full object-contain object-bottom"
-                                            src="/images/LOsO0RwPYEzhVfeDuJG3M.png"
+                                            class=" h-full w-full rounded-xl object-cover "
+                                            src={img4}
                                             alt=""
                                         />
                                     </div>
@@ -205,7 +210,7 @@ export default function Dashboard({ auth, futsal_listings }) {
                 </div>
             </div>
 
-            <div>
+            <div className="mb-16">
                 <div class="flex container px-12">
                     <div class="border-white/20 relative mx-auto my-5 w-full bg-gradient-to-r from-surface-color to-secondary-color shadow-lg">
                         <div class="p-8 md:p-12 lg:px-16">
@@ -215,9 +220,8 @@ export default function Dashboard({ auth, futsal_listings }) {
                                 </h2>
 
                                 <p class="hidden text-white sm:mt-4 sm:block">
-                                    Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Facere temporibus dicta
-                                    mollitia!
+                                    Get emails for new court listings,
+                                    promotions, and more.
                                 </p>
                             </div>
 
@@ -235,7 +239,11 @@ export default function Dashboard({ auth, futsal_listings }) {
                                         />
                                     </div>
 
-                                    <Button width="w-[150px] " variant="danger" className="text-nowrap">
+                                    <Button
+                                        width="w-[150px] "
+                                        variant="danger"
+                                        className="text-nowrap"
+                                    >
                                         Sign Up
                                     </Button>
                                 </form>
