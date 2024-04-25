@@ -139,6 +139,7 @@ export default function AddCourt({ auth }) {
                                     id="short_description"
                                     name="short_description"
                                     label="Short description"
+                                    type="textarea"
                                     value={data.short_description}
                                     autoComplete="short_description"
                                     onChange={(e) =>
@@ -160,6 +161,7 @@ export default function AddCourt({ auth }) {
                                     id="long_description"
                                     name="long_description"
                                     label="Long description"
+                                    type="textarea"
                                     value={data.long_description}
                                     autoComplete="long_description"
                                     onChange={(e) =>
