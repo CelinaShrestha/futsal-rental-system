@@ -2,7 +2,7 @@
     @apply h-[250px] w-[800px] border rounded-md grid grid-cols-[auto_auto] justify-items-stretch;
 
     .img {
-        @apply w-[400px] h-[250px];
+        @apply w-[350px] h-[200px] ml-4;
 
         img {
             @apply h-full w-full rounded-l-sm;

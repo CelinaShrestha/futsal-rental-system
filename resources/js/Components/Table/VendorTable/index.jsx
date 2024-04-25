@@ -102,8 +102,8 @@ function VendorTable({ vendor }) {
                             </span>
                         </Button>
                         <Modal
-                            isOpen={isOpen}
-                            closeModal={closeModal}
+                            show={isOpen}
+                            onClose={closeModal}
                             modalTitle="Delete Vendor?"
                         >
                             <form className="p-6">

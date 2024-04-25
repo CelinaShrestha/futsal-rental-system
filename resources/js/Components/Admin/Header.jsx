@@ -118,9 +118,7 @@ function Header({ user }) {
                             >
                                 Courts
                             </MenuItem>
-                            <MenuItem icon={<RiListUnordered />}>
-                                Booked List
-                            </MenuItem>
+
                             <MenuItem
                                 icon={<GoUnverified />}
                                 href={route("admin.courts.unverified")}
@@ -151,8 +149,8 @@ function Header({ user }) {
                         >
                             <MenuItem
                                 icon={<RiProfileLine />}
-                                href={route("vendor.profile.edit")}
-                                active={route().current("vendor.profile.edit")}
+                                href={route("admin.profile.edit")}
+                                active={route().current("admin.profile.edit")}
                             >
                                 Profile
                             </MenuItem>

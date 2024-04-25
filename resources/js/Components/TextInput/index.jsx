@@ -20,7 +20,7 @@ export default forwardRef(function TextInput(
     const [showPassword, setShowPassword] = useState(false);
     const toggleIcon = showPassword ? "eye-slash" : "eye";
 
-    const togglePasswordVisiblity = () => {
+    const togglePasswordVisibility = () => {
         setShowPassword((prev) => !prev);
     };
 
@@ -33,6 +33,7 @@ export default forwardRef(function TextInput(
     const inputFieldClasses = classNames({
         // invalid: hasError,
         "with-icon": icon,
+        "text-area": type === "textarea",
     });
 
     return (
@@ -40,22 +41,30 @@ export default forwardRef(function TextInput(
             <label htmlFor={name}>{label}</label>
 
             <div className="form-control">
-                <input
-                    {...props}
-                    type={
-                        type === "password"
-                            ? showPassword
-                                ? "text"
-                                : "password"
-                            : type
-                    }
-                    className={inputFieldClasses}
-                    ref={input}
-                />
+                {type === "textarea" ? (
+                    <textarea
+                        {...props}
+                        className={inputFieldClasses}
+                        ref={input}
+                    />
+                ) : (
+                    <input
+                        {...props}
+                        type={
+                            type === "password"
+                                ? showPassword
+                                    ? "text"
+                                    : "password"
+                                : type
+                        }
+                        className={inputFieldClasses}
+                        ref={input}
+                    />
+                )}
                 {type === "password" && (
                     <span
                         className="icon-container"
-                        onClick={togglePasswordVisiblity}
+                        onClick={togglePasswordVisibility}
                     >
                         <button className="icon-btn" type="button">
                             <Icon icon={toggleIcon} size={20} />
@@ -72,14 +81,4 @@ export default forwardRef(function TextInput(
             </div>
         </div>
     );
-
-    /* // <input
-        //     {...props}
-        //     type={type}
-        //     className={
-        //         'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm ' +
-        //         className
-        //     }
-        //     ref={input}
-        // /> */
 });

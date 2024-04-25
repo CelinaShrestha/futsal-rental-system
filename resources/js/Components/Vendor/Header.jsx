@@ -98,9 +98,6 @@ function Header({ user }) {
                                 >
                                     Courts
                                 </MenuItem>
-                                <MenuItem icon={<RiListUnordered />}>
-                                    Booked List
-                                </MenuItem>
                                 <MenuItem
                                     icon={<GoUnverified />}
                                     href={route("futsal-listings.create")}
@@ -132,8 +129,14 @@ function Header({ user }) {
                                 label={"Customers"}
                                 icon={<RiAccountCircleLine />}
                             >
-                                <MenuItem icon={<RiListUnordered />}>
-                                    Customer List
+                                <MenuItem
+                                    icon={<RiListUnordered />}
+                                    href={route("vendor.customer-bookings")}
+                                    active={route().current(
+                                        "vendor.customer-bookings"
+                                    )}
+                                >
+                                    Customer Bookings
                                 </MenuItem>
                                 <MenuItem icon={<RiListUnordered />}>
                                     Refund Request
@@ -145,7 +148,9 @@ function Header({ user }) {
                                 icon={<RiSettings3Line />}
                             >
                                 <MenuItem icon={<RiProfileLine />}>
-                                    Profile
+                                    <Link href={route("vendor.profile.edit")}>
+                                        Profile
+                                    </Link>
                                 </MenuItem>
                                 <MenuItem icon={<RiLogoutBoxLine />}>
                                     <Link

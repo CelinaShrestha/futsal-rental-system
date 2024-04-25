@@ -1,11 +1,11 @@
 import React from "react";
 
-function CourtDescription({futsal_listing}) {
+function CourtDescription({ futsal_listing }) {
     return (
         <div className="flex flex-col gap-5 mt-8">
             <div>
                 <h2 className="font-semibold text-lg">Description</h2>
-                <div className="p-8 my-2 bg-surface-color rounded-lg text-justify leading-7">
+                <div className=" text-justify leading-9">
                     <p>{futsal_listing.long_description}</p>
                 </div>
                 {/* Other details of the futsal listing */}
@@ -26,10 +26,14 @@ function CourtDescription({futsal_listing}) {
             </div>
             <div>
                 <h2 className="font-semibold text-lg">Contact Info</h2>
-                <p>{futsal_listing.contactNumber}</p>
+                <p className="text-justify leading-9">
+                    Address : {futsal_listing.location}
+                    <br />
+                    Contact Number : {futsal_listing.contactNumber}
+                </p>
                 {/* Other details of the futsal listing */}
             </div>
-            <div>
+            <div className="mb-12">
                 <h2 className="font-semibold text-lg">Location</h2>
                 <p>*Map Integration*</p>
                 {/* Other details of the futsal listing */}
