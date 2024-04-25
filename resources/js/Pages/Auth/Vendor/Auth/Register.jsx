@@ -8,7 +8,7 @@ import AuthDescription from "@/Components/AuthDescription";
 import Button from "@/Components/Button";
 import AdminLayout from "@/Layouts/AdminLayout";
 
-export default function VendorRegister(auth) {
+export default function VendorRegister({auth}) {
     const { data, setData, post, processing, errors, reset } = useForm({
         firstName: "",
         middleName: "",

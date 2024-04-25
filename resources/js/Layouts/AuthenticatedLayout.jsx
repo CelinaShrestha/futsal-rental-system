@@ -43,12 +43,12 @@ export default function AuthenticatedLayout({ user, header, children }) {
                             >
                                 Bookings
                             </NavLink>
-                            <NavLink href="#">About</NavLink>
+                            {/* <NavLink href="#">About</NavLink> */}
                         </div>
                         {/* </div> */}
 
                         <div className="hidden sm:flex sm:items-center sm:ms-6">
-                            <NavLink href="#">Contact Us</NavLink>
+                            {/* <NavLink href="#">Contact Us</NavLink> */}
                             <div className="ms-3 relative">
                                 <Dropdown>
                                     <Dropdown.Trigger>
