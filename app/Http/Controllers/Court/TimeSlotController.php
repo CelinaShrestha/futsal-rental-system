@@ -104,9 +104,7 @@ class TimeSlotController extends Controller
             }
 
             // Return a success response
-            return response()
-                ->json(['message' => 'Time slots created successfully'], 201)
-                ->header('X-Inertia-Location', route('vendor.dashboard'));
+            return redirect()->route('vendor.futsal-listings.show', ['id' => $id]);
         } catch (\Exception $e) {
             // If an error occurs during creation, return an error response
             return response()->json(['message' => 'Failed to create time slots', 'error' => $e->getMessage()], 500);
@@ -145,9 +143,7 @@ class TimeSlotController extends Controller
             }
 
             // Return a success response
-            return response()
-                ->json(['message' => 'Time slots updated successfully'], 200)
-                ->redirect(route('vendor.futsal-listings'));
+            return redirect()->route('vendor.futsal-listings.show', ['id' => $id]);
         } catch (\Exception $e) {
             // If an error occurs during update, return an error response
             return response()->json(['message' => 'Failed to update time slots', 'error' => $e->getMessage()], 500);

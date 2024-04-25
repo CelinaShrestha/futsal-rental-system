@@ -6,43 +6,43 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\FutsalListings;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Log;
 
 class FilterController extends Controller
 {
     public function filter(Request $request)
     {
-        // Extract filters from the request
-        $city = $request->input('location');
-        $price = $request->input('price');
-        $availability = $request->input('availability');
+        try {
+            Log::info('Received filter data: ', $request->all());
 
-        // Apply filters and fetch filtered futsal listings
-        $filteredFutsalListings = FutsalListings::query();
+            $location = $request->input('location');
+            $price = $request->input('price');
+            $is_available = $request->input('is_available');
 
-        if (!empty($city)) {
-            $filteredFutsalListings->whereIn('location', $city);
-        }
+            $query = FutsalListings::where('is_verified', true);
 
-        if (!empty($price)) {
-            foreach ($price as $range) {
-                $priceRange = explode('-', $range);
-                if (count($priceRange) === 2) {
-                    $filteredFutsalListings->orWhereBetween('price', [$priceRange[0], $priceRange[1]]);
-                }
+            // Process location filter
+            if ($location) {
+                $query->where('location', 'like', '%' . $location . '%');
             }
+
+            // Process price filter
+            if ($price) {
+                [$minPrice, $maxPrice] = explode('-', $price);
+                $query->whereBetween('price', [(int) $minPrice, (int) $maxPrice]);
+            }
+
+            // Process availability filter
+            if ($is_available) {
+                $query->where('is_available', $is_available === 'true' ? 1 : 0);
+            }
+
+            $futsalListings = $query->get();
+
+            return response()->json(['futsal_listings' => $futsalListings]);
+        } catch (\Exception $e) {
+            Log::error('Filter error: ' . $e->getMessage());
+            return response()->json(['error' => 'An error occurred while filtering the listings'], 500);
         }
-
-        if (!empty($availability)) {
-            // Convert string values to boolean
-            $availability = array_map(function ($value) {
-                return $value === 'true' ? true : false;
-            }, $availability);
-
-            // Filter based on availability
-            $filteredFutsalListings->whereIn('is_available', $availability);
-        }
-        $filteredFutsalListings = $filteredFutsalListings->get();
-
-        return Inertia::render('Customer/FutsalListings/index', ['futsal_listings' => $filteredFutsalListings]);
     }
 }
