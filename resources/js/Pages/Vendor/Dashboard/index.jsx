@@ -1,8 +1,11 @@
 import React from "react";
 import VendorLayout from "@/Layouts/VendorLayout";
 
-export default function Dashboard({ auth }) {
+export default function Dashboard({ auth, FutsalCount, BookingCount, CustomerCount }) {
     console.log(auth.user.firstName);
+    console.log(FutsalCount);
+    console.log(BookingCount);
+    console.log(CustomerCount);
     return (
         <VendorLayout user={auth}>
             <div className="container my-14">
@@ -43,10 +46,10 @@ export default function Dashboard({ auth }) {
                                 />
                             </svg>
                             <p class="text-sm font-medium text-gray-500">
-                                Vistors
+                               Total Futsal
                             </p>
                             <p class="text-4xl font-medium text-gray-800">
-                                24,430
+                               {FutsalCount}
                             </p>
                             <span class="float-right rounded-full bg-rose-100 px-1 text-sm font-medium text-rose-600">
                                 <svg
@@ -99,10 +102,10 @@ export default function Dashboard({ auth }) {
                                 />
                             </svg>
                             <p class="text-sm font-medium text-gray-500">
-                                Members
+                                Total Bookings
                             </p>
                             <p class="text-4xl font-medium text-gray-800">
-                                3,405
+                               {BookingCount}
                             </p>
                             <span class="float-right rounded-full bg-emerald-100 px-1 text-sm font-medium text-emerald-600">
                                 <svg
@@ -155,10 +158,10 @@ export default function Dashboard({ auth }) {
                                 />
                             </svg>
                             <p class="text-sm font-medium text-gray-500">
-                                Active Now
+                               Active Customers
                             </p>
                             <p class="text-4xl font-medium text-gray-800">
-                                405
+                              {CustomerCount}
                             </p>
                             <div class="float-right flex -space-x-2">
                                 <img
