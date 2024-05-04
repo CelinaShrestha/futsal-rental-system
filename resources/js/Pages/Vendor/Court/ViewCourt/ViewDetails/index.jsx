@@ -22,18 +22,21 @@ function ViewDetails({ auth, futsal_listing }) {
         setShowOverview(true);
         setShowRatings(false);
         setShowTimeSlots(false);
+        setDisabled(false);
     };
 
     const handleRatingsClick = () => {
         setShowOverview(false);
         setShowRatings(true);
         setShowTimeSlots(false);
+        setDisabled(false);
     };
 
     const handleTimeSlotsClick = () => {
         setShowOverview(false);
         setShowRatings(false);
         setShowTimeSlots(true);
+        setDisabled(false);
     };
 
     const handleDisabledDateClick = () => {
@@ -111,18 +114,16 @@ function ViewDetails({ auth, futsal_listing }) {
                 {showOverview && (
                     <CourtDescription futsal_listing={futsal_listing} />
                 )}
-                {showRatings && <RatingsList />}
+                {showRatings && (
+                    <RatingsList ratings={futsal_listing.ratings} />
+                )}
                 {showTimeSlots && (
                     <TimeSlot
                         timeSlots={futsal_listing.time_slots}
                         futsal_listing_id={futsal_listing.id}
                     />
                 )}
-                {disabled && (
-                    <DisabledDate
-                       futsal_listing={futsal_listing}
-                    />
-                )}
+                {disabled && <DisabledDate futsal_listing={futsal_listing} />}
             </div>
         </VendorLayout>
     );
