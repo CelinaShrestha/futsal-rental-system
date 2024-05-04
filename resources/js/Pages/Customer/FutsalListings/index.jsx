@@ -19,6 +19,7 @@ import {
 import classNames from "classnames";
 import SearchComponent from "@/Components/SearchComponent";
 import { Inertia } from "@inertiajs/inertia";
+import Pagination from "@/Components/Pagination";
 
 const sortOptions = [
     { name: "Most Popular", href: "#", current: true },
@@ -70,48 +71,23 @@ export default function ViewFutsal({ auth, futsal_listings }) {
     const [inputValue, setInputValue] = useState("");
     const [searchResults, setSearchResults] = useState([]);
 
-    const { data, setData, post } = useForm({
-        filters: [],
+    const [formData, setFormData] = useState({
+        location: null,
+        price: null,
+        is_available: null,
     });
 
     console.log(futsal_listings);
 
-    const checkedValue = (e) => {
-        const { name, value, checked } = e.target;
-        if (checked) {
-            // Update filters based on filter type
-            switch (name) {
-                case "location":
-                    setData((data) => ({
-                        ...data,
-                        location: value,
-                    }));
-                    break;
-                case "price":
-                    setData((data) => ({
-                        ...data,
-                        price: value,
-                    }));
-                    break;
-                case "is_available":
-                    setData((data) => ({
-                        ...data,
-                        is_available: value,
-                    }));
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            // Remove filter if unchecked
-            setData((data) => ({
-                ...data,
-                [name]: null,
-            }));
-        }
-    };
+    const listings = futsal_listings.data;
 
-    console.log(data);
+    const handleCheckboxChange = (e) => {
+        const { name, value, checked } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: checked ? value : null,
+        }));
+    };
 
     const handleSearch = async () => {
         try {
@@ -134,21 +110,16 @@ export default function ViewFutsal({ auth, futsal_listings }) {
 
     const applyFilters = async () => {
         try {
-            // Send separate requests for each filter type
-            if (data.location) {
-                await Inertia.visit(route("futsal-listings.filter"), {
-                    data: { location: data.location },
-                });
-            }
-            if (data.price) {
-                await Inertia.visit(route("futsal-listings.filter"), {
-                    data: { price: data.price },
-                });
-            }
-            if (data.is_available) {
-                await Inertia.visit(route("futsal-listings.filter"), {
-                    data: { is_available: data.is_available },
-                });
+            const response = await Inertia.get(
+                route("futsal-listings.filter"),
+                formData
+            );
+            if (response.ok) {
+                const data = await response.json();
+                // Update the listings with the filtered results
+                setSearchResults(data.futsal_listings);
+            } else {
+                console.error("Failed to fetch filtered listings");
             }
         } catch (error) {
             console.error(
@@ -304,8 +275,8 @@ export default function ViewFutsal({ auth, futsal_listings }) {
                                                 {({ open }) => (
                                                     <>
                                                         <h3 className="-my-3 flow-root">
-                                                            <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
-                                                                <span className="font-medium text-gray-900">
+                                                            <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm font-medium text-gray-900 hover:text-gray-500">
+                                                                <span>
                                                                     {
                                                                         section.name
                                                                     }
@@ -333,23 +304,27 @@ export default function ViewFutsal({ auth, futsal_listings }) {
                                                                         optionIdx
                                                                     ) => (
                                                                         <div
-                                                                            key={
-                                                                                option.value
-                                                                            }
+                                                                            key={`${section.id}-${optionIdx}`}
                                                                             className="flex items-center"
                                                                         >
                                                                             <input
                                                                                 id={`filter-${section.id}-${optionIdx}`}
-                                                                                name={`${section.id}`}
-                                                                                defaultValue={
+                                                                                name={
+                                                                                    section.id
+                                                                                }
+                                                                                value={
                                                                                     option.value
                                                                                 }
                                                                                 type="checkbox"
-                                                                                defaultChecked={
-                                                                                    option.checked
+                                                                                checked={
+                                                                                    formData[
+                                                                                        section
+                                                                                            .id
+                                                                                    ] ===
+                                                                                    option.value
                                                                                 }
                                                                                 onChange={
-                                                                                    checkedValue
+                                                                                    handleCheckboxChange
                                                                                 }
                                                                                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                                                             />
@@ -370,6 +345,7 @@ export default function ViewFutsal({ auth, futsal_listings }) {
                                                 )}
                                             </Disclosure>
                                         ))}
+
                                         <Button
                                             variant="secondary"
                                             className="mt-6"
@@ -380,12 +356,17 @@ export default function ViewFutsal({ auth, futsal_listings }) {
                                     </div>
                                     {/* Product grid */}
                                     <div className="lg:col-span-3 ml-14">
-                                        {futsal_listings.map((listing) => (
-                                            <FutsalCard
-                                                key={listing.id}
-                                                listing={listing}
-                                            />
-                                        ))}
+                                        {listings &&
+                                            listings.map((listing) => (
+                                                <FutsalCard
+                                                    key={listing.id}
+                                                    listing={listing}
+                                                />
+                                            ))}
+                                        <Pagination
+                                            meta={futsal_listings}
+                                            pageSize={2}
+                                        />
                                     </div>
                                 </div>
                             </section>

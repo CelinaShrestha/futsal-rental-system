@@ -6,13 +6,15 @@ import Button from "@/Components/Button";
 import { Inertia } from "@inertiajs/inertia";
 import { useForm } from "@inertiajs/inertia-react";
 
-function Booking({ auth, futsal_listing, timeSlot }) {
+function Booking({ auth, futsal_listing, timeSlot, disabledDateTime }) {
     const [selectedDuration, setSelectedDuration] = useState(null);
     const [selectedInterval, setSelectedInterval] = useState(null);
     const [intervalOptions, setIntervalOptions] = useState([]);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [showFullDescription, setShowFullDescription] = useState(false);
     const [disabledDates, setDisabledDates] = useState([]);
+
+    console.log("Disabled Dates:", disabledDateTime); // Debug logging
 
     // Calculate total price based on the selected duration
     const calculatePrice = () => {
@@ -61,6 +63,128 @@ function Booking({ auth, futsal_listing, timeSlot }) {
         updateData();
     }, [selectedDate, selectedDuration]);
 
+    // const handleDurationChange = (option) => {
+    //     setSelectedDuration(option);
+    //     setSelectedInterval(null); // Reset selected interval
+
+    //     const selectedDaySlot = timeSlot.find(
+    //         (slot) =>
+    //             slot.day ===
+    //             selectedDate.toLocaleDateString("en-US", { weekday: "long" })
+    //     );
+
+    //     const intervals = [];
+    //     if (selectedDaySlot) {
+    //         const startTime = new Date(
+    //             `01/01/2000 ${selectedDaySlot.start_time}`
+    //         );
+    //         const endTime = new Date(`01/01/2000 ${selectedDaySlot.end_time}`);
+    //         const duration = parseInt(option.value);
+
+    //         let currentTime = startTime;
+    //         let allSlotsBooked = true; // Flag to check if all slots are booked
+
+    //         while (currentTime < endTime) {
+    //             const startTimeFormatted = currentTime.toLocaleTimeString([], {
+    //                 hour: "2-digit",
+    //                 minute: "2-digit",
+    //             });
+    //             const endTimeFormatted = new Date(
+    //                 currentTime.getTime() + duration * 60000
+    //             ); // Calculate end time based on duration
+    //             const endTimeFormattedString =
+    //                 endTimeFormatted.toLocaleTimeString([], {
+    //                     hour: "2-digit",
+    //                     minute: "2-digit",
+    //                 });
+
+    //             const isDisabled = futsal_listing.bookings.some((booking) => {
+    //                 // Parse booking date and time
+    //                 const bookingDate = new Date(booking.booking_date);
+    //                 const bookingStartTime = new Date(
+    //                     `01/01/2000 ${booking.start_time}`
+    //                 );
+    //                 const bookingEndTime = new Date(
+    //                     `01/01/2000 ${booking.end_time}`
+    //                 );
+
+    //                 // Check if the booking date matches the selected date
+    //                 const isSameDate =
+    //                     bookingDate.getDate() === selectedDate.getDate() &&
+    //                     bookingDate.getMonth() === selectedDate.getMonth() &&
+    //                     bookingDate.getFullYear() ===
+    //                         selectedDate.getFullYear();
+
+    //                 // Check if the current interval overlaps with the booking time slot
+    //                 const doesOverlap =
+    //                     isSameDate &&
+    //                     ((currentTime >= bookingStartTime &&
+    //                         currentTime < bookingEndTime) ||
+    //                         (endTimeFormatted > bookingStartTime &&
+    //                             endTimeFormatted <= bookingEndTime) ||
+    //                         (currentTime <= bookingStartTime &&
+    //                             endTimeFormatted >= bookingEndTime));
+
+    //                 return doesOverlap;
+    //             });
+
+    //             const isDisabledDateTime = disabledDateTime.some((disabled) => {
+    //                 const disabledDate = new Date(disabled.date);
+    //                 const disabledStartTime = new Date(
+    //                     `01/01/2000 ${disabled.start_time}`
+    //                 );
+    //                 const disabledEndTime = new Date(
+    //                     `01/01/2000 ${disabled.end_time}`
+    //                 );
+
+    //                 const isSameDate =
+    //                     disabledDate.getDate() === selectedDate.getDate() &&
+    //                     disabledDate.getMonth() === selectedDate.getMonth() &&
+    //                     disabledDate.getFullYear() ===
+    //                         selectedDate.getFullYear();
+
+    //                 const doesOverlap =
+    //                     isSameDate &&
+    //                     ((currentTime >= disabledStartTime &&
+    //                         currentTime < disabledEndTime) ||
+    //                         (endTimeFormatted > disabledStartTime &&
+    //                             endTimeFormatted <= disabledEndTime) ||
+    //                         (currentTime <= disabledStartTime &&
+    //                             endTimeFormatted >= disabledEndTime));
+
+    //                 return doesOverlap;
+    //             });
+
+    //             // Push the interval with disabled property to the intervals array
+    //             intervals.push({
+    //                 value: `${startTimeFormatted}-${endTimeFormattedString}`,
+    //                 label: `${startTimeFormatted}-${endTimeFormattedString}`,
+    //                 duration: option.value, // Store duration here
+    //                 disabled: isDisabled || isDisabledDateTime, // Set the disabled property based on the isDisabled flag
+    //             });
+
+    //             if (!isDisabled && !isDisabledDateTime) {
+    //                 allSlotsBooked = false;
+    //             }
+
+    //             currentTime = endTimeFormatted;
+    //         }
+
+    //         setIntervalOptions(intervals);
+    //         setData({
+    //             ...data,
+    //             interval: null, // Reset interval when duration changes
+    //             time_slot: null, // Reset time slot when duration changes
+    //         });
+
+    //         // Disable the date in the calendar if all slots are booked
+    //         const datesToDisable = allSlotsBooked
+    //             ? [selectedDate] // Disable selected date if all slots are booked
+    //             : [];
+    //         setDisabledDates(datesToDisable);
+    //     }
+    // };
+
     const handleDurationChange = (option) => {
         setSelectedDuration(option);
         setSelectedInterval(null); // Reset selected interval
@@ -78,6 +202,7 @@ function Booking({ auth, futsal_listing, timeSlot }) {
             );
             const endTime = new Date(`01/01/2000 ${selectedDaySlot.end_time}`);
             const duration = parseInt(option.value);
+            const now = new Date(); // Current time
 
             let currentTime = startTime;
             let allSlotsBooked = true; // Flag to check if all slots are booked
@@ -89,15 +214,20 @@ function Booking({ auth, futsal_listing, timeSlot }) {
                 });
                 const endTimeFormatted = new Date(
                     currentTime.getTime() + duration * 60000
-                ); // Calculate end time based on duration
+                );
                 const endTimeFormattedString =
                     endTimeFormatted.toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
                     });
 
+                // Check if the current time slot has already passed
+                const isPassedTime =
+                    currentTime.getHours() < now.getHours() ||
+                    (currentTime.getHours() === now.getHours() &&
+                        currentTime.getMinutes() <= now.getMinutes());
+
                 const isDisabled = futsal_listing.bookings.some((booking) => {
-                    // Parse booking date and time
                     const bookingDate = new Date(booking.booking_date);
                     const bookingStartTime = new Date(
                         `01/01/2000 ${booking.start_time}`
@@ -106,14 +236,12 @@ function Booking({ auth, futsal_listing, timeSlot }) {
                         `01/01/2000 ${booking.end_time}`
                     );
 
-                    // Check if the booking date matches the selected date
                     const isSameDate =
                         bookingDate.getDate() === selectedDate.getDate() &&
                         bookingDate.getMonth() === selectedDate.getMonth() &&
                         bookingDate.getFullYear() ===
                             selectedDate.getFullYear();
 
-                    // Check if the current interval overlaps with the booking time slot
                     const doesOverlap =
                         isSameDate &&
                         ((currentTime >= bookingStartTime &&
@@ -126,17 +254,42 @@ function Booking({ auth, futsal_listing, timeSlot }) {
                     return doesOverlap;
                 });
 
-                console.log("Is Disabled:", isDisabled); // Debug logging
+                const isDisabledDateTime = disabledDateTime.some((disabled) => {
+                    const disabledDate = new Date(disabled.date);
+                    const disabledStartTime = new Date(
+                        `01/01/2000 ${disabled.start_time}`
+                    );
+                    const disabledEndTime = new Date(
+                        `01/01/2000 ${disabled.end_time}`
+                    );
+
+                    const isSameDate =
+                        disabledDate.getDate() === selectedDate.getDate() &&
+                        disabledDate.getMonth() === selectedDate.getMonth() &&
+                        disabledDate.getFullYear() ===
+                            selectedDate.getFullYear();
+
+                    const doesOverlap =
+                        isSameDate &&
+                        ((currentTime >= disabledStartTime &&
+                            currentTime < disabledEndTime) ||
+                            (endTimeFormatted > disabledStartTime &&
+                                endTimeFormatted <= disabledEndTime) ||
+                            (currentTime <= disabledStartTime &&
+                                endTimeFormatted >= disabledEndTime));
+
+                    return doesOverlap;
+                });
 
                 // Push the interval with disabled property to the intervals array
                 intervals.push({
                     value: `${startTimeFormatted}-${endTimeFormattedString}`,
                     label: `${startTimeFormatted}-${endTimeFormattedString}`,
                     duration: option.value, // Store duration here
-                    disabled: isDisabled, // Set the disabled property based on the isDisabled flag
+                    disabled: isDisabled || isDisabledDateTime || isPassedTime, // Set the disabled property based on whether the current time is before the interval or if it overlaps with bookings or disabled times
                 });
 
-                if (!isDisabled) {
+                if (!isDisabled && !isDisabledDateTime && !isPassedTime) {
                     allSlotsBooked = false;
                 }
 
