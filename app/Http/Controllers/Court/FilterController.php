@@ -12,34 +12,31 @@ class FilterController extends Controller
 {
     public function filter(Request $request)
     {
+        Log::info('Received filter data: ', $request);
         try {
-            Log::info('Received filter data: ', $request->all());
+            Log::info('Received filter data: ', $request);
 
-            $location = $request->input('location');
-            $price = $request->input('price');
-            $is_available = $request->input('is_available');
+            $futsal_listings = FutsalListings::where('is_verified', true)
+                ->where('location', 'like', '%' . $query . '%')
+                ->get();
 
-            $query = FutsalListings::where('is_verified', true);
+            // // Filter by price range if provided and not null
+            // if (!empty($request->price)) {
+            //     [$minPrice, $maxPrice] = explode('-', $request->price);
+            //     $query->whereBetween('price', [(int) $minPrice, (int) $maxPrice]);
+            // }
 
-            // Process location filter
-            if ($location) {
-                $query->where('location', 'like', '%' . $location . '%');
-            }
+            // // Filter by availability if provided and not null
+            // if ($request->is_available !== null) {
+            //     $query->where('is_available', $request->is_available === 'true');
+            // }
 
-            // Process price filter
-            if ($price) {
-                [$minPrice, $maxPrice] = explode('-', $price);
-                $query->whereBetween('price', [(int) $minPrice, (int) $maxPrice]);
-            }
+            // // Get the results
+            // $listings = $query->get();
 
-            // Process availability filter
-            if ($is_available) {
-                $query->where('is_available', $is_available === 'true' ? 1 : 0);
-            }
-
-            $futsalListings = $query->get();
-
-            return response()->json(['futsal_listings' => $futsalListings]);
+            return Inertia::render('Customer/FutsalListings/index', [
+                'futsal_listings' => $futsal_listings,
+            ]);
         } catch (\Exception $e) {
             Log::error('Filter error: ' . $e->getMessage());
             return response()->json(['error' => 'An error occurred while filtering the listings'], 500);

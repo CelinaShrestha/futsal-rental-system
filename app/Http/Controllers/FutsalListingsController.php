@@ -25,10 +25,12 @@ class FutsalListingsController extends Controller
     {
         $query = $request->input('q');
         Log::info('Query: ' . $query);
+
         $futsal_listings = FutsalListings::where('is_verified', true)
-            ->where('title', 'like', '%' . $query . '%')
-            ->orWhere('location', 'like', '%' . $query . '%')
-            ->get();
+            ->where(function ($queryBuilder) use ($query) {
+                $queryBuilder->where('title', 'like', '%' . $query . '%')->orWhere('location', 'like', '%' . $query . '%');
+            })
+            ->paginate(2);
 
         return Inertia::render('Customer/FutsalListings/index', [
             'futsal_listings' => $futsal_listings,
@@ -37,7 +39,7 @@ class FutsalListingsController extends Controller
 
     public function index()
     {
-        $futsal_listings = FutsalListings::where('is_verified', true)->get();
+        $futsal_listings = FutsalListings::where('is_verified', true)->paginate(2);
 
         // Iterate over each futsal listing
         foreach ($futsal_listings as $futsal_listing) {

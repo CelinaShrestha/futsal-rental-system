@@ -35,7 +35,8 @@ class CourtViewController extends Controller
             ->where('id', $id)
             ->with(['timeSlots', 'timeSlots.bookings']) // Eager load time slots and their bookings
             ->withCount('bookings')
-            ->with('ratings')
+            ->with(['ratings', 'ratings.user'])
+            ->with('disabledDateTimes')
 
             ->first(); // Execute the query and get the first result
 

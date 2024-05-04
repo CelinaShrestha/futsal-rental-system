@@ -10,6 +10,7 @@ use Inertia\Inertia;
 use Label84\HoursHelper\Facades\HoursHelper;
 use App\Models\TimeSlot;
 use App\Models\Booking;
+use App\Models\DisabledDateTime;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -22,14 +23,12 @@ class BookingController extends Controller
 
         $timeSlot = TimeSlot::where('futsal_listings_id', $id)->get();
 
-        // $hours = HoursHelper::create('08:00', '11:00', 60, 'H:i', [
-        //     ['09:00', '09:59'],
-        //     // more..
-        // ]);
+        $disabledDateTime = DisabledDateTime::where('futsal_listings_id', $id)->get();
 
         return Inertia::render('Customer/Booking/index', [
             'futsal_listing' => $futsal_listing,
             'timeSlot' => $timeSlot,
+            'disabledDateTime' => $disabledDateTime,
         ]);
     }
     // public function show($id, $day, $interval)
