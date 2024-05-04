@@ -31,19 +31,33 @@ class DisabledDateTimeController extends Controller
     {
         Log::info('Received request data:', $request->all());
         $validatedData = $request->validate([
-            'date' => 'required|date',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i|after:start_time',
+            'booking_date' => 'required|date',
+            'start_time' => ['required', 'regex:/^\d{2}:\d{2}$/'],
+            'end_time' => ['required', 'regex:/^\d{2}:\d{2}$/', 'after:start_time'],
             'day' => 'required|string',
             'reason' => 'required|string',
         ]);
 
+        // Convert start_time and end_time strings to datetime objects
+        $validatedData['start_time'] = \DateTime::createFromFormat('H:i', $validatedData['start_time'])->format('H:i');
+        $validatedData['end_time'] = \DateTime::createFromFormat('H:i', $validatedData['end_time'])->format('H:i');
+
+        Log::info('Validated data:', $validatedData);
+
         try {
             // Log to see if there are any existing disabled dates that might be conflicting
             $existingDisabledDate = DisabledDateTime::where('futsal_listings_id', $id)
-                ->where('date', '=', $validatedData['date'])
+                ->where('date', '=', $validatedData['booking_date'])
                 ->where(function ($query) use ($validatedData) {
-                    $query->whereBetween('start_time', [$validatedData['start_time'], $validatedData['end_time']])->orWhereBetween('end_time', [$validatedData['start_time'], $validatedData['end_time']]);
+                    $query
+                        ->where(function ($subQuery) use ($validatedData) {
+                            // Check if the start time of the new disabled date falls within an existing time slot
+                            $subQuery->where('start_time', '>=', $validatedData['start_time'])->where('start_time', '<=', $validatedData['end_time']);
+                        })
+                        ->orWhere(function ($subQuery) use ($validatedData) {
+                            // Check if the end time of the new disabled date falls within an existing time slot
+                            $subQuery->where('end_time', '>=', $validatedData['start_time'])->where('end_time', '<=', $validatedData['end_time']);
+                        });
                 })
                 ->exists();
 
@@ -55,14 +69,18 @@ class DisabledDateTimeController extends Controller
             // Assuming time slots are correctly identified and fetched
             $time_slot_id = TimeSlot::where('futsal_listings_id', $id)
                 ->where('day', $validatedData['day'])
-                ->where('start_time', '>=', $validatedData['start_time'])
-                ->where('end_time', '<=', $validatedData['end_time'])
-                ->pluck('id');
+                ->value('id');
 
+            // Check if a time slot ID was retrieved
+            if (!$time_slot_id) {
+                // Handle the case where no matching time slot is found
+                Log::info('No matching time slot found');
+                return response()->json(['message' => 'No matching time slot found'], 400);
+            }
             DisabledDateTime::create([
-                'futsal_listing_id' => $id,
+                'futsal_listings_id' => $id, // Use $id directly
                 'time_slot_id' => $time_slot_id,
-                'date' => $validatedData['date'],
+                'date' => $validatedData['booking_date'],
                 'start_time' => $validatedData['start_time'],
                 'end_time' => $validatedData['end_time'],
                 'day' => $validatedData['day'],

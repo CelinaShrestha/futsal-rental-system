@@ -11,15 +11,7 @@ class DisabledDateTime extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $fillable = [
-        'date',
-        'day',
-        'start_time',
-        'end_time',
-        'reason',
-    ];
-
-    
+    protected $fillable = ['date', 'day', 'start_time', 'end_time', 'reason', 'futsal_listings_id', 'time_slot_id'];
 
     public function futsalListings()
     {
@@ -30,6 +22,4 @@ class DisabledDateTime extends Model
     {
         return $this->belongsTo(TimeSlot::class);
     }
-
-
 }
