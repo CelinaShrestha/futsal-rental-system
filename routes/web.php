@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\ProfileViewController;
 use App\Http\Controllers\Admin\ProfileEditController;
 use App\Http\Controllers\Admin\CustomerProfileEditController;
 use App\Http\Controllers\Admin\CourtEditController;
+use App\Http\Controllers\Admin\DashboardController;
 
 use App\Http\Controllers\VendorAuth\RegisteredUserController;
 use App\Http\Controllers\Vendor\CourtViewController;
@@ -86,13 +87,8 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-Route::get('/admin/dashboard', function () {
-    return Inertia::render('Admin/Dashboard/index');
-})
-    ->middleware(['auth:admin', 'verified'])
-    ->name('admin.dashboard');
-
 Route::middleware('auth:admin')->group(function () {
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/profile', [AdminProfileController::class, 'edit'])->name('admin.profile.edit');
     Route::patch('/admin/profile', [AdminProfileController::class, 'update'])->name('admin.profile.update');
     Route::delete('/admin/profile', [AdminProfileController::class, 'destroy'])->name('admin.profile.destroy');
