@@ -34,9 +34,9 @@ const filterOptions = [
         id: "location",
         name: "City",
         options: [
-            { value: "kathmandu", label: "Kathmandu" },
-            { value: "bhaktapur", label: "Bhaktapur" },
-            { value: "lalitpur", label: "Lalitpur" },
+            { value: "Kathmandu", label: "Kathmandu" },
+            { value: "Bhaktapur", label: "Bhaktapur" },
+            { value: "Lalitpur", label: "Lalitpur" },
         ],
     },
     {
@@ -55,14 +55,6 @@ const filterOptions = [
             },
         ],
     },
-    {
-        id: "is_available",
-        name: "Availability",
-        options: [
-            { value: "true", label: "Available" },
-            { value: "false", label: "Not Available" },
-        ],
-    },
 ];
 
 export default function ViewFutsal({ auth, futsal_listings }) {
@@ -74,7 +66,6 @@ export default function ViewFutsal({ auth, futsal_listings }) {
     const [formData, setFormData] = useState({
         location: null,
         price: null,
-        is_available: null,
     });
 
     console.log(futsal_listings);
@@ -106,20 +97,23 @@ export default function ViewFutsal({ auth, futsal_listings }) {
         }
     };
 
-    // ViewFutsal.js
-
     const applyFilters = async () => {
         try {
-            const response = await Inertia.get(
-                route("futsal-listings.filter"),
-                formData
-            );
-            if (response.ok) {
-                const data = await response.json();
-                // Update the listings with the filtered results
-                setSearchResults(data.futsal_listings);
+            const response = Inertia.visit(route("futsal-listings.filter"), {
+                method: "get",
+                data: {
+                    location: formData.location,
+                    price: formData.price,
+                },
+            });
+
+            if (response.props.error) {
+                console.error(
+                    "Failed to fetch filtered listings:",
+                    response.props.error
+                );
             } else {
-                console.error("Failed to fetch filtered listings");
+                setSearchResults(response.props.futsal_listings);
             }
         } catch (error) {
             console.error(

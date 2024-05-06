@@ -12,33 +12,30 @@ class FilterController extends Controller
 {
     public function filter(Request $request)
     {
-        Log::info('Received filter data: ', $request);
+        $location = $request->input('location', '');
+        $priceRange = $request->input('price', '');
+
         try {
-            Log::info('Received filter data: ', $request);
+            $query = FutsalListings::where('is_verified', true);
 
-            $futsal_listings = FutsalListings::where('is_verified', true)
-                ->where('location', 'like', '%' . $query . '%')
-                ->get();
+            if (!empty($location)) {
+                $query->where('location', 'like', '%' . $location . '%');
+            }
 
-            // // Filter by price range if provided and not null
-            // if (!empty($request->price)) {
-            //     [$minPrice, $maxPrice] = explode('-', $request->price);
-            //     $query->whereBetween('price', [(int) $minPrice, (int) $maxPrice]);
-            // }
+            if (!empty($priceRange)) {
+                $priceLimits = explode('-', $priceRange);
+                $query->whereBetween('price', [$priceLimits[0], $priceLimits[1]]);
+            }
 
-            // // Filter by availability if provided and not null
-            // if ($request->is_available !== null) {
-            //     $query->where('is_available', $request->is_available === 'true');
-            // }
+            $futsal_listings = $query->paginate(2);
 
-            // // Get the results
-            // $listings = $query->get();
+            // Log::info('SQL Query:', [$query->toSql(), $query->getBindings()]);
 
             return Inertia::render('Customer/FutsalListings/index', [
                 'futsal_listings' => $futsal_listings,
             ]);
         } catch (\Exception $e) {
-            Log::error('Filter error: ' . $e->getMessage());
+            Log::error('Filter error:', ['message' => $e->getMessage(), 'exception' => $e]);
             return response()->json(['error' => 'An error occurred while filtering the listings'], 500);
         }
     }

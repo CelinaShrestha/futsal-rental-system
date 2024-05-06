@@ -81,7 +81,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/futsal-listings', [FutsalListingsController::class, 'index'])->name('futsal-listings.index');
     Route::get('/futsal-listings/search', [FutsalListingsController::class, 'search'])->name('search');
     Route::get('/futsal-listings/filter', [FilterController::class, 'filter'])->name('futsal-listings.filter');
-    Route::post('/futsal-listings', [FilterController::class, 'filter'])->name('futsal-listings.filter');
     Route::get('/futsal-listings/{id}', [FutsalListingsController::class, 'show'])->name('futsal-listings.show');
 });
 
