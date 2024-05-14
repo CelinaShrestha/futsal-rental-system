@@ -14,10 +14,11 @@ export default function AddCourt({ auth }) {
         price: "",
         short_description: "",
         long_description: "",
-        capacity: "", // Initialize as an empty string
         facilities: null, // Initialize as an empty array
         contactNumber: "",
         altContactNumber: "",
+        longitude: "",
+        latitude: "",
     });
 
     const submit = async (e) => {
@@ -178,24 +179,6 @@ export default function AddCourt({ auth }) {
                                     className="mt-2"
                                 />
                             </div>
-
-                            <div className="mt-4 md:col-span-3">
-                                <TextInput
-                                    id="capacity"
-                                    name="capacity"
-                                    label="Capacity"
-                                    type="number"
-                                    autoComplete="capacity"
-                                    value={data.capacity} // Ensure controlled component behavior
-                                    onChange={handleCapacityChange} // Use the custom handler
-                                    required
-                                />
-
-                                <InputError
-                                    message={errors.capacity}
-                                    className="mt-2"
-                                />
-                            </div>
                             <div className="mt-4 md:col-span-3">
                                 <TextInput
                                     id="facilities"
@@ -256,6 +239,40 @@ export default function AddCourt({ auth }) {
 
                                 <InputError
                                     message={errors.altContactNumber}
+                                    className="mt-2"
+                                />
+                            </div>
+                            <div className="mt-4 md:col-span-3">
+                                <TextInput
+                                    id="longitude"
+                                    name="longitude"
+                                    label="Longitude"
+                                    value={data.longitude}
+                                    autoComplete="longitude"
+                                    onChange={(e) =>
+                                        setData("longitude", e.target.value)
+                                    }
+                                />
+
+                                <InputError
+                                    message={errors.longitude}
+                                    className="mt-2"
+                                />
+                            </div>
+                            <div className="mt-4 md:col-span-3">
+                                <TextInput
+                                    id="latitude"
+                                    name="latitude"
+                                    label="Latitude"
+                                    value={data.latitude}
+                                    autoComplete="latitude"
+                                    onChange={(e) =>
+                                        setData("latitude", e.target.value)
+                                    }
+                                />
+
+                                <InputError
+                                    message={errors.latitude}
                                     className="mt-2"
                                 />
                             </div>

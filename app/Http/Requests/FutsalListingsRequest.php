@@ -28,12 +28,13 @@ class FutsalListingsRequest extends FormRequest
             'long_description' => 'required|string',
             'location' => 'required|string',
             'price' => 'required|integer',
-            'capacity' => 'required|integer|min:0|max:15',
             'contactNumber' => 'required|string',
             'altContactNumber' => 'nullable|string',
             'facilities' => 'nullable|array',
             'is_verified' => 'boolean',
             'is_available' => 'boolean',
+            'longitude' => 'nullable|numeric',
+            'latitude' => 'nullable|numeric',
         ];
 
         $imageRules = [
@@ -54,8 +55,6 @@ class FutsalListingsRequest extends FormRequest
             'location.required' => 'The location is required.',
             'price.required' => 'The price is required.',
             'price.integer' => 'The price must be an integer.',
-            'capacity.required' => 'The capacity is required.',
-            'capacity.integer' => 'The capacity must be an integer.',
             'contactNumber.required' => 'The contact number is required.',
             'images.required' => 'At least one image is required.',
             'images.array' => 'The images field must be an array.',

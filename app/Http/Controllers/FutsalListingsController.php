@@ -87,13 +87,14 @@ class FutsalListingsController extends Controller
                 'images' => $imageNames,
                 'location' => $request->location,
                 'price' => $request->price,
-                'capacity' => $request->capacity,
                 'facilities' => $request->facilities,
                 'contactNumber' => $request->contactNumber,
                 'altContactNumber' => $request->altContactNumber,
                 'is_verified' => $request->is_verified ?? false,
                 'is_available' => $request->is_available ?? true,
                 'vendor_id' => $user_id,
+                'longitude' => $request->longitude,
+                'latitude' => $request->latitude,
             ]);
 
             // Redirect back to a specific page with success message
@@ -252,12 +253,13 @@ class FutsalListingsController extends Controller
             $futsal_listings->long_description = $request->long_description;
             $futsal_listings->location = $request->location;
             $futsal_listings->price = $request->price;
-            $futsal_listings->capacity = $request->capacity;
             $futsal_listings->facilities = $request->facilities;
             $futsal_listings->contactNumber = $request->contactNumber;
             $futsal_listings->altContactNumber = $request->altContactNumber;
             $futsal_listings->is_verified = $request->is_verified ?? false;
             $futsal_listings->is_available = $request->is_available ?? true;
+            $futsal_listings->longitude = $request->longitude;
+            $futsal_listings->latitude = $request->latitude;
 
             // Handle image upload for each image in the request
             if ($request->hasFile('images')) {

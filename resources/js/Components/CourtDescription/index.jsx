@@ -1,4 +1,5 @@
 import React from "react";
+import Map from "../Map";
 
 function CourtDescription({ futsal_listing }) {
     return (
@@ -34,8 +35,8 @@ function CourtDescription({ futsal_listing }) {
                 {/* Other details of the futsal listing */}
             </div>
             <div className="mb-12">
-                <h2 className="font-semibold text-lg">Location</h2>
-                <p>*Map Integration*</p>
+                <h2 className="font-semibold text-lg mb-4">Location</h2>
+                <Map futsal_listing={futsal_listing} />
                 {/* Other details of the futsal listing */}
             </div>
         </div>

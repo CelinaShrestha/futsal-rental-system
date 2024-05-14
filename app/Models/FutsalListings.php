@@ -11,7 +11,7 @@ class FutsalListings extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $fillable = ['title', 'short_description', 'long_description', 'images', 'location', 'price', 'capacity', 'facilities', 'contactNumber', 'altContactNumber', 'is_verified', 'is_available', 'vendor_id'];
+    protected $fillable = ['title', 'short_description', 'long_description', 'images', 'location', 'price', 'facilities', 'contactNumber', 'altContactNumber', 'is_verified', 'is_available', 'vendor_id','longitude', 'latitude'];
 
     protected $casts = [
         'images' => 'array',
