@@ -7,6 +7,7 @@ import ImageSlider from "@/Components/ImageSlider";
 import Booking from "../Booking";
 import CourtDescription from "@/Components/CourtDescription";
 import RatingsList from "@/Components/RatingsList";
+import Khalti from "@/Components/Khalti";
 
 export default function FutsalDescription({ futsal_listing, auth }) {
     console.log(futsal_listing);
@@ -71,6 +72,7 @@ export default function FutsalDescription({ futsal_listing, auth }) {
                     ))} */}
                     <ImageSlider images={futsal_listing.images} />
                 </div>
+                <Khalti />
                 <div className="flex my-4 max-w-sm ">
                     <Button
                         variant="link"
@@ -90,7 +92,9 @@ export default function FutsalDescription({ futsal_listing, auth }) {
                 {showOverview && (
                     <CourtDescription futsal_listing={futsal_listing} />
                 )}
-                {showRatings && <RatingsList ratings={futsal_listing.ratings}  />}
+                {showRatings && (
+                    <RatingsList ratings={futsal_listing.ratings} />
+                )}
             </div>
         </AuthenticatedLayout>
     );

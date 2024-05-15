@@ -8,6 +8,7 @@ use App\Http\Controllers\CustomerProfileController;
 use App\Http\Controllers\FutsalListingsController;
 use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\VendorProfileController;
+use App\Http\Controllers\PaymentController;
 
 use App\Http\Controllers\Admin\ProfileViewController;
 use App\Http\Controllers\Admin\ProfileEditController;
@@ -82,6 +83,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/futsal-listings/search', [FutsalListingsController::class, 'search'])->name('search');
     Route::get('/futsal-listings/filter', [FilterController::class, 'filter'])->name('futsal-listings.filter');
     Route::get('/futsal-listings/{id}', [FutsalListingsController::class, 'show'])->name('futsal-listings.show');
+
+    Route::post('/api/payment/verify', [PaymentController::class, 'verify'])->name('payment.verify');
 });
 
 require __DIR__ . '/auth.php';
