@@ -1,12 +1,11 @@
 import KhaltiCheckout from "khalti-checkout-web";
 import React from "react";
-import myKey from "./khaltiKey";
 import axios from "axios";
 import { Inertia } from "@inertiajs/inertia";
 
 let config = {
     // replace this key with yours
-    publicKey: "live_public_key_9901b601b0304a58b95ff5af57619230",
+    publicKey: "test_public_key_ac9fa02798af42758975954e73365de0",
     productIdentity: "1234567890",
     productName: "kickIt",
     productUrl: "http://localhost:8000/",
