@@ -134,9 +134,9 @@ function MyBookings({ auth, bookings }) {
                                     >
                                         <td className="py-2 px-4">
                                             <div className="flex items-center">
-                                                <div className="w-[300px] h-[200]">
+                                                <div className="w-[250px] h-[150px]">
                                                     <img
-                                                        className="w-full h-full object-cover"
+                                                        className="w-full h-full object-cover rounded-md"
                                                         src={`http://127.0.0.1:8000/storage/${booking.futsal_listings.images[0]}`}
                                                         alt=""
                                                     />
@@ -159,7 +159,7 @@ function MyBookings({ auth, bookings }) {
                                         </td>
                                         <td className="py-2 pl-4">
                                             {booking.is_confirmed ? (
-                                                <Pill variant="primary">
+                                                <Pill variant="success">
                                                     Booked
                                                 </Pill>
                                             ) : (
@@ -247,7 +247,7 @@ function MyBookings({ auth, bookings }) {
                                             ).toLocaleDateString("en-US")}
                                         </td>
                                         <td className="py-2 pl-4">
-                                            <Pill variant="primary">
+                                            <Pill variant="success">
                                                 Booked
                                             </Pill>
                                         </td>
