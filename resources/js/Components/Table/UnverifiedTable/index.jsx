@@ -1,12 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@/Components/Button";
 import { RiEdit2Line, RiDeleteBin6Line } from "react-icons/ri";
 import Pill from "@/Components/Pill";
 import { Inertia } from "@inertiajs/inertia";
+import Modal from "@/Components/Modal";
+import { useForm } from "@inertiajs/react";
 
 function UnverifiedCourtTable({ futsal_listings }) {
+    const [isOpen, setIsOpen] = useState(false);
+    const {
+        data,
+        setData,
+        delete: destroy,
+        processing,
+        reset,
+        errors,
+    } = useForm({});
     const handleVerify = (id) => {
-        Inertia.patch(route("admin.court.verify", { id: id}))
+        Inertia.patch(route("admin.court.verify", { id: id }))
             .then(() => {
                 // Refresh the page or update the UI as needed
                 console.log("Listing verified successfully");
@@ -15,6 +26,23 @@ function UnverifiedCourtTable({ futsal_listings }) {
             .catch((error) => {
                 console.error("Error verifying listing:", error);
             });
+    };
+    const handleDeleteConfirm = (listingId) => {
+        // Perform delete operation here
+        console.log("Item deleted");
+        destroy(route("admin.court.profile.destroy", { id: listingId }), {
+            preserveScroll: true,
+            onSuccess: () => closeModal(),
+            onFinish: () => reset(),
+        });
+    };
+
+    const openModal = () => {
+        setIsOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsOpen(false);
     };
     return (
         <>
@@ -48,7 +76,7 @@ function UnverifiedCourtTable({ futsal_listings }) {
                     </td>
                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                         <p className="text-gray-900 whitespace-no-wrap">
-                            *Listngs Owner*
+                            {listing.vendor.firstName} {listing.vendor.lastName}
                         </p>
                     </td>
                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -65,9 +93,42 @@ function UnverifiedCourtTable({ futsal_listings }) {
                         >
                             <span>Verify</span>
                         </Button>
-                        <Button size="sm" variant="danger" className="w-[25px]">
+                        <Button
+                            size="sm"
+                            variant="danger"
+                            className="w-[25px]"
+                            onClick={openModal}
+                        >
                             <span>Delete</span>
                         </Button>
+                        <Modal
+                            show={isOpen}
+                            onClose={closeModal}
+                            modalTitle="Delete Court?"
+                        >
+                            <form className="p-6">
+                                <p className="text-center">
+                                    Are you sure you want to delete the court?{" "}
+                                </p>
+                                <div className="flex justify-end mt-4">
+                                    <Button
+                                        variant="danger"
+                                        onClick={() =>
+                                            handleDeleteConfirm(listing.id)
+                                        }
+                                        className="mr-2"
+                                    >
+                                        Delete
+                                    </Button>
+                                    <Button
+                                        variant="secondary"
+                                        onClick={closeModal}
+                                    >
+                                        Cancel
+                                    </Button>
+                                </div>
+                            </form>
+                        </Modal>
                     </td>
                 </tr>
             ))}

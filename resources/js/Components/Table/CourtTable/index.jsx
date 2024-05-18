@@ -1,14 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@/Components/Button";
 import { RiEdit2Line, RiDeleteBin6Line } from "react-icons/ri";
 import Pill from "@/Components/Pill";
 import { Inertia } from "@inertiajs/inertia";
-
+import Modal from "@/Components/Modal";
+import { useForm } from "@inertiajs/react";
 
 function CourtTable({ futsal_listings }) {
+    const [isOpen, setIsOpen] = useState(false);
+    const {
+        data,
+        setData,
+        delete: destroy,
+        processing,
+        reset,
+        errors,
+    } = useForm({});
     const onClickEdit = (listingId) => {
         // console.log(listing.id);
         Inertia.visit(route("admin.court.profile.edit", { id: listingId }));
+    };
+    const handleDeleteConfirm = (listingId) => {
+        // Perform delete operation here
+        console.log("Item deleted");
+        destroy(route("admin.court.profile.destroy", { id: listingId }), {
+            preserveScroll: true,
+            onSuccess: () => closeModal(),
+            onFinish: () => reset(),
+        });
+    };
+
+    const openModal = () => {
+        setIsOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsOpen(false);
     };
     return (
         <>
@@ -68,11 +95,44 @@ function CourtTable({ futsal_listings }) {
                                 <RiEdit2Line />
                             </span>
                         </Button>
-                        <Button size="sm" variant="danger" className="w-[25px]">
+                        <Button
+                            size="sm"
+                            variant="danger"
+                            className="w-[25px]"
+                            onClick={openModal}
+                        >
                             <span>
                                 <RiDeleteBin6Line />
                             </span>
                         </Button>
+                        <Modal
+                            show={isOpen}
+                            onClose={closeModal}
+                            modalTitle="Delete Court?"
+                        >
+                            <form className="p-6">
+                                <p className="text-center">
+                                    Are you sure you want to delete the court?{" "}
+                                </p>
+                                <div className="flex justify-end mt-4">
+                                    <Button
+                                        variant="danger"
+                                        onClick={() =>
+                                            handleDeleteConfirm(listing.id)
+                                        }
+                                        className="mr-2"
+                                    >
+                                        Delete
+                                    </Button>
+                                    <Button
+                                        variant="secondary"
+                                        onClick={closeModal}
+                                    >
+                                        Cancel
+                                    </Button>
+                                </div>
+                            </form>
+                        </Modal>
                     </td>
                 </tr>
             ))}
