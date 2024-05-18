@@ -3,7 +3,7 @@ import futsal from "../../../assets/images/futsal.jpg";
 import Button from "../Button";
 import { Inertia } from "@inertiajs/inertia";
 
-export default function FutsalCard({ listing }) {
+export default function FutsalCard({ listing}) {
     const onClickHandler = (e) => {
         Inertia.visit(route("futsal-listings.show", { id: listing.id }));
     };
@@ -56,6 +56,7 @@ export default function FutsalCard({ listing }) {
                     <p className="text-secondary-color">
                         Rs. {listing.price}/hr
                     </p>
+
                     <Button
                         variant="secondary"
                         size="sm"
