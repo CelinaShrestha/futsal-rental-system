@@ -104,7 +104,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::patch('admin/Unverified_Courts/{id}', [ProfileViewController::class, 'futsalverify'])->name('admin.court.verify');
     Route::get('admin/court/profile/{id}', [CourtEditController::class, 'edit'])->name('admin.court.profile.edit');
     Route::patch('admin/court/profile/{id}', [FutsalListingsController::class, 'update'])->name('admin.court.profile.update');
-    Route::delete('/court/profile/{id}', [FutsalListingsController::class, 'destroy'])->name('admin.court.profile.destroy');
+    Route::delete('admin/courts/{id}', [FutsalListingsController::class, 'destroy'])->name('admin.court.profile.destroy');
 
     Route::get('admin/customers', [ProfileViewController::class, 'customershow'])->name('customers.show');
     Route::get('admin/customer/profile/{id}', [CustomerProfileEditController::class, 'edit'])->name('admin.customer.profile.edit');
@@ -141,6 +141,7 @@ Route::middleware('auth:vendor')->group(function () {
 
     Route::get('/vendor/disabledDateTime/{id}', [DisabledDateTimeController::class, 'index'])->name('vendor.disable.index');
     Route::post('/vendor/disabledDateTime/{id}', [DisabledDateTimeController::class, 'create'])->name('vendor.disable.create');
+    Route::delete('/vendor/disabledDateTime/{id}', [DisabledDateTimeController::class, 'destroy'])->name('vendor.disable.destroy');
 
     Route::get('/vendor/courts', [CourtViewController::class, 'index'])->name('vendor.futsal-listings');
     Route::get('/vendor/courts/{id}', [CourtViewController::class, 'show'])->name('vendor.futsal-listings.show');
