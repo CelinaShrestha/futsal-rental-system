@@ -15,20 +15,11 @@ class ProfileUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $id = $this->route('id'); // Retrieve the id from the route parameters
-        $user = User::find($id);
         return [
             'firstName' => ['required', 'string', 'max:255'],
             'middleName' => ['nullable', 'string', 'max:255'], // Make it nullable if it's not required
             'lastName' => ['required', 'string', 'max:255'],
-            'email' => [
-                'required',
-                'string',
-                'lowercase',
-                'email',
-                'max:255',
-                Rule::unique(User::class)->ignore($user), // Use the retrieved admin ID here
-            ],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique('users')->ignore($this->user()->id)],
             'contactNumber' => 'required|string|max:10|min:10',
             'address' => 'required|string|max:255',
         ];

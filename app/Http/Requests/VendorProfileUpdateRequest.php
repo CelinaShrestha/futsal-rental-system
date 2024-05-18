@@ -20,16 +20,8 @@ class VendorProfileUpdateRequest extends FormRequest
         $vendor = Vendor::find($id);
         return [
             'firstName' => ['required', 'string', 'max:255'],
-            'middleName' => ['nullable', 'string', 'max:255'], // Make it nullable if it's not required
             'lastName' => ['required', 'string', 'max:255'],
-            'email' => [
-                'required',
-                'string',
-                'lowercase',
-                'email',
-                'max:255',
-                Rule::unique(Vendor::class)->ignore($vendor), // Use the retrieved admin ID here
-            ],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique('users')->ignore($this->user()->id)],
             'contactNumber' => 'required|string|max:10|min:10',
             'address' => 'required|string|max:255',
         ];
