@@ -11,7 +11,7 @@ import { Inertia } from "@inertiajs/inertia";
 function AddDisableDate({ auth, futsal_listing, timeSlot }) {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [startTimes, setStartTimes] = useState([]);
-    const [endTimes, setEndTimes] = useState(startTimes);
+    const [endTimes, setEndTimes] = useState([]);
     const [selectedStartTime, setSelectedStartTime] = useState(null);
     const [selectedEndTime, setSelectedEndTime] = useState(null);
 
@@ -23,21 +23,23 @@ function AddDisableDate({ auth, futsal_listing, timeSlot }) {
         reason: "",
     });
 
-    console.log("Data:", data);
-    console.log("startTimes:", startTimes);
-    console.log("endTimes:", endTimes);
+    useEffect(() => {
+        // Increment selected date by one day
+        const incrementedDate = new Date(selectedDate);
+        incrementedDate.setDate(selectedDate.getDate() + 1);
 
-    console.log(data.start_time);
-    console.log(data.end_time);
+        // Update form data when selected date changes
+        const updatedBookingDate = incrementedDate.toISOString().split("T")[0];
+        const updatedDay = selectedDate.toLocaleDateString("en-US", {
+            weekday: "long",
+        });
 
-    // useEffect(() => {
-    //     // Update form data when selected date changes
-    //     setData("booking_date", selectedDate.toISOString().split("T")[0]);
-    //     setData(
-    //         "day",
-    //         selectedDate.toLocaleDateString("en-US", { weekday: "long" })
-    //     );
-    // }, [selectedDate, setData]);
+        setData({
+            ...data,
+            booking_date: updatedBookingDate,
+            day: updatedDay,
+        });
+    }, [selectedDate]);
 
     useEffect(() => {
         const daySlot = timeSlot.find(
@@ -51,7 +53,6 @@ function AddDisableDate({ auth, futsal_listing, timeSlot }) {
             // Assuming start and end times are in HH:mm format and time slots are in 30 minute intervals
             const times = generateTimeOptions(startTime, endTime);
             setStartTimes(times);
-            // Create a new array for endTimes to avoid sharing the same reference with startTimes
             setEndTimes([...times]);
         } else {
             setStartTimes([]);
@@ -87,9 +88,9 @@ function AddDisableDate({ auth, futsal_listing, timeSlot }) {
         date.setHours(hours, minutes + 30, 0);
         return date.toTimeString().substr(0, 5);
     };
+
     const handleStartTimeChange = (selectedOption) => {
         const startTimeValue = selectedOption.value; // Extract the value from the selected option
-        console.log("Start Time Value:", startTimeValue);
         setData("start_time", startTimeValue);
         setSelectedStartTime(selectedOption);
 
@@ -99,7 +100,6 @@ function AddDisableDate({ auth, futsal_listing, timeSlot }) {
         );
         if (startIndex !== -1) {
             const filteredEndTimes = startTimes.slice(startIndex + 1);
-            console.log("Filtered End Times:", filteredEndTimes);
             setEndTimes(filteredEndTimes);
             // If end time is before selected start time, reset end time
             if (
@@ -107,13 +107,13 @@ function AddDisableDate({ auth, futsal_listing, timeSlot }) {
                 filteredEndTimes.every((time) => time.value !== data.end_time)
             ) {
                 setData("end_time", "");
+                setSelectedEndTime(null);
             }
         }
     };
 
     const handleEndTimeChange = (selectedOption) => {
         const endTimeValue = selectedOption.value; // Extract the value from the selected option
-        console.log("End Time Value:", endTimeValue);
         setData("end_time", endTimeValue);
         setSelectedEndTime(selectedOption);
     };
@@ -126,6 +126,11 @@ function AddDisableDate({ auth, futsal_listing, timeSlot }) {
         e.preventDefault();
         post(route("vendor.disable.create", { id: futsal_listing.id }));
     };
+
+    console.log("Data:", data);
+    console.log("startTimes:", startTimes);
+    console.log("endTimes:", endTimes);
+
     return (
         <VendorLayout user={auth}>
             <AuthDescription className="container my-6">
@@ -137,9 +142,10 @@ function AddDisableDate({ auth, futsal_listing, timeSlot }) {
                 <form onSubmit={handleSubmit}>
                     <CustomCalendar
                         selectedDate={selectedDate}
-                        onDateChange={setSelectedDate}
+                        onDateChange={(date) => {
+                            setSelectedDate(date);
+                        }}
                     />
-
                     <SelectInput
                         label="Start Time"
                         options={startTimes}
@@ -156,7 +162,6 @@ function AddDisableDate({ auth, futsal_listing, timeSlot }) {
                         isSearchable={false}
                         required
                     />
-
                     <TextInput
                         type="textarea"
                         label="Reason"
@@ -168,7 +173,13 @@ function AddDisableDate({ auth, futsal_listing, timeSlot }) {
                         <Button type="submit" disabled={processing}>
                             Add Disable Date
                         </Button>
-                        <Button type="button" variant="danger" onClick={handleBackClick}>Back</Button>
+                        <Button
+                            type="button"
+                            variant="danger"
+                            onClick={handleBackClick}
+                        >
+                            Back
+                        </Button>
                     </div>
                 </form>
             </div>

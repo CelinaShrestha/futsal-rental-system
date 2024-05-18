@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Head, Link, useForm } from "@inertiajs/react";
 import InputError from "@/Components/InputError";
 import TextInput from "@/Components/TextInput";
@@ -7,14 +7,15 @@ import VendorLayout from "@/Layouts/VendorLayout";
 import AuthDescription from "@/Components/AuthDescription";
 
 export default function AddCourt({ auth }) {
+    const [imagePreviews, setImagePreviews] = useState([]);
     const { data, setData, post, processing, errors, reset } = useForm({
         title: "",
-        images: [], // Initialize with an empty array for multiple images
+        images: [],
         location: "",
         price: "",
         short_description: "",
         long_description: "",
-        facilities: null, // Initialize as an empty array
+        facilities: [],
         contactNumber: "",
         altContactNumber: "",
         longitude: "",
@@ -22,11 +23,9 @@ export default function AddCourt({ auth }) {
     });
 
     const submit = async (e) => {
-        e.preventDefault(); // Prevent default form submission behavior
-        console.log("Form submitted"); // Add a log statement to check if the function is called
+        e.preventDefault();
         try {
-            const response = await post(route("futsal-listings.store")); // Submit form data asynchronously
-            console.log("Response:", response); // Log the response object
+            const response = await post(route("futsal-listings.store"));
             if (response && response.status === 200) {
                 console.log("Form submitted successfully");
             } else {
@@ -42,18 +41,25 @@ export default function AddCourt({ auth }) {
 
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
-        setData("images", [...data.images, ...files]); // Append new files to the existing array
+        setData("images", [...data.images, ...files]);
+
+        // Generate image previews
+        const filePreviews = files.map((file) => URL.createObjectURL(file));
+        setImagePreviews((prevPreviews) => [...prevPreviews, ...filePreviews]);
     };
 
-    const handleCapacityChange = (e) => {
-        const value = parseInt(e.target.value);
-        if (!isNaN(value) && value >= 0 && value <= 20) {
-            // Check if value is a valid integer and non-negative
-            setData("capacity", value);
-        } else {
-            setData("capacity", ""); // Clear the capacity field if the input is invalid
-        }
+    const handleRemoveImage = (index) => {
+        // Remove image from data
+        const updatedImages = [...data.images];
+        updatedImages.splice(index, 1);
+        setData("images", updatedImages);
+
+        // Remove image preview
+        const updatedPreviews = [...imagePreviews];
+        updatedPreviews.splice(index, 1);
+        setImagePreviews(updatedPreviews);
     };
+
 
     return (
         <>
@@ -78,7 +84,6 @@ export default function AddCourt({ auth }) {
                                     }
                                     required
                                 />
-
                                 <InputError
                                     message={errors.title}
                                     className="mt-2"
@@ -91,13 +96,32 @@ export default function AddCourt({ auth }) {
                                     name="images"
                                     type="file"
                                     onChange={handleFileChange}
-                                    multiple // Allow multiple file selection
+                                    multiple
                                 />
-
                                 <InputError
                                     message={errors.images}
                                     className="mt-2"
                                 />
+                                <div className="image-previews flex flex-wrap gap-2 mt-2">
+                                    {imagePreviews.map((src, index) => (
+                                        <div key={index} className="relative">
+                                            <img
+                                                src={src}
+                                                alt={`Preview ${index + 1}`}
+                                                className="w-24 h-24 object-cover"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    handleRemoveImage(index)
+                                                }
+                                                className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
+                                            >
+                                                &times;
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                             <div className="mt-4 md:col-span-3">
                                 <TextInput
@@ -111,7 +135,6 @@ export default function AddCourt({ auth }) {
                                     }
                                     required
                                 />
-
                                 <InputError
                                     message={errors.location}
                                     className="mt-2"
@@ -129,7 +152,6 @@ export default function AddCourt({ auth }) {
                                     }
                                     required
                                 />
-
                                 <InputError
                                     message={errors.price}
                                     className="mt-2"
@@ -151,7 +173,6 @@ export default function AddCourt({ auth }) {
                                     }
                                     required
                                 />
-
                                 <InputError
                                     message={errors.short_description}
                                     className="mt-2"
@@ -173,7 +194,6 @@ export default function AddCourt({ auth }) {
                                     }
                                     required
                                 />
-
                                 <InputError
                                     message={errors.long_description}
                                     className="mt-2"
@@ -197,7 +217,6 @@ export default function AddCourt({ auth }) {
                                     }
                                     required
                                 />
-
                                 <InputError
                                     message={errors.facilities}
                                     className="mt-2"
@@ -215,7 +234,6 @@ export default function AddCourt({ auth }) {
                                     }
                                     required
                                 />
-
                                 <InputError
                                     message={errors.contactNumber}
                                     className="mt-2"
@@ -236,7 +254,6 @@ export default function AddCourt({ auth }) {
                                     }
                                     required
                                 />
-
                                 <InputError
                                     message={errors.altContactNumber}
                                     className="mt-2"
@@ -253,7 +270,6 @@ export default function AddCourt({ auth }) {
                                         setData("longitude", e.target.value)
                                     }
                                 />
-
                                 <InputError
                                     message={errors.longitude}
                                     className="mt-2"
@@ -270,7 +286,6 @@ export default function AddCourt({ auth }) {
                                         setData("latitude", e.target.value)
                                     }
                                 />
-
                                 <InputError
                                     message={errors.latitude}
                                     className="mt-2"
