@@ -12,7 +12,6 @@ use Illuminate\Support\Str;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\FutsalListingsRequest;
 
-
 class CourtEditController extends Controller
 {
     public function edit(Request $request, $id): Response
@@ -88,9 +87,22 @@ class CourtEditController extends Controller
 
     // public function destroy(Request $request, $id): RedirectResponse
     // {
-    //     $futsal = Futsal::find($id);
-    //     $futsal->delete();
+    //     // Find the FutsalListing
+    //     $futsal = FutsalListings::find($id);
 
-    //     return Redirect::route('futsal.show');
+    //     // Check if the FutsalListing exists
+    //     if (!$futsal) {
+    //         return Redirect::route('admin.courts.show')->withErrors('Futsal Listing not found.');
+    //     }
+
+    //     // Attempt to delete the FutsalListing
+    //     try {
+    //         $futsal->delete();
+    //         return Redirect::route('admin.courts.show')->with('success', 'Futsal Listing successfully deleted.');
+    //     } catch (\Exception $e) {
+    //         // Log the exception or handle it as needed
+    //         \Log::error('Error deleting Futsal Listing: ' . $e->getMessage());
+    //         return Redirect::route('admin.courts.show')->withErrors('Error deleting Futsal Listing.');
+    //     }
     // }
 }

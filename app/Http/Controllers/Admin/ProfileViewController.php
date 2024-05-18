@@ -24,7 +24,7 @@ class ProfileViewController extends Controller
 
     public function unverified()
     {
-        $futsal_listings = FutsalListings::where('is_verified', false)->get();
+        $futsal_listings = FutsalListings::where('is_verified', false)->with('vendor')->get();
 
         return Inertia::render('Admin/Court/UnverifiedCourt/index', [
             'futsal_listings' => $futsal_listings,

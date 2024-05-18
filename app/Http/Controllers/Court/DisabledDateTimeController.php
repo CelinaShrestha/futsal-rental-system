@@ -10,6 +10,8 @@ use App\Models\FutsalListings;
 use App\Models\TimeSlot;
 use App\Models\DisabledDateTime;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Redirect;
 
 class DisabledDateTimeController extends Controller
 {
@@ -63,7 +65,9 @@ class DisabledDateTimeController extends Controller
 
             if ($existingDisabledDate) {
                 Log::info('Date range already disabled');
-                return response()->json(['message' => 'Date range already disabled'], 400);
+                $response = Response::make('error', 200, ['Content-Type' => 'text/plain']);
+                $response->setContent('Time Slot disabled already');
+                return $response;
             }
 
             // Assuming time slots are correctly identified and fetched
@@ -75,7 +79,9 @@ class DisabledDateTimeController extends Controller
             if (!$time_slot_id) {
                 // Handle the case where no matching time slot is found
                 Log::info('No matching time slot found');
-                return response()->json(['message' => 'No matching time slot found'], 400);
+                $response = Response::make('error', 200, ['Content-Type' => 'text/plain']);
+                $response->setContent('Vo matching time slot found');
+                return $response;
             }
             DisabledDateTime::create([
                 'futsal_listings_id' => $id, // Use $id directly
@@ -87,10 +93,30 @@ class DisabledDateTimeController extends Controller
                 'reason' => $validatedData['reason'],
             ]);
 
-            return response()->json(['message' => 'Disabled date added successfully'], 201);
+            return Redirect::route('vendor.futsal-listings.show', ['id' => $id])->with('success', 'Added successfully!');
         } catch (\Exception $e) {
             Log::error('Failed to add disabled date:', ['error' => $e->getMessage()]);
             return response()->json(['message' => 'Failed to add disabled date', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            // Find the DisabledDateTime entry by its ID
+            $disabledDateTime = DisabledDateTime::findOrFail($id);
+
+            // Delete the entry
+            $disabledDateTime->delete();
+
+            // Redirect back with success message
+            return Redirect::back()->with('success', 'Disabled date/time entry deleted successfully');
+        } catch (\Exception $e) {
+            // Log the error
+            Log::error('Failed to delete disabled date/time entry:', ['error' => $e->getMessage()]);
+
+            // Redirect back with error message
+            return Redirect::back()->with('error', 'Failed to delete disabled date/time entry');
         }
     }
 }

@@ -77,9 +77,9 @@ class BookingController extends Controller
                 'duration' => $validatedData['interval'],
                 'total_price' => $validatedData['total_price'],
                 'day' => $validatedData['day'],
-                'is_confirmed' => false,
+                'is_confirmed' => true,
                 'is_cancelled' => false,
-                'is_paid' => false,
+                'is_paid' => true,
             ]);
 
             return Redirect::route('my-bookings.index')->with('success', 'Booking added successfully!');

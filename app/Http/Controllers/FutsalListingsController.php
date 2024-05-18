@@ -329,8 +329,8 @@ class FutsalListingsController extends Controller
     public function destroy($id)
     {
         // Find FutsalListing
-        $futsal_listings = FutsalListings::find($id);
-        if (!$futsal_listings) {
+        $futsal_listing = FutsalListings::find($id);
+        if (!$futsal_listing) {
             return response()->json(
                 [
                     'message' => 'Futsal Listing Not Found.',
@@ -343,23 +343,24 @@ class FutsalListingsController extends Controller
         $storage = Storage::disk('public');
 
         // Delete each image associated with the FutsalListing
-        if (!empty($futsal_listings->images)) {
-            foreach ($futsal_listings->images as $image) {
+        if (!empty($futsal_listing->images)) {
+            foreach ($futsal_listing->images as $image) {
                 if ($storage->exists($image)) {
                     $storage->delete($image);
+                } else {
+                    // Add a debug log if the image does not exist
+                    \Log::debug("Image not found in storage: $image");
                 }
             }
         }
 
-        // Delete the FutsalListing
-        $futsal_listings->delete();
-
-        // Return JSON response
-        return response()->json(
-            [
-                'message' => 'Futsal Listing successfully deleted.',
-            ],
-            200,
-        );
+        try {
+            $futsal_listing->delete();
+            return Redirect::route('admin.courts.show')->with('success', 'Futsal Listing successfully deleted.');
+        } catch (\Exception $e) {
+            // Log the exception or handle it as needed
+            \Log::error('Error deleting Futsal Listing: ' . $e->getMessage());
+            return Redirect::route('admin.courts.show')->withErrors('Error deleting Futsal Listing.');
+        }
     }
 }
