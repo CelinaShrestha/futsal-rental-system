@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\VendorRegisteredMail;
 
 class RegisteredUserController extends Controller
 {
@@ -54,6 +56,8 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($vendor));
+
+        Mail::to($vendor->email)->send(new VendorRegisteredMail($vendor->firstName, $vendor->email, $request->password));
 
         Auth::guard('vendor')->login($vendor);
 
