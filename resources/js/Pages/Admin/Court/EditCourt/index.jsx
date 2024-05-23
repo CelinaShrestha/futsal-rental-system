@@ -24,7 +24,7 @@ function EditCourt({ auth, status, futsal }) {
     const submit = (e) => {
         e.preventDefault();
 
-        patch(route("admin.vendor.profile.update", { id: vendor.id }));
+        patch(route("admin.court.profile.update", { id: futsal.id }));
     };
 
     const cancel = (e) => {
@@ -37,11 +37,11 @@ function EditCourt({ auth, status, futsal }) {
             <section className="container my-12">
                 <header>
                     <h2 className="text-xl font-bold text-primary-color font-heading">
-                        Edit Vendor Profile
+                        Edit Court Details
                     </h2>
 
                     <p className="mt-1 text-sm text-gray-600">
-                        Name: {futsal.name}
+                        Name: {futsal.title}
                     </p>
                 </header>
 

@@ -39,7 +39,7 @@ class FutsalListingsController extends Controller
 
     public function index()
     {
-        $futsal_listings = FutsalListings::where('is_verified', true)->paginate(2);
+        $futsal_listings = FutsalListings::where('is_verified', true)->paginate(3);
 
         // Iterate over each futsal listing
         foreach ($futsal_listings as $futsal_listing) {

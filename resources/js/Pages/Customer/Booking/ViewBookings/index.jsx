@@ -223,7 +223,7 @@ function MyBookings({ auth, bookings }) {
                                     >
                                         <td className="py-2 px-4">
                                             <div className="flex items-center">
-                                                <div className="w-[300px] h-[200]">
+                                                <div className="w-[250px] h-[150px]">
                                                     <img
                                                         className="w-full h-full object-cover"
                                                         src={`http://127.0.0.1:8000/storage/${booking.futsal_listings.images[0]}`}

@@ -48,7 +48,7 @@ export default function FutsalCard({ listing}) {
                 )}
 
                 <div>
-                    <p className="text-justify">
+                    <p className="">
                         {truncateDescription(listing.short_description)} ...
                     </p>
                 </div>
