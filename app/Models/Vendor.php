@@ -41,4 +41,9 @@ class Vendor extends Authenticatable
     {
         return $this->hasMany(FutsalListings::class)->where('is_verified', true);
     }
+
+    public function vendorPayments()
+    {
+        return $this->hasMany(VendorPayment::class);
+    }
 }

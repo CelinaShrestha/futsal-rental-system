@@ -11,7 +11,7 @@ class Booking extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $fillable = ['booking_date', 'start_time', 'end_time', 'duration', 'day', 'total_price', 'is_confirmed', 'is_cancelled', 'is_paid', 'futsal_listings_id', 'user_id', 'time_slot_id'];
+    protected $fillable = ['booking_date', 'start_time', 'end_time', 'duration', 'day', 'total_price', 'is_confirmed', 'is_cancelled', 'is_paid', 'futsal_listings_id', 'user_id', 'time_slot_id','payment_id'];
 
     protected $casts = [
         'booking_date' => 'date',
@@ -33,5 +33,10 @@ class Booking extends Model
     public function timeSlot()
     {
         return $this->belongsTo(TimeSlot::class);
+    }
+
+    public function payment()
+    {
+        return $this->belongsTo(Payment::class);
     }
 }
