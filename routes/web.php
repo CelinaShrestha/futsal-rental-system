@@ -85,6 +85,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/futsal-listings/{id}', [FutsalListingsController::class, 'show'])->name('futsal-listings.show');
 
     Route::post('/api/payment/verify', [PaymentController::class, 'verify'])->name('payment.verify');
+    Route::get('/payment/success/{booking_id}', [PaymentController::class, 'success'])->name('payment.success');
+    Route::get('/booking-details/{id}', [paymentController::class, 'details'])->name('booking.details');
+    Route::post('/cancel-booking', [PaymentController::class, 'cancelBooking'])->name('booking.cancel');
 });
 
 require __DIR__ . '/auth.php';
@@ -98,6 +101,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('admin/vendors', [ProfileViewController::class, 'vendorshow'])->name('vendors.show');
     Route::get('admin/vendor/register', [RegisteredUserController::class, 'create'])->name('admin.vendor.register');
     Route::post('admin/vendor/register', [RegisteredUserController::class, 'store']);
+    Route::get('admin/vendor/payment', [ProfileViewController::class, 'payment'])->name('vendors.payment');
 
     Route::get('admin/courts', [ProfileViewController::class, 'futsalshow'])->name('admin.courts.show');
     Route::get('admin/Unverified_Courts', [ProfileViewController::class, 'unverified'])->name('admin.courts.unverified');
@@ -145,6 +149,9 @@ Route::middleware('auth:vendor')->group(function () {
 
     Route::get('/vendor/courts', [CourtViewController::class, 'index'])->name('vendor.futsal-listings');
     Route::get('/vendor/courts/{id}', [CourtViewController::class, 'show'])->name('vendor.futsal-listings.show');
+
+    Route::get('/vendor/refund', [CustomerViewController::class, 'refund'])->name('vendor.refund');
+    Route::post('/vendor/refund/{id}', [PaymentController::class, 'markAsRefunded'])->name('vendor.refund.store');
 });
 
 require __DIR__ . '/vendorauth.php';
