@@ -2,10 +2,10 @@ import React from "react";
 import AdminLayout from "@/Layouts/AdminLayout";
 import Table from "@/Components/Table";
 import UserTable from "@/Components/Table/UserTable";
-
+import Pagination from "@/Components/Pagination";
 
 export default function ShowVendor({ auth, user }) {
-    console.log(user);
+
 
     const headings = [
         "User",
@@ -18,8 +18,9 @@ export default function ShowVendor({ auth, user }) {
     return (
         <AdminLayout user={auth}>
             <Table headings={headings} title="Customers">
-                <UserTable user={user} />
+                <UserTable user={user.data} />
             </Table>
+            <Pagination meta={user} pageSize={2} />
         </AdminLayout>
     );
 }

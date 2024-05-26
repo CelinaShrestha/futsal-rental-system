@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Head } from "@inertiajs/react";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
@@ -14,21 +14,45 @@ function EditCourt({ auth, status, futsal }) {
             title: futsal.title,
             location: futsal.location,
             contactNumber: futsal.contactNumber,
+            altContactNumber: futsal.altContactNumber,
             short_description: futsal.short_description,
             long_description: futsal.long_description,
             price: futsal.price,
             facilities: futsal.facilities,
-            image: futsal.image,
+            images: futsal.images, // for new images
+            longitude: futsal.longitude,
+            latitude: futsal.latitude,
         });
 
+    const [imagePreviews, setImagePreviews] = useState(
+        futsal.images.map((image) => `/storage/${image}`)
+    ); // Existing images with correct path
+
+    const handleImageChange = (e) => {
+        const files = Array.from(e.target.files);
+        const newImages = [...data.images, ...files]; // Combine existing and new images
+        setData("images", newImages);
+
+        const previews = files.map((file) => URL.createObjectURL(file));
+        setImagePreviews((prevPreviews) => [...prevPreviews, ...previews]);
+    };
+
+    const handleRemoveImage = (index) => {
+        const updatedImages = data.images.filter((_, i) => i !== index);
+        setData("images", updatedImages);
+
+        const updatedPreviews = imagePreviews.filter((_, i) => i !== index);
+        setImagePreviews(updatedPreviews);
+    };
     const submit = (e) => {
         e.preventDefault();
-
+        console.log("Submitting data:", data);
         patch(route("admin.court.profile.update", { id: futsal.id }));
     };
 
     const cancel = (e) => {
         e.preventDefault();
+
         history.back();
     };
 
@@ -39,13 +63,12 @@ function EditCourt({ auth, status, futsal }) {
                     <h2 className="text-xl font-bold text-primary-color font-heading">
                         Edit Court Details
                     </h2>
-
                     <p className="mt-1 text-sm text-gray-600">
                         Name: {futsal.title}
                     </p>
                 </header>
 
-                <form className="mt-6 space-y-6">
+                <form className="mt-6 space-y-6" onSubmit={submit}>
                     <div>
                         <TextInput
                             id="title"
@@ -53,11 +76,8 @@ function EditCourt({ auth, status, futsal }) {
                             label="Title"
                             value={data.title}
                             onChange={(e) => setData("title", e.target.value)}
-                            required
-                            isFocused
                             autoComplete="title"
                         />
-
                         <InputError className="mt-2" message={errors.title} />
                     </div>
                     <div>
@@ -71,13 +91,11 @@ function EditCourt({ auth, status, futsal }) {
                             }
                             autoComplete="location"
                         />
-
                         <InputError
                             className="mt-2"
                             message={errors.location}
                         />
                     </div>
-
                     <div>
                         <TextInput
                             id="contactNumber"
@@ -90,13 +108,27 @@ function EditCourt({ auth, status, futsal }) {
                             required
                             autoComplete="contactNumber"
                         />
-
                         <InputError
                             className="mt-2"
                             message={errors.contactNumber}
                         />
                     </div>
-
+                    <div>
+                        <TextInput
+                            id="altContactNumber"
+                            className="mt-1 block w-full"
+                            label="Alternate Contact Number"
+                            value={data.altContactNumber}
+                            onChange={(e) =>
+                                setData("altContactNumber", e.target.value)
+                            }
+                            autoComplete="altContactNumber"
+                        />
+                        <InputError
+                            className="mt-2"
+                            message={errors.altContactNumber}
+                        />
+                    </div>
                     <div>
                         <TextInput
                             id="short_description"
@@ -109,13 +141,11 @@ function EditCourt({ auth, status, futsal }) {
                             required
                             autoComplete="short_description"
                         />
-
                         <InputError
                             className="mt-2"
                             message={errors.short_description}
                         />
                     </div>
-
                     <div>
                         <TextInput
                             id="long_description"
@@ -128,13 +158,11 @@ function EditCourt({ auth, status, futsal }) {
                             required
                             autoComplete="long_description"
                         />
-
                         <InputError
                             className="mt-2"
                             message={errors.long_description}
                         />
                     </div>
-
                     <div>
                         <TextInput
                             id="price"
@@ -145,10 +173,8 @@ function EditCourt({ auth, status, futsal }) {
                             required
                             autoComplete="price"
                         />
-
                         <InputError className="mt-2" message={errors.price} />
                     </div>
-
                     <div>
                         <TextInput
                             id="facilities"
@@ -161,60 +187,86 @@ function EditCourt({ auth, status, futsal }) {
                             required
                             autoComplete="facilities"
                         />
-
                         <InputError
                             className="mt-2"
                             message={errors.facilities}
                         />
                     </div>
-
                     <div>
                         <TextInput
-                            id="image"
+                            id="latitude"
                             className="mt-1 block w-full"
-                            label="Image"
-                            value={data.image}
-                            onChange={(e) => setData("image", e.target.value)}
+                            label="Latitude"
+                            value={data.latitude}
+                            onChange={(e) =>
+                                setData("latitude", e.target.value)
+                            }
                             required
-                            autoComplete="image"
+                            autoComplete="latitude"
                         />
-
-                        <InputError className="mt-2" message={errors.image} />
+                        <InputError
+                            className="mt-2"
+                            message={errors.latitude}
+                        />
+                    </div>
+                    <div>
+                        <TextInput
+                            id="longitude"
+                            className="mt-1 block w-full"
+                            label="Longitude"
+                            value={data.longitude}
+                            onChange={(e) =>
+                                setData("longitude", e.target.value)
+                            }
+                            required
+                            autoComplete="longitude"
+                        />
+                        <InputError
+                            className="mt-2"
+                            message={errors.longitude}
+                        />
                     </div>
 
-                    {/* {mustVerifyEmail && user.email_verified_at === null && (
-                <div>
-                    <p className="text-sm mt-2 text-gray-800">
-                        Your email address is unverified.
-                        <Link
-                            href={route("verification.send")}
-                            method="post"
-                            as="button"
-                            className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                            Click here to re-send the verification
-                            email.
-                        </Link>
-                    </p>
+                    <div>
+                        <InputLabel forInput="images" value="Images" />
+                        <input
+                            type="file"
+                            id="images"
+                            name="images"
+                            accept="image/*"
+                            multiple
+                            onChange={handleImageChange}
+                            className="mt-1 block w-full"
+                        />
 
-                    {status === "verification-link-sent" && (
-                        <div className="mt-2 font-medium text-sm text-green-600">
-                            A new verification link has been sent to
-                            your email address.
+                        <InputError className="mt-2" message={errors.images} />
+                        <div className="image-previews flex flex-wrap gap-2 mt-2">
+                            {imagePreviews.map((src, index) => (
+                                <div key={index} className="relative">
+                                    <img
+                                        src={src}
+                                        alt={`Preview ${index + 1}`}
+                                        className="w-24 h-24 object-cover"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => handleRemoveImage(index)}
+                                        className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
+                                    >
+                                        &times;
+                                    </button>
+                                </div>
+                            ))}
                         </div>
-                    )}
-                </div>
-            )} */}
-
+                    </div>
                     <div className="flex items-center gap-4">
                         <Button
                             className="w-[100px]"
                             disabled={processing}
-                            onClick={submit}
+                            type="submit"
                         >
                             Save
                         </Button>
-
                         <Transition
                             show={recentlySuccessful}
                             enter="transition ease-in-out"
@@ -224,7 +276,6 @@ function EditCourt({ auth, status, futsal }) {
                         >
                             <p className="text-sm text-gray-600">Saved.</p>
                         </Transition>
-
                         <Button
                             className="w-[100px]"
                             variant="danger"
