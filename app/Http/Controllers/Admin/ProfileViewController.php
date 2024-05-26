@@ -10,12 +10,14 @@ use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Vendor;
 use App\Models\User;
+use App\Models\VendorPayment;
+use Carbon\Carbon;
 
 class ProfileViewController extends Controller
 {
     public function futsalshow()
     {
-        $futsal_listings = FutsalListings::with('vendor')->get();
+        $futsal_listings = FutsalListings::with('vendor')->paginate(10);
 
         return Inertia::render('Admin/Court/ShowCourt/index', [
             'futsal_listings' => $futsal_listings,
@@ -46,7 +48,7 @@ class ProfileViewController extends Controller
             'futsalListings as listings_count' => function ($query) {
                 $query->where('is_verified', true); // Assuming there's an 'is_verified' column in the futsal_listings table
             },
-        ])->get();
+        ])->paginate(10);
 
         return Inertia::render('Admin/Vendor/ShowVendor/index', [
             'vendor' => $vendors,
@@ -55,10 +57,20 @@ class ProfileViewController extends Controller
 
     public function customershow()
     {
-        $user = User::withCount('bookings')->get();
-
+        $today = Carbon::today();
+        $user = User::withCount([
+            'bookings' => function ($query) use ($today) {
+                $query->where('booking_date', '>=', $today);
+            },
+        ])->paginate(10);
         return Inertia::render('Admin/Customer/ShowCustomer/index', [
             'user' => $user,
         ]);
+    }
+
+    public function payment()
+    {
+        $payments = VendorPayment::with('vendor')->get();
+        return Inertia::render('Admin/Vendor/Payment/index', ['payments' => $payments]);
     }
 }

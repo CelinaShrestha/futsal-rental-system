@@ -12,6 +12,7 @@ use Inertia\Response;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class CustomerProfileEditController extends Controller
 {
@@ -28,9 +29,10 @@ class CustomerProfileEditController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request, $id): RedirectResponse
+    public function update(ProfileUpdateRequest $request, $id)
     {
         $user = User::find($id);
+
         if (!$user) {
             // Vendor not found, handle this case (e.g., redirect back with an error message)
             return redirect()->back()->with('error', 'User not found.');

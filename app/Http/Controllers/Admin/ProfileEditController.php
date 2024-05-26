@@ -38,10 +38,6 @@ class ProfileEditController extends Controller
         }
         $vendor->fill($request->validated());
 
-        // if ($request->Auth::guard('vendor')->user()->isDirty('email')) {
-        //     $request->Auth::guard('vendor')->user()->email_verified_at = null;
-        // }
-
         $vendor->save();
 
         return Redirect::route('vendors.show');

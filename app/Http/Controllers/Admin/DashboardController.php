@@ -9,13 +9,14 @@ use App\Models\User;
 use App\Models\Vendor;
 use App\Models\FutsalListings;
 use Inertia\Inertia;
-
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $totalBookings = Booking::count();
+        $today = Carbon::today();
+        $totalBookings = Booking::where('booking_date', '>=', $today)->count();
         $totalUsers = User::count();
         $totalVendors = Vendor::count();
         $totalFutsalListings = FutsalListings::count();
