@@ -38,11 +38,14 @@ function MyBookings({ auth, bookings }) {
     const today = new Date();
     const currentTime = `${today.getHours()}:${today.getMinutes()}:00`;
 
+    // Filter out cancelled bookings
+    const activeBookings = bookings.filter((booking) => !booking.is_cancelled);
+
     // Separate bookings into upcoming and history
     const upcomingBookings = [];
     const bookingHistory = [];
 
-    bookings.forEach((booking) => {
+    activeBookings.forEach((booking) => {
         // Convert booking date to Date object
         const bookingDate = new Date(booking.booking_date);
         const bookingTime = booking.start_time;
@@ -187,11 +190,13 @@ function MyBookings({ auth, bookings }) {
                                             {booking.duration} min
                                         </td>
                                         <td className="py-2 px-4">
-                                            ${booking.total_price}
+                                            Rs. {booking.total_price}
                                         </td>
                                         <td className="py-2 px-4">
                                             <a
-                                                href="#"
+                                                href={route("booking.details", {
+                                                    id: booking.id,
+                                                })}
                                                 className="text-secondary-dark-2 underline"
                                             >
                                                 View Details
@@ -270,7 +275,7 @@ function MyBookings({ auth, bookings }) {
                                             {booking.duration} min
                                         </td>
                                         <td className="py-2 px-4">
-                                            ${booking.total_price}
+                                            Rs. {booking.total_price}
                                         </td>
                                         <td className="py-2 px-4">
                                             <a

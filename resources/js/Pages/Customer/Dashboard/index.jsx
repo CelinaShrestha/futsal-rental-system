@@ -37,28 +37,11 @@ export default function Dashboard({ auth, futsal_listings }) {
                 "Choose from various payment methods, including credit/debit cards.",
         },
     ];
+
     return (
         <AuthenticatedLayout user={auth.user}>
             <div className="">
                 <div className="first-page">
-                    {/* <div className="flex flex-col gap-10">
-                        <div className="flex flex-col gap-5">
-                            <h1 className="text-2xl text-accent-color font-bold font-heading">
-                                Book your game today!
-                            </h1>
-                            <h2 className=" text-[20px]">
-                                Sprinkle your week with some futsal and make it
-                                more fun . Explore more for seamless court
-                                booking experience.
-                            </h2>
-                        </div>
-
-                    </div>
-
-                    <div className="img">
-                        <img src={home} alt="home" />
-                    </div> */}
-
                     <div class="container">
                         <div class="relative mx-auto flex items-center justify-center px-4  md:flex-row">
                             <div class="my-auto mx-auto mt-10 w-full max-w-xl   lg:max-w-screen-xl">
@@ -253,16 +236,7 @@ export default function Dashboard({ auth, futsal_listings }) {
                 </div>
             </div>
 
-            {/*
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-                            You're logged sdsd
-                        </div>
-                    </div>
-                </div>
-            </div> */}
+
         </AuthenticatedLayout>
     );
 }

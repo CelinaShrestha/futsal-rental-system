@@ -145,7 +145,7 @@ export default function ViewFutsal({ auth, futsal_listings }) {
                                         as="div"
                                         className="relative inline-block text-left"
                                     >
-                                        <div>
+                                        {/* <div>
                                             <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
                                                 Sort
                                                 <ChevronDownIcon
@@ -153,7 +153,7 @@ export default function ViewFutsal({ auth, futsal_listings }) {
                                                     aria-hidden="true"
                                                 />
                                             </Menu.Button>
-                                        </div>
+                                        </div> */}
 
                                         <Transition
                                             as={Fragment}
@@ -349,7 +349,7 @@ export default function ViewFutsal({ auth, futsal_listings }) {
                                         </Button>
                                     </div>
                                     {/* Product grid */}
-                                    <div className="lg:col-span-3 ml-14">
+                                    <div className="lg:col-span-3 ml-24">
                                         {listings &&
                                             listings.map((listing) => (
                                                 <FutsalCard

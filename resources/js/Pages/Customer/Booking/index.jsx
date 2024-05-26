@@ -7,6 +7,7 @@ import { Inertia } from "@inertiajs/inertia";
 import { useForm } from "@inertiajs/inertia-react";
 import KhaltiCheckout from "khalti-checkout-web";
 import config from "../../../Components/Khalti/khaltiConfig";
+import FutsalDetail from "@/Components/FutsalDetail";
 
 function Booking({ auth, futsal_listing, timeSlot, disabledDateTime }) {
     const [selectedDuration, setSelectedDuration] = useState(null);
@@ -62,253 +63,6 @@ function Booking({ auth, futsal_listing, timeSlot, disabledDateTime }) {
 
         updateData();
     }, [selectedDate, selectedDuration]);
-
-    //     setSelectedDuration(option);
-    //     setSelectedInterval(null); // Reset selected interval
-
-    //     const selectedDaySlot = timeSlot.find(
-    //         (slot) =>
-    //             slot.day ===
-    //             selectedDate.toLocaleDateString("en-US", { weekday: "long" })
-    //     );
-
-    //     const intervals = [];
-    //     if (selectedDaySlot) {
-    //         const startTime = new Date(
-    //             `01/01/2000 ${selectedDaySlot.start_time}`
-    //         );
-    //         const endTime = new Date(`01/01/2000 ${selectedDaySlot.end_time}`);
-    //         const duration = parseInt(option.value);
-
-    //         let currentTime = startTime;
-    //         let allSlotsBooked = true; // Flag to check if all slots are booked
-
-    //         while (currentTime < endTime) {
-    //             const startTimeFormatted = currentTime.toLocaleTimeString([], {
-    //                 hour: "2-digit",
-    //                 minute: "2-digit",
-    //             });
-    //             const endTimeFormatted = new Date(
-    //                 currentTime.getTime() + duration * 60000
-    //             ); // Calculate end time based on duration
-    //             const endTimeFormattedString =
-    //                 endTimeFormatted.toLocaleTimeString([], {
-    //                     hour: "2-digit",
-    //                     minute: "2-digit",
-    //                 });
-
-    //             const isDisabled = futsal_listing.bookings.some((booking) => {
-    //                 // Parse booking date and time
-    //                 const bookingDate = new Date(booking.booking_date);
-    //                 const bookingStartTime = new Date(
-    //                     `01/01/2000 ${booking.start_time}`
-    //                 );
-    //                 const bookingEndTime = new Date(
-    //                     `01/01/2000 ${booking.end_time}`
-    //                 );
-
-    //                 // Check if the booking date matches the selected date
-    //                 const isSameDate =
-    //                     bookingDate.getDate() === selectedDate.getDate() &&
-    //                     bookingDate.getMonth() === selectedDate.getMonth() &&
-    //                     bookingDate.getFullYear() ===
-    //                         selectedDate.getFullYear();
-
-    //                 // Check if the current interval overlaps with the booking time slot
-    //                 const doesOverlap =
-    //                     isSameDate &&
-    //                     ((currentTime >= bookingStartTime &&
-    //                         currentTime < bookingEndTime) ||
-    //                         (endTimeFormatted > bookingStartTime &&
-    //                             endTimeFormatted <= bookingEndTime) ||
-    //                         (currentTime <= bookingStartTime &&
-    //                             endTimeFormatted >= bookingEndTime));
-
-    //                 return doesOverlap;
-    //             });
-
-    //             const isDisabledDateTime = disabledDateTime.some((disabled) => {
-    //                 const disabledDate = new Date(disabled.date);
-    //                 const disabledStartTime = new Date(
-    //                     `01/01/2000 ${disabled.start_time}`
-    //                 );
-    //                 const disabledEndTime = new Date(
-    //                     `01/01/2000 ${disabled.end_time}`
-    //                 );
-
-    //                 const isSameDate =
-    //                     disabledDate.getDate() === selectedDate.getDate() &&
-    //                     disabledDate.getMonth() === selectedDate.getMonth() &&
-    //                     disabledDate.getFullYear() ===
-    //                         selectedDate.getFullYear();
-
-    //                 const doesOverlap =
-    //                     isSameDate &&
-    //                     ((currentTime >= disabledStartTime &&
-    //                         currentTime < disabledEndTime) ||
-    //                         (endTimeFormatted > disabledStartTime &&
-    //                             endTimeFormatted <= disabledEndTime) ||
-    //                         (currentTime <= disabledStartTime &&
-    //                             endTimeFormatted >= disabledEndTime));
-
-    //                 return doesOverlap;
-    //             });
-
-    //             // Push the interval with disabled property to the intervals array
-    //             intervals.push({
-    //                 value: `${startTimeFormatted}-${endTimeFormattedString}`,
-    //                 label: `${startTimeFormatted}-${endTimeFormattedString}`,
-    //                 duration: option.value, // Store duration here
-    //                 disabled: isDisabled || isDisabledDateTime, // Set the disabled property based on the isDisabled flag
-    //             });
-
-    //             if (!isDisabled && !isDisabledDateTime) {
-    //                 allSlotsBooked = false;
-    //             }
-
-    //             currentTime = endTimeFormatted;
-    //         }
-
-    //         setIntervalOptions(intervals);
-    //         setData({
-    //             ...data,
-    //             interval: null, // Reset interval when duration changes
-    //             time_slot: null, // Reset time slot when duration changes
-    //         });
-
-    //         // Disable the date in the calendar if all slots are booked
-    //         const datesToDisable = allSlotsBooked
-    //             ? [selectedDate] // Disable selected date if all slots are booked
-    //             : [];
-    //         setDisabledDates(datesToDisable);
-    //     }
-    // };
-
-    // const handleDurationChange = (option) => {
-    //     setSelectedDuration(option);
-    //     setSelectedInterval(null); // Reset selected interval
-
-    //     const selectedDaySlot = timeSlot.find(
-    //         (slot) =>
-    //             slot.day ===
-    //             selectedDate.toLocaleDateString("en-US", { weekday: "long" })
-    //     );
-
-    //     const intervals = [];
-    //     if (selectedDaySlot) {
-    //         const startTime = new Date(
-    //             `01/01/2000 ${selectedDaySlot.start_time}`
-    //         );
-    //         const endTime = new Date(`01/01/2000 ${selectedDaySlot.end_time}`);
-    //         const duration = parseInt(option.value);
-    //         const now = new Date(); // Current time
-
-    //         let currentTime = startTime;
-    //         let allSlotsBooked = true; // Flag to check if all slots are booked
-
-    //         while (currentTime < endTime) {
-    //             const startTimeFormatted = currentTime.toLocaleTimeString([], {
-    //                 hour: "2-digit",
-    //                 minute: "2-digit",
-    //             });
-    //             const endTimeFormatted = new Date(
-    //                 currentTime.getTime() + duration * 60000
-    //             );
-    //             const endTimeFormattedString =
-    //                 endTimeFormatted.toLocaleTimeString([], {
-    //                     hour: "2-digit",
-    //                     minute: "2-digit",
-    //                 });
-
-    //             // Check if the current time slot has already passed
-    //             const isPassedTime =
-    //                 currentTime.getHours() < now.getHours() ||
-    //                 (currentTime.getHours() === now.getHours() &&
-    //                     currentTime.getMinutes() <= now.getMinutes());
-
-    //             const isDisabled = futsal_listing.bookings.some((booking) => {
-    //                 const bookingDate = new Date(booking.booking_date);
-    //                 const bookingStartTime = new Date(
-    //                     `01/01/2000 ${booking.start_time}`
-    //                 );
-    //                 const bookingEndTime = new Date(
-    //                     `01/01/2000 ${booking.end_time}`
-    //                 );
-
-    //                 const isSameDate =
-    //                     bookingDate.getDate() === selectedDate.getDate() &&
-    //                     bookingDate.getMonth() === selectedDate.getMonth() &&
-    //                     bookingDate.getFullYear() ===
-    //                         selectedDate.getFullYear();
-
-    //                 const doesOverlap =
-    //                     isSameDate &&
-    //                     ((currentTime >= bookingStartTime &&
-    //                         currentTime < bookingEndTime) ||
-    //                         (endTimeFormatted > bookingStartTime &&
-    //                             endTimeFormatted <= bookingEndTime) ||
-    //                         (currentTime <= bookingStartTime &&
-    //                             endTimeFormatted >= bookingEndTime));
-
-    //                 return doesOverlap;
-    //             });
-
-    //             const isDisabledDateTime = disabledDateTime.some((disabled) => {
-    //                 const disabledDate = new Date(disabled.date);
-    //                 const disabledStartTime = new Date(
-    //                     `01/01/2000 ${disabled.start_time}`
-    //                 );
-    //                 const disabledEndTime = new Date(
-    //                     `01/01/2000 ${disabled.end_time}`
-    //                 );
-
-    //                 const isSameDate =
-    //                     disabledDate.getDate() === selectedDate.getDate() &&
-    //                     disabledDate.getMonth() === selectedDate.getMonth() &&
-    //                     disabledDate.getFullYear() ===
-    //                         selectedDate.getFullYear();
-
-    //                 const doesOverlap =
-    //                     isSameDate &&
-    //                     ((currentTime >= disabledStartTime &&
-    //                         currentTime < disabledEndTime) ||
-    //                         (endTimeFormatted > disabledStartTime &&
-    //                             endTimeFormatted <= disabledEndTime) ||
-    //                         (currentTime <= disabledStartTime &&
-    //                             endTimeFormatted >= disabledEndTime));
-
-    //                 return doesOverlap;
-    //             });
-
-    //             // Push the interval with disabled property to the intervals array
-    //             intervals.push({
-    //                 value: `${startTimeFormatted}-${endTimeFormattedString}`,
-    //                 label: `${startTimeFormatted}-${endTimeFormattedString}`,
-    //                 duration: option.value, // Store duration here
-    //                 disabled: isDisabled || isDisabledDateTime || isPassedTime, // Set the disabled property based on whether the current time is before the interval or if it overlaps with bookings or disabled times
-    //             });
-
-    //             if (!isDisabled && !isDisabledDateTime && !isPassedTime) {
-    //                 allSlotsBooked = false;
-    //             }
-
-    //             currentTime = endTimeFormatted;
-    //         }
-
-    //         setIntervalOptions(intervals);
-    //         setData({
-    //             ...data,
-    //             interval: null, // Reset interval when duration changes
-    //             time_slot: null, // Reset time slot when duration changes
-    //         });
-
-    //         // Disable the date in the calendar if all slots are booked
-    //         const datesToDisable = allSlotsBooked
-    //             ? [selectedDate] // Disable selected date if all slots are booked
-    //             : [];
-    //         setDisabledDates(datesToDisable);
-    //     }
-    // };
 
     const handleDurationChange = (option) => {
         setSelectedDuration(option);
@@ -456,13 +210,6 @@ function Booking({ auth, futsal_listing, timeSlot, disabledDateTime }) {
         setShowFullDescription(!showFullDescription);
     };
 
-    const shortenDescription = (text, maxLength) => {
-        if (text.length <= maxLength) {
-            return text;
-        }
-        return text.substr(0, maxLength) + " ... ";
-    };
-
     const totalPrice = calculatePrice();
 
     const khaltiConfig = {
@@ -475,11 +222,14 @@ function Booking({ auth, futsal_listing, timeSlot, disabledDateTime }) {
                     token: payload.token,
                     amount: payload.amount,
                     id: futsal_listing.id,
+                    booking_date: data.booking_date,
+                    interval: data.interval,
+                    time_slot: data.time_slot,
+                    total_price: data.total_price,
+                    day: data.day,
                 });
 
                 // Assuming your server sends back a 'success' prop
-
-                handleBook(); // Trigger the desired action after payment success
             },
 
             onError: (error) => {
@@ -489,81 +239,19 @@ function Booking({ auth, futsal_listing, timeSlot, disabledDateTime }) {
     };
     let checkout = new KhaltiCheckout(khaltiConfig);
 
-    const handleBook = async () => {
-        console.log("Booking data:", data); // Debug logging
-        try {
-            const response = post(
-                route("book.create", { id: futsal_listing.id })
-            ); // Submit form data asynchronously
-
-            if (response.ok) {
-                // Handle success
-                Inertia.visit(response.location);
-            } else {
-                // Handle error
-                console.error("Form submission failed:", response);
-            }
-        } catch (error) {
-            console.error("Form submission error:", error);
-        }
-    };
-
     return (
         <AuthenticatedLayout user={auth.user}>
             <div className="container mt-8 pb-20">
-                <div className="flex flex-col lg:flex-row gap-12 justify-end ">
-                    <div className="listng-indo">
+                <div className="flex flex-col lg:flex-row gap-12 justify-between ">
+                    <div className="listing-info w-[750px]">
                         <h1 className=" text-xl font-bold text-text font-heading">
                             Book your futsal!
                         </h1>
-                        <div className="min-w-[200px] min-h-[200px] lg:w-[700px] lg:h-[400px] mt-8 ">
-                            <img
-                                src={`http://127.0.0.1:8000/storage/${futsal_listing.images[0]}`}
-                                alt={futsal_listing.title}
-                                className="w-full h-full object-cover rounded-sm"
-                            />
-                        </div>
-                        <div className="mt-4">
-                            <div className="flex justify-between">
-                                <span>
-                                    <p className="text-lg text-text font-semibold">
-                                        {futsal_listing.title}
-                                    </p>
-                                    <p className=" text-text ">
-                                        {futsal_listing.location}
-                                    </p>
-                                </span>
-                                <span className="">
-                                    <p className="text-lg text-text font-semibold">
-                                        Rs. {futsal_listing.price}/hr
-                                    </p>
-                                </span>
-                            </div>
-                            <div className="text-justify text-gray-700 leading-7 mt-6">
-                                {showFullDescription
-                                    ? futsal_listing.long_description
-                                    : shortenDescription(
-                                          futsal_listing.long_description,
-                                          200
-                                      )}
-
-                                {showFullDescription ? (
-                                    <span
-                                        className="font-bold text-text cursor-pointer"
-                                        onClick={toggleDescription}
-                                    >
-                                        Show Less
-                                    </span>
-                                ) : (
-                                    <span
-                                        className="font-bold text-text cursor-pointer"
-                                        onClick={toggleDescription}
-                                    >
-                                        Read More
-                                    </span>
-                                )}
-                            </div>
-                        </div>
+                        <FutsalDetail
+                            futsal_listing={futsal_listing}
+                            showFullDescription={showFullDescription}
+                            toggleDescription={toggleDescription}
+                        />
                     </div>
                     <div className="booking-form lg:min-w-[500px] pl-6">
                         <form>
@@ -663,7 +351,7 @@ function Booking({ auth, futsal_listing, timeSlot, disabledDateTime }) {
                             <Button
                                 onClick={(e) => {
                                     e.preventDefault();
-                                    checkout.show({ amount: 10 * 100 });
+                                    checkout.show({ amount: 10*100 });
                                 }}
                                 color="primary"
                                 disabled={!auth.user.email_verified_at}
