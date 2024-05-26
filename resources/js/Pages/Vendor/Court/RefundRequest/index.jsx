@@ -1,14 +1,20 @@
-import Pagination from "@/Components/Pagination";
+import Button from "@/Components/Button";
 import Pill from "@/Components/Pill";
 import VendorLayout from "@/Layouts/VendorLayout";
 import React from "react";
+import { Inertia } from "@inertiajs/inertia";
 
-const BookedCourts = ({ auth, booking_list }) => {
+const BookedCourts = ({ auth, refundRequests }) => {
+    const onClickHandler = (id) => {
+        console.log("Refund button clicked");
+        Inertia.post(route("vendor.refund.store", { id: id }));
+    };
+
     return (
         <VendorLayout user={auth}>
-            <div className="container mx-auto px-4">
-                <h2 className="text-2xl font-bold mb-4">Booked Courts</h2>
-                <div className="overflow-x-auto">
+            <div className="px-4 my-12">
+                <h2 className="text-2xl font-bold mb-4">Refund Requests</h2>
+                <div className="">
                     <table className="min-w-full divide-y divide-gray-200">
                         <thead className="bg-gray-50">
                             <tr>
@@ -28,13 +34,13 @@ const BookedCourts = ({ auth, booking_list }) => {
                                     scope="col"
                                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                 >
-                                    Court Name
+                                    Transaction ID
                                 </th>
                                 <th
                                     scope="col"
                                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                 >
-                                    Booking Time
+                                    Amount
                                 </th>
                                 <th
                                     scope="col"
@@ -48,46 +54,59 @@ const BookedCourts = ({ auth, booking_list }) => {
                                 >
                                     Status
                                 </th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                            {booking_list.data.map((booking) => (
-                                <tr
-                                    key={booking.id}
-                                    className="hover:bg-gray-100"
-                                >
+                            {refundRequests.data.map((data) => (
+                                <tr key={data.id} className="hover:bg-gray-100">
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        {booking.user.firstName}
+                                        {data.user.firstName}{" "}
+                                        {data.user.lastName}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        {booking.user.contactNumber}
+                                        {data.user.contactNumber}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowr ap">
+                                        {data.transaction_id}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        {booking.futsal_listings.title}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        {formatTime(booking.start_time)} -{" "}
-                                        {formatTime(booking.end_time)}
+                                        Rs {data.amount}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         {new Date(
-                                            booking.booking_date
+                                            data.created_at
                                         ).toDateString()}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        {booking.is_cancelled ? (
-                                            <Pill variant="accent">
-                                                Cancelled
+                                        {data.is_refunded ? (
+                                            <Pill variant="success">
+                                                Refunded
                                             </Pill>
                                         ) : (
-                                            <Pill variant="success">Paid</Pill>
+                                            <Pill variant="accent">
+                                                Not Refunded
+                                            </Pill>
+                                        )}
+                                    </td>
+                                    <td>
+                                        {!data.is_refunded && (
+                                            <Button
+                                                variant="secondary"
+                                                size="sm"
+                                                className="w-[90px]"
+                                                onClick={() =>
+                                                    onClickHandler(data.id)
+                                                }
+                                            >
+                                                Refund
+                                            </Button>
                                         )}
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
-                    <Pagination meta={booking_list} pageSize={2} />
                 </div>
             </div>
         </VendorLayout>
