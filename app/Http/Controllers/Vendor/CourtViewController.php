@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\FutsalListings;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class CourtViewController extends Controller
 {
@@ -15,10 +16,18 @@ class CourtViewController extends Controller
         // Retrieve the authenticated user (Vendor instance)
         $vendor = Auth::guard('vendor')->user();
 
+        // Get today's date
+        $today = Carbon::today();
+
         // Retrieve futsal listings for the vendor with bookings count
         $futsal_listings = FutsalListings::where('vendor_id', $vendor->id)
-            ->withCount('bookings')
-            ->get();
+            ->withCount([
+                'bookings' => function ($query) use ($today) {
+                    // Filter bookings for today's date
+                    $query->whereDate('booking_date', $today);
+                },
+            ])
+            ->paginate(4);
 
         return Inertia::render('Vendor/Court/ViewCourt/index', [
             'futsal_listings' => $futsal_listings,
