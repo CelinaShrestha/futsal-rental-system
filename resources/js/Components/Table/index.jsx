@@ -47,7 +47,7 @@ function Table({ headings, title, children }) {
                     </div>
                 </div>*/}
                     </div>
-                    <div className="block relative">
+                    {/* <div className="block relative">
                         <span className="h-full absolute inset-y-0 left-0 flex items-center pl-2">
                             <svg
                                 viewBox="0 0 24 24"
@@ -60,7 +60,7 @@ function Table({ headings, title, children }) {
                             placeholder="Search"
                             className="appearance-none rounded  border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
                         />
-                    </div>
+                    </div> */}
                 </div>
                 <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
                     <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
@@ -103,19 +103,6 @@ function Table({ headings, title, children }) {
                                 {children}
                             </tbody>
                         </table>
-                        <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
-                            <span className="text-xs xs:text-sm text-gray-900">
-                                Showing 1 to 4 of 50 Entries
-                            </span>
-                            <div className="inline-flex mt-2 xs:mt-0">
-                                <button className="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l">
-                                    Prev
-                                </button>
-                                <button className="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-r">
-                                    Next
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

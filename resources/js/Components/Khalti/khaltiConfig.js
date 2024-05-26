@@ -27,10 +27,6 @@ let config = {
     },
     paymentPreference: [
         "KHALTI",
-        "EBANKING",
-        "MOBILE_BANKING",
-        "CONNECT_IPS",
-        "SCT",
     ],
 };
 

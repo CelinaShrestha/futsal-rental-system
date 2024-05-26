@@ -105,6 +105,13 @@ function Header({ user }) {
                             >
                                 Vendor List
                             </MenuItem>
+                            <MenuItem
+                                icon={<RiListUnordered />}
+                                href={route("vendors.payment")}
+                                active={route().current("vendors.payment")}
+                            >
+                                Vendor Payment
+                            </MenuItem>
                         </SubMenu>
                         <SubMenu
                             defaultOpen

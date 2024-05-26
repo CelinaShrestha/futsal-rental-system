@@ -138,7 +138,11 @@ function Header({ user }) {
                                 >
                                     Customer Bookings
                                 </MenuItem>
-                                <MenuItem icon={<RiListUnordered />}>
+                                <MenuItem
+                                    icon={<RiListUnordered />}
+                                    href={route("vendor.refund")}
+                                    active={route().current("vendor.refund")}
+                                >
                                     Refund Request
                                 </MenuItem>
                             </SubMenu>

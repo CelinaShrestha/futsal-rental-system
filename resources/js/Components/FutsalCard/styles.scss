@@ -2,11 +2,10 @@
     @apply h-[250px] w-[800px] border rounded-md grid grid-cols-[auto_auto] justify-items-stretch;
 
     .img {
-        @apply w-[350px] h-[200px] ml-4;
+        @apply w-[350px] h-[249px] rounded-l-sm;
 
         img {
             @apply h-full w-full rounded-l-sm;
         }
     }
-
 }
