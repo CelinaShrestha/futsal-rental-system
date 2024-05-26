@@ -19,7 +19,11 @@ class BookingController extends Controller
 {
     public function show($id)
     {
-        $futsal_listing = FutsalListings::with('bookings')->findOrFail($id);
+        $futsal_listing = FutsalListings::with([
+            'bookings' => function ($query) {
+                $query->where('is_cancelled', false);
+            },
+        ])->findOrFail($id);
 
         $timeSlot = TimeSlot::where('futsal_listings_id', $id)->get();
 

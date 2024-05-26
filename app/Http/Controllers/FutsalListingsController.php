@@ -159,20 +159,6 @@ class FutsalListingsController extends Controller
         return Inertia::render('Customer/FutsalDescription/index', [
             'futsal_listing' => $futsal_listing,
         ]);
-        // $futsal_listings = FutsalListings::find($id);
-
-        // // if (!$futsal_listings) {
-        // //     return response()->json(
-        // //         [
-        // //             'message' => 'Product Not Found.',
-        // //         ],
-        // //         404,
-        // //     );
-        // // }
-
-        // return Inertia::render('Customer/FutsalDescription/index', [
-        //     'futsal_listings' => $futsal_listings,
-        // ]);
     }
 
     // public function update(FutsalListingsRequest $request, $id)
@@ -233,9 +219,12 @@ class FutsalListingsController extends Controller
     //     }
     // }
 
-    public function update(FutsalListingsRequest $request, $id)
+    public function update(Request $request, $id)
     {
         try {
+            // Log the entire request for debugging
+            Log::info('Request Data: ', $request->all());
+
             // Find product
             $futsal_listings = FutsalListings::find($id);
             if (!$futsal_listings) {
@@ -248,28 +237,29 @@ class FutsalListingsController extends Controller
             }
 
             // Update fields
-            $futsal_listings->title = $request->title;
-            $futsal_listings->short_description = $request->short_description;
-            $futsal_listings->long_description = $request->long_description;
-            $futsal_listings->location = $request->location;
-            $futsal_listings->price = $request->price;
-            $futsal_listings->facilities = $request->facilities;
-            $futsal_listings->contactNumber = $request->contactNumber;
-            $futsal_listings->altContactNumber = $request->altContactNumber;
-            $futsal_listings->is_verified = $request->is_verified ?? false;
-            $futsal_listings->is_available = $request->is_available ?? true;
-            $futsal_listings->longitude = $request->longitude;
-            $futsal_listings->latitude = $request->latitude;
+            $futsal_listings->title = $request->input('title');
+            $futsal_listings->short_description = $request->input('short_description');
+            $futsal_listings->long_description = $request->input('long_description');
+            $futsal_listings->location = $request->input('location');
+            $futsal_listings->price = $request->input('price');
+            $futsal_listings->facilities = $request->input('facilities');
+            $futsal_listings->contactNumber = $request->input('contactNumber');
+            $futsal_listings->altContactNumber = $request->input('altContactNumber');
+            $futsal_listings->is_verified = $request->input('is_verified', true);
+            $futsal_listings->is_available = $request->input('is_available', true);
+            $futsal_listings->longitude = $request->input('longitude');
+            $futsal_listings->latitude = $request->input('latitude');
 
             // Handle image upload for each image in the request
             if ($request->hasFile('images')) {
-                $imageNames = [];
+                $imageNames = $futsal_listings->images ?: []; // Preserve existing images
                 foreach ($request->file('images') as $image) {
                     $imageName = Str::random(32) . '.' . $image->getClientOriginalExtension();
                     $image->storeAs('public/images', $imageName);
                     $imageNames[] = $imageName;
                 }
                 $futsal_listings->images = $imageNames;
+                Log::debug('Images: ' . json_encode($imageNames));
             }
 
             // Save changes
@@ -283,6 +273,7 @@ class FutsalListingsController extends Controller
                 200,
             );
         } catch (\Exception $e) {
+            Log::error('Error updating Futsal Listing: ' . $e->getMessage());
             // Return JSON response for error
             return response()->json(
                 [
